@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "70995296244",
+    "firebase_url": "https://eventu-5b9d1.firebaseio.com",
+    "project_id": "eventu-5b9d1",
+    "storage_bucket": "eventu-5b9d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70995296244:android:192000d895d2d71d",
+        "android_client_info": {
+          "package_name": "com.eventu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70995296244-vm17ah8nhujkmtfs9fbi3otvj1a68cdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventu",
+            "certificate_hash": "67368367386bf01838f63e5053f689dfd9ded021"
+          }
+        },
+        {
+          "client_id": "70995296244-s89k4i9s5j8orm12hm4vp88hcsqqit5u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDet1iQiTXMLl4j2dYZtPRzmSrmlN9EUZs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70995296244-s89k4i9s5j8orm12hm4vp88hcsqqit5u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
