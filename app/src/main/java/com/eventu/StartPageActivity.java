@@ -8,7 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 /**
- * A start page that offers two buttons to go to the login screen and the register screen
+ * A start page that offers two buttons to go to the login screen and the registration screen
  */
 public class StartPageActivity extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class StartPageActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(StartPageActivity.this, RegisterActivity.class));
+                startActivity(new Intent(StartPageActivity.this, AccountTypeActivity.class));
             }
         });
     }

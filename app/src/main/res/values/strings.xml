@@ -6,6 +6,8 @@
     <string name="prompt_password">Password</string>
     <string name="action_log_in">Log in</string>
     <string name="action_register">Register</string>
+    <string name="club">Club</string>
+    <string name="student">Student</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_password_short">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>

@@ -144,10 +144,18 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     }
 
     /**
-     * The given email must match the string "text@school.edu"
+     * Clubs can have any valid email.
+     * If registering as a student, the given email must match the string "text@school.edu"
      */
     private boolean isEmailValid(String email) {
-        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.edu$", Pattern.CASE_INSENSITIVE);
+        Pattern p;
+        boolean isClub = getIntent().getBooleanExtra("isClub", false);
+        if (isClub) {
+            p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+                    Pattern.CASE_INSENSITIVE);
+        } else {
+            p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.edu$", Pattern.CASE_INSENSITIVE);
+        }
         Matcher m = p.matcher(email);
         return m.find();
     }
