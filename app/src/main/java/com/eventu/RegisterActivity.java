@@ -125,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
@@ -145,19 +144,38 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     /**
      * Clubs can have any valid email.
-     * If registering as a student, the given email must match the string "text@school.edu"
+     * If registering as a student, the given email must match the domain of the school
+     * chosen in the SchoolSelectActivity.
+     * Displays email form errors
      */
     private boolean isEmailValid(String email) {
-        Pattern p;
+        Pattern emailPattern;
         boolean isClub = getIntent().getBooleanExtra("isClub", false);
+        ArrayList<String> domains = getIntent().getStringArrayListExtra("schoolDomains");
         if (isClub) {
-            p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+            emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
                     Pattern.CASE_INSENSITIVE);
         } else {
-            p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.edu$", Pattern.CASE_INSENSITIVE);
+            boolean matches = false;
+            for (int i = 0; i < domains.size(); i++) {
+                if (email.contains(domains.get(i))) {
+                    matches = true;
+                    break;
+                }
+            }
+            if (!matches) {
+                mEmailView.setError(getString(R.string.error_no_email_domain_match));
+                return false;
+            }
+            emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.edu$",
+                    Pattern.CASE_INSENSITIVE);
         }
-        Matcher m = p.matcher(email);
-        return m.find();
+        Matcher emailMatcher = emailPattern.matcher(email);
+        if (!emailMatcher.find()) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            return false;
+        }
+        return true;
     }
 
     private boolean isPasswordValid(String password) {

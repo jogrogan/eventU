@@ -29,7 +29,7 @@ public class StartPageActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(StartPageActivity.this, AccountTypeActivity.class));
+                startActivity(new Intent(StartPageActivity.this, SchoolSelectActivity.class));
             }
         });
     }

@@ -32,6 +32,22 @@
                 android:value="com.eventu.StartPageActivity"/>
         </activity>
         <activity
+            android:name=".SchoolSelectActivity"
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".StartPageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eventu.StartPageActivity"/>
+        </activity>
+        <activity
+            android:name=".AccountTypeActivity"
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".SchoolSelectActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eventu.SchoolSelectActivity"/>
+        </activity>
+        <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
             android:parentActivityName=".AccountTypeActivity">
@@ -39,14 +55,5 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.AccountTypeActivity"/>
         </activity>
-        <activity
-            android:name=".AccountTypeActivity">
-            android:label="@string/title_activity_register"
-            android:parentActivityName=".StartPageActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.eventu.StartPageActivity"/>
-        </activity>
     </application>
-
 </manifest>
