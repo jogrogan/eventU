@@ -55,5 +55,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.AccountTypeActivity"/>
         </activity>
+        <activity android:name=".ViewEvents">
+        </activity>
     </application>
+
 </manifest>

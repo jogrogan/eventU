@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -174,10 +175,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         Toast.LENGTH_SHORT).show();
                                 //updateUI(null);
                             }
-
-                            // ...
                         }
                     });
+            Intent i = new Intent(this, ViewEvents.class);
+            i.putExtra("username", email);
+            startActivity(i);
         }
     }
 
