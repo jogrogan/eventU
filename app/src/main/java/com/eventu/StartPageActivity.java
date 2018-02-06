@@ -9,6 +9,7 @@ import android.widget.Button;
 
 /**
  * A start page that offers two buttons to go to the login screen and the registration screen
+ * and another one for resetting password in case you forgot yours
  */
 public class StartPageActivity extends AppCompatActivity {
 
@@ -30,6 +31,14 @@ public class StartPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(StartPageActivity.this, SchoolSelectActivity.class));
+            }
+        });
+
+        Button forgotpasswordButton = findViewById(R.id.forgot_password);
+        forgotpasswordButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StartPageActivity.this, AccountRetrievalActivity.class));
             }
         });
     }

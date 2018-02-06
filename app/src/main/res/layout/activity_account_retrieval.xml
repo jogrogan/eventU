@@ -8,26 +8,21 @@
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
-              tools:context="com.eventu.StartPageActivity">
+              tools:context="com.eventu.AccountTypeActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+            android:id="@+id/password_retrival"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="@string/prompt_email"/>
+    </android.support.design.widget.TextInputLayout>
     <Button
-        android:id="@+id/log_in_button"
+        android:id="@+id/reset_password"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/action_log_in"
-        android:textStyle="bold"/>
-    <Button
-        android:id="@+id/register_button"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/action_register"
-        android:textStyle="bold"/>
-    <Button
-        android:id="@+id/forgot_password"
-        style="@style/FirebaseUI.Button"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/action_forgot_password"/>
+        android:text="@string/reset_password" android:textStyle="bold"/>
 </LinearLayout>

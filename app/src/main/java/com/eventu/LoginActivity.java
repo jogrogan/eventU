@@ -168,6 +168,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 Log.d("yang", "signInWithEmail:success");
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
+
+                                Intent i = new Intent(LoginActivity.this, ViewEventsActivity.class);
+                                i.putExtra("username", user.getDisplayName());
+                                startActivity(i);
+
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("yang", "signInWithEmail:failure", task.getException());
@@ -177,9 +182,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             }
                         }
                     });
-            Intent i = new Intent(this, ViewEvents.class);
-            i.putExtra("username", email);
-            startActivity(i);
         }
     }
 

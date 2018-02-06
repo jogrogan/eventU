@@ -128,6 +128,7 @@
         <codeStyleSettings language="JAVA">
           <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="ALIGN_MULTILINE_FOR" value="false" />
+          <option name="ALIGN_MULTILINE_ASSIGNMENT" value="true" />
           <option name="CALL_PARAMETERS_WRAP" value="1" />
           <option name="PREFER_PARAMETERS_WRAP" value="true" />
           <option name="METHOD_PARAMETERS_WRAP" value="1" />
@@ -142,6 +143,7 @@
           <option name="FOR_STATEMENT_WRAP" value="1" />
           <option name="ARRAY_INITIALIZER_WRAP" value="1" />
           <option name="ASSIGNMENT_WRAP" value="1" />
+          <option name="PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE" value="true" />
           <option name="IF_BRACE_FORCE" value="1" />
           <option name="DOWHILE_BRACE_FORCE" value="1" />
           <option name="WHILE_BRACE_FORCE" value="1" />
