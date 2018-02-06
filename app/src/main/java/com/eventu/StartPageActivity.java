@@ -33,14 +33,6 @@ public class StartPageActivity extends AppCompatActivity {
                 startActivity(new Intent(StartPageActivity.this, SchoolSelectActivity.class));
             }
         });
-
-        Button forgotpasswordButton = findViewById(R.id.forgot_password);
-        forgotpasswordButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(StartPageActivity.this, AccountRetrievalActivity.class));
-            }
-        });
     }
 }
 

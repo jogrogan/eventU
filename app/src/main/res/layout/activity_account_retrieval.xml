@@ -11,12 +11,15 @@
               tools:context="com.eventu.AccountTypeActivity">
 
     <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <AutoCompleteTextView
             android:id="@+id/password_retrival"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_weight="1" android:text="@string/prompt_email"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/prompt_email"/>
     </android.support.design.widget.TextInputLayout>
     <Button
         android:id="@+id/reset_password"
@@ -24,5 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/reset_password" android:textStyle="bold"/>
+        android:text="@string/reset_password"
+        android:textStyle="bold"/>
 </LinearLayout>

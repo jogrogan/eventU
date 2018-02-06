@@ -71,6 +71,12 @@
                 android:text="@string/action_log_in"
                 android:textStyle="bold"/>
 
+            <Button
+                android:id="@+id/forgot_password"
+                style="@style/FirebaseUI.Button"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/action_forgot_password"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
