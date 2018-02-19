@@ -37,5 +37,6 @@
     <string name="event_description">Event Description</string>
     <string name="time">Time</string>
     <string name="create_event">Create Event</string>
+    <string name="date_and_time">Date and Time</string>
 
 </resources>

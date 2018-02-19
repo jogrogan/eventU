@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,12 +8,43 @@
     android:minWidth="@dimen/activity_horizontal_margin"
     tools:context="com.eventu.ViewEventsActivity">
 
+    <TextView
+        android:id="@+id/event_name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="20dp" android:layout_marginTop="20dp"
+        android:text="@string/event_name" android:textSize="18sp"
+        tools:layout_editor_absoluteX="177dp" tools:layout_editor_absoluteY="153dp"/>
+    <TextView
+        android:id="@+id/event_location_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp" android:layout_toRightOf="@id/event_name_view"
+        android:text="@string/event_location" android:textSize="18sp"
+        tools:layout_editor_absoluteX="16dp" tools:layout_editor_absoluteY="128dp"/>
+    <TextView
+        android:id="@+id/event_date_and_time_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" android:layout_toRightOf="@id/event_location_view"
+        android:text="@string/date_and_time" android:textSize="18sp"
+        tools:layout_editor_absoluteX="129dp" tools:layout_editor_absoluteY="72dp"/>
+
+    <TextView
+        android:id="@+id/event_description_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_name_view" android:text="@string/event_description"
+        android:textSize="14sp" tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="224dp"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/event_creation_fab"
-        android:layout_width="191dp"
-        android:layout_height="195dp"
-        android:layout_marginStart="93dp" android:layout_marginTop="146dp"
-        android:clickable="true" android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorPrimary" app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" android:clickable="true"
+        android:src="@android:drawable/ic_input_add" app:backgroundTint="@color/colorPrimary"
+        tools:layout_editor_absoluteX="273dp" tools:layout_editor_absoluteY="403dp"/>
+</RelativeLayout>

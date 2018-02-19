@@ -1,6 +1,7 @@
 package com.eventu;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,7 +10,27 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CreateEventActivity extends AppCompatActivity {
+
+    //NO HARDCODING! Tags used in place of strings
+    public static final String EVENT_NAME = "Event Name";
+    public static final String EVENT_LOCATION = "Event Location";
+    public static final String EVENT_DESCRIPTION = "Event Description";
+    public static final String EVENT_DATE = "Event Date";
+    public static final String OWNER = "Event Creator";
 
     //UI References
     private EditText mEventName;
@@ -19,51 +40,54 @@ public class CreateEventActivity extends AppCompatActivity {
     private DatePicker mDatePicker;
     private FloatingActionButton nextButton;
 
+    //DataBase References
+    private DocumentReference mDocRef = FirebaseFirestore.getInstance().document(
+            "Club Events/Event");
+
+    //Firebase References
+    private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_time_and_date_event);
-
-
+        setContentView(R.layout.activity_create_event);
         mEventName = findViewById(R.id.event_name);
         mEventDescription = findViewById(R.id.event_description);
         mEventLocation = findViewById(R.id.event_location);
         mTimePicker = findViewById(R.id.tp_timepicker);
         mDatePicker = findViewById(R.id.dp_datepicker);
-
-        mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Toast.makeText(CreateEventActivity.this,
-                        "Hour/Minutes: " + hourOfDay + ':' + minute,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mDatePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Toast.makeText(CreateEventActivity.this,
-                        "Month/Day/Year: " + monthOfYear + "/" + dayOfMonth + "/" + year,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
         nextButton = findViewById(R.id.next_button);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(CreateEventActivity.this,
-                        "Event Name: " + mEventName.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(CreateEventActivity.this,
-                        "Event Locaiton: " + mEventLocation.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(CreateEventActivity.this,
-                        "Event Description: " + mEventDescription.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
+                Map<String, Object> eventData = new HashMap<>();
+                eventData.put(EVENT_NAME, mEventName.getText().toString());
+                eventData.put(EVENT_LOCATION, mEventLocation.getText().toString());
+                eventData.put(EVENT_DESCRIPTION, mEventDescription.getText().toString());
+                Date eventDate = new GregorianCalendar(
+                        mDatePicker.getYear(),
+                        mDatePicker.getMonth(),
+                        mDatePicker.getDayOfMonth(),
+                        mTimePicker.getHour(),
+                        mTimePicker.getMinute()).getTime();
+                eventData.put(EVENT_DATE, eventDate);
+                eventData.put(OWNER, mCurrentUser.getDisplayName());
+
+                mDocRef.set(eventData, SetOptions.merge())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(CreateEventActivity.this, "Successful Write!",
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CreateEventActivity.this, "FAILURE!",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         });
     }
-
 }
