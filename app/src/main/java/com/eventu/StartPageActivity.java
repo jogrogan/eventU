@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * A start page that offers two buttons to go to the login screen and the registration screen
@@ -18,6 +19,9 @@ public class StartPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_page);
         // Set up the login form.
+
+        ImageView eventu_logo = findViewById(R.id.eventu_logo);
+        eventu_logo.setImageResource(R.drawable.eventu_logo);
 
         Button logInButton = findViewById(R.id.log_in_button);
         logInButton.setOnClickListener(new OnClickListener() {

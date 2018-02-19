@@ -34,7 +34,7 @@
         <activity
             android:name=".AccountRetrievalActivity"
             android:label="@string/title_forgot_password"
-            android:parentActivityName="LoginActivity">
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.LoginActivity"/>
@@ -64,6 +64,11 @@
                 android:value="com.eventu.AccountTypeActivity"/>
         </activity>
         <activity android:name=".ViewEventsActivity">
+        </activity>
+        <activity
+            android:name=".CreateEventActivity"
+            android:label="@string/title_activity_create_event"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

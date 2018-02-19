@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/activity_horizontal_margin" tools:context="com.eventu.ViewEvents">
+    android:minWidth="@dimen/activity_horizontal_margin"
+    tools:context="com.eventu.ViewEventsActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="TextView"
-        tools:layout_editor_absoluteX="147dp" tools:layout_editor_absoluteY="16dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/event_creation_fab"
+        android:layout_width="191dp"
+        android:layout_height="195dp"
+        android:layout_marginStart="93dp" android:layout_marginTop="146dp"
+        android:clickable="true" android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/colorPrimary" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>
