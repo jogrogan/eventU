@@ -186,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
 
-                                Intent i = new Intent(LoginActivity.this, ViewEventsActivity.class);
+                                Intent i = new Intent(LoginActivity.this, HomePageActivity.class);
                                 i.putExtra("username", user.getDisplayName());
                                 startActivity(i);
 

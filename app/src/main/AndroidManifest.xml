@@ -63,7 +63,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.AccountTypeActivity"/>
         </activity>
-        <activity android:name=".ViewEventsActivity">
+        <activity android:name=".HomePageActivity">
         </activity>
         <activity
             android:name=".CreateEventActivity"

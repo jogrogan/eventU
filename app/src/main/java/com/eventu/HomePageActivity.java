@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +14,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-public class ViewEventsActivity extends AppCompatActivity {
+public class HomePageActivity extends AppCompatActivity {
 
     //NO HARDCODING! Tags used in place of strings
     public static final String EVENT_NAME = "Event Name";
@@ -48,7 +47,7 @@ public class ViewEventsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras.containsKey("username")) {
             String username = extras.getString("username");
-            Toast.makeText(ViewEventsActivity.this, "Welcome " + username + "!",
+            Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -56,7 +55,7 @@ public class ViewEventsActivity extends AppCompatActivity {
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ViewEventsActivity.this, CreateEventActivity.class));
+                startActivity(new Intent(HomePageActivity.this, CreateEventActivity.class));
             }
         });
     }
@@ -64,7 +63,6 @@ public class ViewEventsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("yang", "Got to On Start");
         mDocRef.addSnapshotListener(
                 this, new EventListener<DocumentSnapshot>() {
                     @Override
@@ -78,7 +76,7 @@ public class ViewEventsActivity extends AppCompatActivity {
                             mEventDateandTime.setText(
                                     documentSnapshot.getDate(EVENT_DATE).toString());
                         } else if (e != null) {
-                            Toast.makeText(ViewEventsActivity.this, e.getMessage(),
+                            Toast.makeText(HomePageActivity.this, e.getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
