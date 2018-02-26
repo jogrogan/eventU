@@ -29,10 +29,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,9 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
-        if (mayRequestContacts()) {
-            getLoaderManager().initLoader(0, null, this);
-        }
+        populateAutoComplete();
 
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -102,25 +105,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 startActivity(new Intent(LoginActivity.this, AccountRetrievalActivity.class));
             }
         });
-    }
-
-    private boolean mayRequestContacts() {
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
     }
 
     /**
@@ -186,9 +170,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
 
-                                Intent i = new Intent(LoginActivity.this, HomePageActivity.class);
-                                i.putExtra("username", user.getDisplayName());
-                                startActivity(i);
+                                DocumentReference doc = FirebaseFirestore.getInstance().collection(
+                                        "universities")
+                                        .document(user.getDisplayName()).collection("Users")
+                                        .document(user.getUid());
+
+
+                                doc.update("lastLogin", FieldValue.serverTimestamp());
+                                doc.get().addOnSuccessListener(
+                                        new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(
+                                                    DocumentSnapshot documentSnapshot) {
+                                                UserInfo userInfo = documentSnapshot.toObject(
+                                                        UserInfo.class);
+                                                Intent intent = new Intent(LoginActivity.this,
+                                                        HomePageActivity.class);
+                                                intent.putExtra("UserInfo", userInfo);
+                                                startActivity(intent);
+                                            }
+                                        });
 
                             } else {
                                 showProgress(false);
@@ -239,6 +240,51 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
+    }
+
+    /**
+     * +     * Callback received when a permissions request has been completed.
+     * +
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
         }
     }
 
