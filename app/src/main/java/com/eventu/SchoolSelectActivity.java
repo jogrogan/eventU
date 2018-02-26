@@ -52,7 +52,8 @@ public class SchoolSelectActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(SchoolSelectActivity.this, AccountTypeActivity.class);
-                intent.putExtra("schoolName", schoolJSONObjects[position].getName());
+                String schoolName = schoolJSONObjects[position].getName().replace('/', ' ');
+                intent.putExtra("schoolName", schoolName);
                 intent.putExtra("schoolDomains", schoolJSONObjects[position].getDomains());
                 startActivity(intent);
             }
