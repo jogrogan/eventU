@@ -30,7 +30,6 @@ public class UserInfo implements Serializable {
 
     public UserInfo(String email, ArrayList<String> favorites, String username, String schoolName,
             String userID, boolean isClub) {
-//        accountCreation = lastLogin = (Date)FieldValue.serverTimestamp();
         this.email = email;
         this.favorites = new ArrayList<String>(favorites);
         this.username = username;
