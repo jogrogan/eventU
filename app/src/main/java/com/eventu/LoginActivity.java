@@ -29,10 +29,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,9 +170,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
 
-                                Intent i = new Intent(LoginActivity.this, HomePageActivity.class);
-                                i.putExtra("username", user.getDisplayName());
-                                startActivity(i);
+                                DocumentReference doc = FirebaseFirestore.getInstance().collection(
+                                        "universities")
+                                        .document(user.getDisplayName()).collection("Users")
+                                        .document(user.getUid());
+
+
+                                doc.update("lastLogin", FieldValue.serverTimestamp());
+                                doc.get().addOnSuccessListener(
+                                        new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(
+                                                    DocumentSnapshot documentSnapshot) {
+                                                UserInfo userInfo = documentSnapshot.toObject(
+                                                        UserInfo.class);
+                                                Intent intent = new Intent(LoginActivity.this,
+                                                        HomePageActivity.class);
+                                                intent.putExtra("UserInfo", userInfo);
+                                                startActivity(intent);
+                                            }
+                                        });
 
                             } else {
                                 showProgress(false);

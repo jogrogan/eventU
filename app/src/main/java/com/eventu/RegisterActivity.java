@@ -38,14 +38,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -133,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mPasswordView.setError(null);
 
         // Store values at the time of the registration attempt.
-        String email = mEmailView.getText().toString();
+        final String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         final String name = mNameView.getText().toString();
 
@@ -189,36 +185,32 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                                 }
                                             }
                                         });
+
+                                String schoolName = intent.getStringExtra("schoolName");
                                 UserProfileChangeRequest profileUpdates
                                         = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(name)
+                                        .setDisplayName(schoolName)
                                         .build();
                                 user.updateProfile(profileUpdates);
 
-                                String schoolName = intent.getStringExtra("schoolName");
-                                Boolean isClub = intent.getBooleanExtra("isClub", false);
-                                Map<String, Object> newUser = new HashMap<>();
-                                newUser.put("Account Creation", FieldValue.serverTimestamp());
-                                newUser.put("Last Login", FieldValue.serverTimestamp());
-                                newUser.put("Favorites", Collections.EMPTY_LIST);
-                                newUser.put("Email", mEmailView.getText().toString());
-                                newUser.put("Name", name);
-                                newUser.put("isClub", isClub);
-                                newUser.put("UID", user.getUid());
+                                boolean isClub = intent.getBooleanExtra("isClub", false);
+
+                                UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
+                                        name, schoolName, user.getUid(), isClub);
 
                                 FirebaseFirestore.getInstance().collection("universities")
                                         .document(schoolName).collection("Users")
-                                        .document(user.getUid()).set(newUser)
+                                        .document(user.getUid()).set(userInfo)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.d("Register", "Document successfully added");
+                                                Log.d("Firestore", "Document successfully added");
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Log.w("Register", "Error writing document", e);
+                                                Log.w("Firestore", "Error writing document", e);
                                             }
                                         });
 

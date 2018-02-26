@@ -44,12 +44,11 @@ public class HomePageActivity extends AppCompatActivity {
         mEventDescription = findViewById(R.id.event_description_view);
         mEventDateandTime = findViewById(R.id.event_date_and_time_view);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras.containsKey("username")) {
-            String username = extras.getString("username");
-            Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
-                    Toast.LENGTH_SHORT).show();
-        }
+        UserInfo info = (UserInfo) getIntent().getSerializableExtra("UserInfo");
+
+        String username = info.getUsername();
+        Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
+                Toast.LENGTH_SHORT).show();
 
 
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
