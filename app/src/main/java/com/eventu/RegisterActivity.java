@@ -1,5 +1,7 @@
 package com.eventu;
 
+import static android.Manifest.permission.READ_CONTACTS;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -7,14 +9,16 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,14 +31,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,19 +55,22 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
-     * Keep track of the registration task to ensure we can cancel it if requested.
+     * Id to identity READ_CONTACTS permission request.
      */
-    private UserRegisterTask mAuthTask = null;
+    private static final int REQUEST_READ_CONTACTS = 0;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mRegisterFormView;
+    private View focusView;
     private EditText mNameView;
 
     //Firebase References
     private FirebaseAuth mFirebaseAuth;
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +79,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         setupActionBar();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        intent = getIntent();
+
+        populateAutoComplete();
 
         // Set up the registration form.
         mEmailView = findViewById(R.id.email);
@@ -110,10 +128,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * errors are presented and no actual registration attempt is made.
      */
     private void attemptRegister() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -124,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         final String name = mNameView.getText().toString();
 
         boolean cancel = false;
-        View focusView = null;
+        focusView = null;
 
         // Check for a valid password.
         if (password.equals("")) {
@@ -181,13 +195,41 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                         .build();
                                 user.updateProfile(profileUpdates);
 
+                                String schoolName = intent.getStringExtra("schoolName");
+                                Boolean isClub = intent.getBooleanExtra("isClub", false);
+                                Map<String, Object> newUser = new HashMap<>();
+                                newUser.put("Account Creation", FieldValue.serverTimestamp());
+                                newUser.put("Last Login", FieldValue.serverTimestamp());
+                                newUser.put("Favorites", Collections.EMPTY_LIST);
+                                newUser.put("Email", mEmailView.getText().toString());
+                                newUser.put("Name", name);
+                                newUser.put("isClub", isClub);
+                                newUser.put("UID", user.getUid());
+
+                                FirebaseFirestore.getInstance().collection("universities")
+                                        .document(schoolName).collection("Users")
+                                        .document(user.getUid()).set(newUser)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("Register", "Document successfully added");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("Register", "Error writing document", e);
+                                            }
+                                        });
+
                                 Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(i);
                             } else {
+                                showProgress(false);
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                //updateUI(null);
+                                mEmailView.setError(getString(R.string.error_email_exists));
+                                focusView = mEmailView;
+                                focusView.requestFocus();
                             }
                         }
                     });
@@ -202,8 +244,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     private boolean isEmailValid(String email) {
         Pattern emailPattern;
-        boolean isClub = getIntent().getBooleanExtra("isClub", false);
-        ArrayList<String> domains = getIntent().getStringArrayListExtra("schoolDomains");
+        boolean isClub = intent.getBooleanExtra("isClub", false);
+        ArrayList<String> domains = intent.getStringArrayListExtra("schoolDomains");
         if (isClub) {
             emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
                     Pattern.CASE_INSENSITIVE);
@@ -270,6 +312,50 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
+    }
+
+    /**
+     * +     * Callback received when a permissions request has been completed.
+     * +
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -322,55 +408,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous registration task used to authenticate the user.
-     */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserRegisterTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            // TODO: register the new account here.
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mEmailView.setError(getString(R.string.error_email_exists));
-                mEmailView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
 
