@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
+    boolean isClub;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -62,10 +63,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private View mRegisterFormView;
     private View focusView;
     private EditText mNameView;
-
     //Firebase References
     private FirebaseAuth mFirebaseAuth;
-
     private Intent intent;
 
     @Override
@@ -77,7 +76,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         intent = getIntent();
-
+        isClub = intent.getBooleanExtra("isClub", false);
+        if (isClub) {
+            TextInputLayout til = findViewById(R.id.name_widget);
+            til.setHint(getResources().getString(R.string.prompt_club_name));
+            TextView tv = new TextView(this);
+            til.addView(tv);
+        }
         populateAutoComplete();
 
         // Set up the registration form.
@@ -193,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                         .build();
                                 user.updateProfile(profileUpdates);
 
-                                boolean isClub = intent.getBooleanExtra("isClub", false);
+                                isClub = intent.getBooleanExtra("isClub", false);
 
                                 UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
                                         name, schoolName, user.getUid(), isClub);
@@ -236,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     private boolean isEmailValid(String email) {
         Pattern emailPattern;
-        boolean isClub = intent.getBooleanExtra("isClub", false);
+        isClub = intent.getBooleanExtra("isClub", false);
         ArrayList<String> domains = intent.getStringArrayListExtra("schoolDomains");
         if (isClub) {
             emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",

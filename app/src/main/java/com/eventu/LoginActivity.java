@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -170,26 +171,38 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 //updateUI(user);
 
-                                DocumentReference doc = FirebaseFirestore.getInstance().collection(
-                                        "universities")
-                                        .document(user.getDisplayName()).collection("Users")
-                                        .document(user.getUid());
+                                if (!user.isEmailVerified()) {
+                                    Toast.makeText(LoginActivity.this,
+                                            getString(R.string.error_email_not_verified),
+                                            Toast.LENGTH_SHORT).show();
+                                    showProgress(false);
+                                    // If sign in fails, display a message to the user.
+                                    focusView = mEmailView;
+                                    focusView.requestFocus();
+                                    user.sendEmailVerification();
+                                } else {
+                                    DocumentReference doc
+                                            = FirebaseFirestore.getInstance().collection(
+                                            "universities")
+                                            .document(user.getDisplayName()).collection("Users")
+                                            .document(user.getUid());
 
 
-                                doc.update("lastLogin", FieldValue.serverTimestamp());
-                                doc.get().addOnSuccessListener(
-                                        new OnSuccessListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onSuccess(
-                                                    DocumentSnapshot documentSnapshot) {
-                                                UserInfo userInfo = documentSnapshot.toObject(
-                                                        UserInfo.class);
-                                                Intent intent = new Intent(LoginActivity.this,
-                                                        HomePageActivity.class);
-                                                intent.putExtra("UserInfo", userInfo);
-                                                startActivity(intent);
-                                            }
-                                        });
+                                    doc.update("lastLogin", FieldValue.serverTimestamp());
+                                    doc.get().addOnSuccessListener(
+                                            new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(
+                                                        DocumentSnapshot documentSnapshot) {
+                                                    UserInfo userInfo = documentSnapshot.toObject(
+                                                            UserInfo.class);
+                                                    Intent intent = new Intent(LoginActivity.this,
+                                                            HomePageActivity.class);
+                                                    intent.putExtra("UserInfo", userInfo);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                }
 
                             } else {
                                 showProgress(false);
