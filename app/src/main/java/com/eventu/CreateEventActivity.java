@@ -14,9 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -41,8 +41,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private FloatingActionButton nextButton;
 
     //DataBase References
-    private DocumentReference mDocRef = FirebaseFirestore.getInstance().document(
-            "Club Events/Event");
+    private CollectionReference mSchoolClubEvents;
+    private DocumentReference mClubDocRef;
 
     //Firebase References
     private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -58,6 +58,9 @@ public class CreateEventActivity extends AppCompatActivity {
         mDatePicker = findViewById(R.id.dp_datepicker);
         nextButton = findViewById(R.id.next_button);
 
+
+        String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
+        mSchoolClubEvents = FirebaseFirestore.getInstance().collection(mEventPath);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,16 +77,17 @@ public class CreateEventActivity extends AppCompatActivity {
                 eventData.put(EVENT_DATE, eventDate);
                 eventData.put(OWNER, mCurrentUser.getDisplayName());
 
-                mDocRef.set(eventData, SetOptions.merge())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                mSchoolClubEvents.add(eventData)
+                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(CreateEventActivity.this, "Successful Write!",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(CreateEventActivity.this, "FAILURE!",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CreateEventActivity.this,
+                                            task.getException().getMessage(),
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
