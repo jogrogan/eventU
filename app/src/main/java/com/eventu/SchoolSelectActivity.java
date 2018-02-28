@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 public class SchoolSelectActivity extends AppCompatActivity {
 
     SchoolObject[] schoolJSONObjects;
+
     // UI references.
     private EditText mSchoolView;
     private ListView mSchoolList;
@@ -39,12 +41,18 @@ public class SchoolSelectActivity extends AppCompatActivity {
         mSchoolView = findViewById(R.id.school);
         mSchoolList = findViewById(R.id.school_list);
 
-        Button searchButton = findViewById(R.id.search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        mSchoolView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                searchSchools();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchSchools();
             }
         });
 
@@ -65,13 +73,12 @@ public class SchoolSelectActivity extends AppCompatActivity {
      * Starts the process to get JSON information about the universities matching the school string
      */
     private void searchSchools() {
-        schoolJSONObjects = null;
+        schoolJSONObjects = new SchoolObject[0];
 
         String school = mSchoolView.getText().toString();
-        if (school.equals("")) {
-            mSchoolView.setError(getString(R.string.error_field_required));
-            View focusView = mSchoolView;
-            focusView.requestFocus();
+
+        if (school.length() < 3) {
+            updateAdapter();
             return;
         }
 

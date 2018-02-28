@@ -9,13 +9,14 @@
               android:paddingTop="@dimen/activity_larger_vertical_margin"
               tools:context="com.eventu.SchoolSelectActivity">
 
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/school"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
@@ -24,13 +25,9 @@
             android:hint="@string/enter_school"
             android:singleLine="true"
             android:textSize="22sp"/>
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search"/>
-    </LinearLayout>
+
+    </android.support.design.widget.TextInputLayout>
+
     <ListView
         android:id="@+id/school_list"
         android:layout_width="match_parent"
