@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/activity_horizontal_margin"
+    tools:context="com.eventu.HomePageActivity">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/event_location_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/event_date_and_time_view"
+            android:layout_below="@+id/event_date_and_time_view"
+            android:layout_marginTop="24dp"
+            android:text="@string/event_location" android:textSize="18sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="128dp"/>
+        <TextView
+            android:id="@+id/event_description_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true" android:layout_below="@+id/event_location_view"
+            android:layout_marginTop="47dp" android:text="@string/event_description"
+            android:textSize="14sp" tools:layout_editor_absoluteX="28dp"
+            tools:layout_editor_absoluteY="224dp"/>
+        <TextView
+            android:id="@+id/event_date_and_time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true" android:layout_below="@+id/event_name_view"
+            android:layout_marginStart="18dp" android:layout_marginTop="23dp"
+            android:text="@string/date_and_time" android:textSize="18sp"
+            tools:layout_editor_absoluteX="129dp" tools:layout_editor_absoluteY="72dp"/>
+        <TextView
+            android:id="@+id/event_name_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/event_date_and_time_view"
+            android:layout_marginTop="20dp" android:text="@string/event_name"
+            android:textSize="18sp" tools:layout_editor_absoluteX="177dp"
+            tools:layout_editor_absoluteY="153dp"/>
+    </ListView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/event_creation_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" android:clickable="true"
+        android:src="@android:drawable/ic_input_add" app:backgroundTint="@color/colorPrimary"
+        tools:layout_editor_absoluteX="273dp" tools:layout_editor_absoluteY="403dp"/>
+</RelativeLayout>
