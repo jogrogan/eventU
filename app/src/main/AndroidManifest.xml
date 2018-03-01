@@ -63,12 +63,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.AccountTypeActivity"/>
         </activity>
-        <activity android:name=".HomePageActivity">
+        <activity
+            android:name=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".HomePageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eventu.HomePageActivity"/>
         </activity>
     </application>
 

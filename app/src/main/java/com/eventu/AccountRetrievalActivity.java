@@ -2,7 +2,6 @@ package com.eventu;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -12,7 +11,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class AccountRetrievalActivity extends AppCompatActivity {
+/**
+ * Allows the user to retrieve their account if they forgot their password
+ */
+public class AccountRetrievalActivity extends BaseClass {
+
+    // UI references.
     private AutoCompleteTextView mEmailView;
 
     @Override

@@ -3,7 +3,6 @@ package com.eventu;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Allows the user to select the university they attend
  */
-public class SchoolSelectActivity extends AppCompatActivity {
+public class SchoolSelectActivity extends BaseClass {
 
     SchoolObject[] schoolJSONObjects;
 
@@ -99,7 +98,6 @@ public class SchoolSelectActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, schools);
         mSchoolList.setAdapter(adapter);
     }
-
 
     /**
      * Connects to the url specified when created a new JsonTask object and gets all the valid

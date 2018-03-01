@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,9 +43,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via email/password
+ * and a button for resetting password in case you forgot yours.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View focusView;
 
 
-    //Firebase References
+    // Firebase References
     private FirebaseAuth mFirebaseAuth;
 
     @Override
@@ -115,7 +115,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
@@ -159,19 +161,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // Show a progress spinner, and perform the user login attempt.
             showProgress(true);
             mFirebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                // Sign in success
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                //updateUI(user);
 
-                                if (!user.isEmailVerified()) {
+                                if (user == null || user.getDisplayName() == null) {
+                                    failedLogin();
+                                } else if (!user.isEmailVerified()) {
                                     Toast.makeText(LoginActivity.this,
                                             getString(R.string.error_email_not_verified),
                                             Toast.LENGTH_SHORT).show();
@@ -205,15 +207,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 }
 
                             } else {
-                                showProgress(false);
-                                // If sign in fails, display a message to the user.
-                                mPasswordView.setError(getString(R.string.error_log_in_failed));
-                                focusView = mPasswordView;
-                                focusView.requestFocus();
+                                failedLogin();
                             }
                         }
                     });
         }
+    }
+
+    private void failedLogin() {
+        showProgress(false);
+        // If sign in fails, display a message to the user.
+        mPasswordView.setError(getString(R.string.error_log_in_failed));
+        focusView = mPasswordView;
+        focusView.requestFocus();
     }
 
     private boolean isEmailValid(String email) {
@@ -288,8 +294,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * +     * Callback received when a permissions request has been completed.
-     * +
+     * Callback received when a permissions request has been completed.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -332,7 +337,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
@@ -344,6 +348,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
+    /**
+     * This is necessary for the case where registration sends us to the log in page. We don't
+     * want to be able to return to resume the registration page so the back button now always
+     * returns us to the start page.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(LoginActivity.this, StartPageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {

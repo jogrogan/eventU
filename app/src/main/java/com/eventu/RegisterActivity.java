@@ -18,7 +18,6 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,21 +48,22 @@ import java.util.regex.Pattern;
 /**
  * A register screen that offers registering via email/password.
  */
-public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends BaseClass implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    // User Information
     boolean isClub;
-    // UI references.
+    // UI references
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mRegisterFormView;
     private View focusView;
     private EditText mNameView;
-    //Firebase References
+    // Firebase References
     private FirebaseAuth mFirebaseAuth;
     private Intent intent;
 
@@ -119,7 +119,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
@@ -167,70 +169,77 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user registration attempt.
+            // Show a progress spinner, and perform the user registration attempt.
             showProgress(true);
             mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                // Registration success
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                //updateUI(user);
-
-                                user.sendEmailVerification()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this,
-                                                            "Verification email sent",
-                                                            Toast.LENGTH_SHORT).show();
+                                if (user == null) {
+                                    failedRegister();
+                                } else {
+                                    user.sendEmailVerification()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(RegisterActivity.this,
+                                                                "Verification email sent",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
 
-                                String schoolName = intent.getStringExtra("schoolName");
-                                UserProfileChangeRequest profileUpdates
-                                        = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(schoolName)
-                                        .build();
-                                user.updateProfile(profileUpdates);
+                                    String schoolName = intent.getStringExtra("schoolName");
+                                    UserProfileChangeRequest profileUpdates
+                                            = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(schoolName)
+                                            .build();
+                                    user.updateProfile(profileUpdates);
 
-                                isClub = intent.getBooleanExtra("isClub", false);
+                                    isClub = intent.getBooleanExtra("isClub", false);
 
-                                UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
-                                        name, schoolName, user.getUid(), isClub);
+                                    UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
+                                            name, schoolName, user.getUid(), isClub);
 
-                                FirebaseFirestore.getInstance().collection("universities")
-                                        .document(schoolName).collection("Users")
-                                        .document(user.getUid()).set(userInfo)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("Firestore", "Document successfully added");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("Firestore", "Error writing document", e);
-                                            }
-                                        });
+                                    FirebaseFirestore.getInstance().collection("universities")
+                                            .document(schoolName).collection("Users")
+                                            .document(user.getUid()).set(userInfo)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("Firestore",
+                                                            "Document successfully added");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w("Firestore", "Error writing document", e);
+                                                }
+                                            });
 
-                                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(i);
+                                    Intent i = new Intent(RegisterActivity.this,
+                                            LoginActivity.class);
+                                    startActivity(i);
+                                }
                             } else {
-                                showProgress(false);
-                                // If sign in fails, display a message to the user.
-                                mEmailView.setError(getString(R.string.error_email_exists));
-                                focusView = mEmailView;
-                                focusView.requestFocus();
+                                failedRegister();
                             }
                         }
                     });
         }
+    }
+
+    private void failedRegister() {
+        showProgress(false);
+        // If registration fails, display a message to the user.
+        mEmailView.setError(getString(R.string.error_email_exists));
+        focusView = mEmailView;
+        focusView.requestFocus();
     }
 
     /**

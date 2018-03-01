@@ -3,7 +3,6 @@ package com.eventu;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,28 +22,29 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateEventActivity extends AppCompatActivity {
+/**
+ * Allows the user to create an event
+ */
+public class CreateEventActivity extends BaseClass {
 
-    //NO HARDCODING! Tags used in place of strings
+    // NO HARDCODING! Tags used in place of strings
     public static final String EVENT_NAME = "Event Name";
     public static final String EVENT_LOCATION = "Event Location";
     public static final String EVENT_DESCRIPTION = "Event Description";
     public static final String EVENT_DATE = "Event Date";
     public static final String OWNER = "Event Creator";
 
-    //UI References
+    // UI References
     private EditText mEventName;
     private EditText mEventLocation;
     private EditText mEventDescription;
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
-    private FloatingActionButton nextButton;
 
-    //DataBase References
+    // Database References
     private CollectionReference mSchoolClubEvents;
-    private DocumentReference mClubDocRef;
 
-    //Firebase References
+    // Firebase References
     private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -56,7 +56,7 @@ public class CreateEventActivity extends AppCompatActivity {
         mEventLocation = findViewById(R.id.event_location);
         mTimePicker = findViewById(R.id.tp_timepicker);
         mDatePicker = findViewById(R.id.dp_datepicker);
-        nextButton = findViewById(R.id.next_button);
+        FloatingActionButton nextButton = findViewById(R.id.next_button);
 
 
         String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
