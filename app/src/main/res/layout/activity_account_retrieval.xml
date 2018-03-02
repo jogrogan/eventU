@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <AutoCompleteTextView
-            android:id="@+id/password_retrival"
+            android:id="@+id/password_retrieval"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

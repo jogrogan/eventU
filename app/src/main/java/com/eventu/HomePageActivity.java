@@ -20,13 +20,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class HomePageActivity extends AppCompatActivity {
 
     // NO HARDCODING! Tags used in place of strings
-    public static final String EVENT_NAME = "Event Name";
-    public static final String EVENT_LOCATION = "Event Location";
-    public static final String EVENT_DESCRIPTION = "Event Description";
-    public static final String EVENT_DATE = "Event Date";
+    private static final String EVENT_NAME = "Event Name";
+    private static final String EVENT_LOCATION = "Event Location";
+    private static final String EVENT_DESCRIPTION = "Event Description";
+    private static final String EVENT_DATE = "Event Date";
 
     // Database References
-    private DocumentReference mDocRef = FirebaseFirestore.getInstance().document(
+    private final DocumentReference mDocRef = FirebaseFirestore.getInstance().document(
             "Club Events/Event");
 
     // UI References

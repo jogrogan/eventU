@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Class to include all user info stored inside the firestore database
+ * Class to include all user info stored inside the Firestore database
  */
 
-public class UserInfo implements Serializable {
+class UserInfo implements Serializable {
     @ServerTimestamp
     private Date accountCreation;
 
@@ -31,7 +31,7 @@ public class UserInfo implements Serializable {
     public UserInfo(String email, ArrayList<String> favorites, String username, String schoolName,
             String userID, boolean isClub) {
         this.email = email;
-        this.favorites = new ArrayList<String>(favorites);
+        this.favorites = new ArrayList<>(favorites);
         this.username = username;
         this.schoolName = schoolName;
         this.userID = userID;
@@ -47,7 +47,7 @@ public class UserInfo implements Serializable {
     }
 
     public ArrayList<String> getFavorites() {
-        return new ArrayList<String>(favorites);
+        return new ArrayList<>(favorites);
     }
 
     public Date getLastLogin() {

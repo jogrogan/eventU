@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 public class SchoolSelectActivity extends BaseClass {
 
-    SchoolObject[] schoolJSONObjects;
+    private SchoolObject[] schoolJSONObjects;
 
     // UI references.
     private EditText mSchoolView;
@@ -90,11 +90,11 @@ public class SchoolSelectActivity extends BaseClass {
      * Updates the list view with the list of schools found
      */
     private void updateAdapter() {
-        ArrayList<String> schools = new ArrayList<String>();
+        ArrayList<String> schools = new ArrayList<>();
         for (SchoolObject school : schoolJSONObjects) {
             schools.add(school.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, schools);
         mSchoolList.setAdapter(adapter);
     }
@@ -104,10 +104,6 @@ public class SchoolSelectActivity extends BaseClass {
      * json objects
      */
     private class JsonTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
 
         protected String doInBackground(String... params) {
             HttpURLConnection connection = null;
@@ -182,7 +178,7 @@ public class SchoolSelectActivity extends BaseClass {
         }
 
         private void setDomains(ArrayList<String> domains) {
-            this.domains = new ArrayList<String>(domains);
+            this.domains = new ArrayList<>(domains);
         }
     }
 }

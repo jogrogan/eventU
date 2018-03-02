@@ -36,7 +36,7 @@ public class AccountTypeActivity extends BaseClass {
     /**
      * Sends all the appropriate fields to the RegisterActivity
      */
-    void launchRegistrationActivity(boolean isClub) {
+    private void launchRegistrationActivity(boolean isClub) {
         ArrayList<String> domains = getIntent().getStringArrayListExtra("schoolDomains");
         String schoolName = getIntent().getStringExtra("schoolName");
 

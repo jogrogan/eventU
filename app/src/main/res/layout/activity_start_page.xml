@@ -14,7 +14,8 @@
         android:id="@+id/eventu_logo"
         android:layout_width="match_parent"
         android:layout_height="178dp"
-        android:contentDescription="@string/eventu_logo" android:src="@drawable/eventu_logo"
+        android:contentDescription="@string/eventu_logo"
+        android:src="@drawable/eventu_logo"
         app:srcCompat="@drawable/eventu_logo"/>
 
     <Button

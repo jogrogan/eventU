@@ -28,24 +28,21 @@ import java.util.Map;
 public class CreateEventActivity extends BaseClass {
 
     // NO HARDCODING! Tags used in place of strings
-    public static final String EVENT_NAME = "Event Name";
-    public static final String EVENT_LOCATION = "Event Location";
-    public static final String EVENT_DESCRIPTION = "Event Description";
-    public static final String EVENT_DATE = "Event Date";
-    public static final String OWNER = "Event Creator";
-
+    private static final String EVENT_NAME = "Event Name";
+    private static final String EVENT_LOCATION = "Event Location";
+    private static final String EVENT_DESCRIPTION = "Event Description";
+    private static final String EVENT_DATE = "Event Date";
+    private static final String OWNER = "Event Creator";
+    // Firebase References
+    private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     // UI References
     private EditText mEventName;
     private EditText mEventLocation;
     private EditText mEventDescription;
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
-
     // Database References
     private CollectionReference mSchoolClubEvents;
-
-    // Firebase References
-    private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +55,9 @@ public class CreateEventActivity extends BaseClass {
         mDatePicker = findViewById(R.id.dp_datepicker);
         FloatingActionButton nextButton = findViewById(R.id.next_button);
 
-
+        if (mCurrentUser == null || mCurrentUser.getDisplayName() == null) {
+            return;
+        }
         String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
         mSchoolClubEvents = FirebaseFirestore.getInstance().collection(mEventPath);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -85,9 +84,12 @@ public class CreateEventActivity extends BaseClass {
                                     Toast.makeText(CreateEventActivity.this, "Successful Write!",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(CreateEventActivity.this,
-                                            task.getException().getMessage(),
-                                            Toast.LENGTH_LONG).show();
+                                    if (task.getException() != null
+                                            && task.getException().getMessage() != null) {
+                                        Toast.makeText(CreateEventActivity.this,
+                                                task.getException().getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             }
                         });

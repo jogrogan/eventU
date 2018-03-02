@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.eventu.UserInfo accountCreation" />
+      <entry_point TYPE="field" FQNAME="com.eventu.UserInfo lastLogin" />
+    </entry_points>
+    <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setDomains" />
+    <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setName" />
+    <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" />
+    <pattern value="com.eventu.UserInfo" method="isClub" />
+    <pattern value="com.eventu.UserInfo" method="getUserID" />
+    <pattern value="com.eventu.UserInfo" method="getSchoolName" />
+    <pattern value="com.eventu.UserInfo" method="getLastLogin" />
+    <pattern value="com.eventu.UserInfo" method="getFavorites" />
+    <pattern value="com.eventu.UserInfo" method="getEmail" />
+    <pattern value="com.eventu.UserInfo" method="getAccountCreation" />
+    <pattern value="com.eventu.UserInfo" />
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

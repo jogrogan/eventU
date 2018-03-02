@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <item name="visible" type="id"/>
     <item name="masked" type="id"/>
 
@@ -6,9 +6,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_larger_vertical_margin">40dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="full_text_field">330dp</dimen>
-    <dimen name="half_text_field">165dp</dimen>
+    <dimen name="fab_margin" tools:keep="@dimen/fab_margin">16dp</dimen>
+    <dimen name="app_bar_height" tools:keep="@dimen/app_bar_height">180dp</dimen>
+    <dimen name="text_margin" tools:keep="@dimen/text_margin">16dp</dimen>
+    <dimen name="full_text_field" tools:keep="@dimen/full_text_field">330dp</dimen>
+    <dimen name="half_text_field" tools:keep="@dimen/half_text_field">165dp</dimen>
 </resources>
