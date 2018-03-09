@@ -15,8 +15,6 @@
     <string name="error_no_email_domain_match">This email address is invalid for this school
     </string>
     <string name="error_password_short">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_invalid_password">This password is invalid</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_email_exists">This email already exists</string>
     <string name="error_log_in_failed">Log in failed</string>
@@ -24,8 +22,6 @@
     <string name="title_activity_register">Register</string>
     <string name="title_forgot_password">Forgot Password</string>
     <string name="enter_school">Enter School</string>
-    <string name="search">Search</string>
-    <string name="enter_name">Name</string>
     <string name="action_forgot_password">Forgot Password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
@@ -35,10 +31,7 @@
     <string name="title_activity_create_event">Create Event</string>
     <string name="event_name">Event Name</string>
     <string name="event_location">Event Location</string>
-    <string name="date">Date</string>
     <string name="event_description">Event Description</string>
-    <string name="time">Time</string>
-    <string name="create_event">Create Event</string>
     <string name="date_and_time">Date and Time</string>
     <string name="event_date">Event Date</string>
     <string name="event_image">Event Image</string>

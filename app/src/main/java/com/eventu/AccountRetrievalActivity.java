@@ -24,7 +24,7 @@ public class AccountRetrievalActivity extends BaseClass {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_retrieval);
 
-        mEmailView = findViewById(R.id.password_retrival);
+        mEmailView = findViewById(R.id.password_retrieval);
         Button resetPassword = findViewById(R.id.reset_password);
         resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
