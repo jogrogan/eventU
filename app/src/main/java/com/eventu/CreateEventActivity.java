@@ -28,11 +28,11 @@ import java.util.Map;
 public class CreateEventActivity extends BaseClass {
 
     // NO HARDCODING! Tags used in place of strings
-    public static final String EVENT_NAME = "Event Name";
-    public static final String EVENT_LOCATION = "Event Location";
-    public static final String EVENT_DESCRIPTION = "Event Description";
-    public static final String EVENT_DATE = "Event Date";
-    public static final String OWNER = "Event Creator";
+    public static final String EVENT_NAME = "EventName";
+    public static final String EVENT_LOCATION = "EventLocation";
+    public static final String EVENT_DESCRIPTION = "EventDescription";
+    public static final String EVENT_DATE = "EventDate";
+    public static final String EVENT_CREATOR = "EventCreator";
 
     // UI References
     private EditText mEventName;
@@ -75,7 +75,7 @@ public class CreateEventActivity extends BaseClass {
                         mTimePicker.getHour(),
                         mTimePicker.getMinute()).getTime();
                 eventData.put(EVENT_DATE, eventDate);
-                eventData.put(OWNER, mCurrentUser.getDisplayName());
+                eventData.put(EVENT_CREATOR, mCurrentUser.getDisplayName());
 
                 mSchoolClubEvents.add(eventData)
                         .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -85,8 +85,14 @@ public class CreateEventActivity extends BaseClass {
                                     Toast.makeText(CreateEventActivity.this, "Successful Write!",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    String message;
+                                    if (task.getException() == null) {
+                                        message = "null pointer exception";
+                                    } else {
+                                        message = task.getException().getMessage();
+                                    }
                                     Toast.makeText(CreateEventActivity.this,
-                                            task.getException().getMessage(),
+                                            message,
                                             Toast.LENGTH_LONG).show();
                                 }
                             }

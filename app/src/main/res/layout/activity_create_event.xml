@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <DatePicker
             android:id="@+id/dp_datepicker"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="365dp"
             android:layout_marginStart="8dp" android:datePickerMode="calendar"
             android:elevation="0dp"

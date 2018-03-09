@@ -40,5 +40,8 @@
     <string name="time">Time</string>
     <string name="create_event">Create Event</string>
     <string name="date_and_time">Date and Time</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_image">Event Image</string>
+    <string name="event_creator">Event Creator</string>
 
 </resources>
