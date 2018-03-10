@@ -33,5 +33,11 @@
     <string name="event_location">Event Location</string>
     <string name="event_description">Event Description</string>
     <string name="date_and_time">Date and Time</string>
+    <string name="menu_timeline">Timeline</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_logout">Log out</string>
+    <string name="logout_confirmation">"Are you sure you want to log out?"</string>
+    <string name="confirm">Confirm</string>
+
 
 </resources>

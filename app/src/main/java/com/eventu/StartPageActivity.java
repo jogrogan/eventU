@@ -35,5 +35,9 @@ public class StartPageActivity extends BaseClass {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }
 

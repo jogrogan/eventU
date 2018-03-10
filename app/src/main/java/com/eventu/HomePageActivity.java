@@ -1,13 +1,18 @@
 package com.eventu;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -52,6 +57,26 @@ public class HomePageActivity extends AppCompatActivity {
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_timeline:
+                                break;
+                            case R.id.action_calendar:
+                                break;
+                            case R.id.action_logout:
+                                logout();
+                                break;
+                        }
+                        return true;
+                    }
+                });
+
 
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,5 +114,30 @@ public class HomePageActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+    }
+
+    public void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(R.string.menu_logout);
+        builder.setMessage(R.string.logout_confirmation);
+        builder.setPositiveButton(R.string.confirm,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(HomePageActivity.this, StartPageActivity.class));
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 }
