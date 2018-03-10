@@ -1,4 +1,4 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,9 +7,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.eventu.BaseClass;
+import com.eventu.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 /**
  * Allows the user to retrieve their account if they forgot their password
@@ -18,6 +21,7 @@ public class AccountRetrievalActivity extends BaseClass {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private View focusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +41,31 @@ public class AccountRetrievalActivity extends BaseClass {
     private void sendPasswordResetEmail() {
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         final String emailAddress = mEmailView.getText().toString();
+        focusView = null;
+
         mFirebaseAuth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(AccountRetrievalActivity.this,
-                                "Email Sent to " + emailAddress + "!",
-                                Toast.LENGTH_SHORT).show();
+
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AccountRetrievalActivity.this,
+                                    "Email Sent to " + emailAddress + "!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                if (task.getException() != null) {
+                                    throw task.getException();
+                                }
+                            } catch (FirebaseAuthInvalidUserException invalidEmail) {
+                                mEmailView.setError(getString(R.string.error_email_not_exists));
+                                focusView = mEmailView;
+                            } catch (Exception e) {
+                                Toast.makeText(AccountRetrievalActivity.this,
+                                        "There was an error in sending reset password email",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 });
     }

@@ -1,4 +1,4 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.eventu.BaseClass;
+import com.eventu.R;
+import com.eventu.login_and_registration.school_selection.SchoolSelectActivity;
 
 /**
  * A start page that offers two buttons to go to the login screen and the registration screen

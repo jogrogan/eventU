@@ -14,10 +14,13 @@
     <string name="error_email_not_verified">Email not verified, new verification email sent</string>
     <string name="error_no_email_domain_match">This email address is invalid for this school
     </string>
+    <string name="error_wrong_password">This password is incorrect</string>
     <string name="error_password_short">This password is too short</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_email_exists">This email already exists</string>
+    <string name="error_email_not_exists">This email does not exist</string>
     <string name="error_log_in_failed">Log in failed</string>
+    <string name="error_register_failed">Registration Failed</string>
     <string name="title_activity_login">Log in</string>
     <string name="title_activity_register">Register</string>
     <string name="title_forgot_password">Forgot Password</string>
