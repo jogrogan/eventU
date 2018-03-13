@@ -8,7 +8,7 @@
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
-              tools:context="com.eventu.LoginActivity">
+              tools:context="com.eventu.login_and_registration.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar
@@ -74,7 +74,8 @@
             <Button
                 android:id="@+id/forgot_password"
                 style="@style/FirebaseUI.Button"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/action_forgot_password"/>
 
         </LinearLayout>

@@ -10,7 +10,7 @@ import java.util.Date;
  * Class to include all user info stored inside the Firestore database
  */
 
-class UserInfo implements Serializable {
+public class UserInfo implements Serializable {
     @ServerTimestamp
     private Date accountCreation;
 

@@ -1,4 +1,4 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,82 +30,88 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eventu.BaseClass;
+import com.eventu.R;
+import com.eventu.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * A login screen that offers login via email/password
- * and a button for resetting password in case you forgot yours.
+ * A register screen that offers registering via email/password.
  */
-public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends BaseClass implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    // UI references.
+    // User Information
+    private boolean isClub;
+    // UI references
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
-    private View mLoginFormView;
+    private View mRegisterFormView;
     private View focusView;
-
-
+    private EditText mNameView;
     // Firebase References
     private FirebaseAuth mFirebaseAuth;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         setupActionBar();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        // Set up the login form.
-        mEmailView = findViewById(R.id.email);
+        intent = getIntent();
+        isClub = intent.getBooleanExtra("isClub", false);
+        if (isClub) {
+            TextInputLayout til = findViewById(R.id.name_widget);
+            til.setHint(getResources().getString(R.string.prompt_club_name));
+            TextView tv = new TextView(this);
+            til.addView(tv);
+        }
         populateAutoComplete();
 
+        // Set up the registration form.
+        mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
+        mNameView = findViewById(R.id.name);
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.register_progress);
+
+        Button registerButton = findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+            }
+        });
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegister();
                     return true;
                 }
                 return false;
-            }
-        });
-
-        Button logInButton = findViewById(R.id.log_in_button);
-        logInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-        Button forgotPasswordButton = findViewById(R.id.forgot_password);
-        forgotPasswordButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, AccountRetrievalActivity.class));
             }
         });
     }
@@ -120,25 +128,30 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Attempts to log in the account specified by the login form.
+     * Attempts to register the account specified by the register form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual registration attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegister() {
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        // Store values at the time of the registration attempt.
+        final String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        final String name = mNameView.getText().toString();
 
         boolean cancel = false;
         focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Check for a valid password.
         if (password.equals("")) {
             mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if (!isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_password_short));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -149,82 +162,140 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and perform the user login attempt.
+            // Show a progress spinner, and perform the user registration attempt.
             showProgress(true);
-            mFirebaseAuth.signInWithEmailAndPassword(email, password)
+            mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success
+                                // Registration success
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
-
-                                if (user == null || user.getDisplayName() == null) {
-                                    failedLogin();
-                                } else if (!user.isEmailVerified()) {
-                                    Toast.makeText(LoginActivity.this,
-                                            getString(R.string.error_email_not_verified),
-                                            Toast.LENGTH_SHORT).show();
+                                if (user == null) {
                                     showProgress(false);
-                                    // If sign in fails, display a message to the user.
+                                    // If registration fails, display a message to the user.
+                                    mEmailView.setError(getString(R.string.error_register_failed));
                                     focusView = mEmailView;
                                     focusView.requestFocus();
-                                    user.sendEmailVerification();
                                 } else {
-                                    DocumentReference doc
-                                            = FirebaseFirestore.getInstance().collection(
-                                            "universities")
-                                            .document(user.getDisplayName()).collection("Users")
-                                            .document(user.getUid());
-
-                                    doc.update("lastLogin", FieldValue.serverTimestamp());
-                                    doc.get().addOnSuccessListener(
-                                            new OnSuccessListener<DocumentSnapshot>() {
+                                    user.sendEmailVerification()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
-                                                public void onSuccess(
-                                                        DocumentSnapshot documentSnapshot) {
-                                                    UserInfo userInfo = documentSnapshot.toObject(
-                                                            UserInfo.class);
-                                                    Intent intent = new Intent(LoginActivity.this,
-                                                            HomePageActivity.class);
-                                                    intent.putExtra("UserInfo", userInfo);
-                                                    startActivity(intent);
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(RegisterActivity.this,
+                                                                "Verification email sent",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             });
-                                }
 
+                                    String schoolName = intent.getStringExtra("schoolName");
+                                    UserProfileChangeRequest profileUpdates
+                                            = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(schoolName)
+                                            .build();
+                                    user.updateProfile(profileUpdates);
+
+                                    isClub = intent.getBooleanExtra("isClub", false);
+
+                                    UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
+                                            name, schoolName, user.getUid(), isClub);
+
+                                    FirebaseFirestore.getInstance().collection("universities")
+                                            .document(schoolName).collection("Users")
+                                            .document(user.getUid()).set(userInfo)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("Firestore",
+                                                            "Document successfully added");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w("Firestore", "Error writing document", e);
+                                                }
+                                            });
+
+                                    Intent i = new Intent(RegisterActivity.this,
+                                            LoginActivity.class);
+                                    startActivity(i);
+                                }
                             } else {
-                                failedLogin();
+                                showProgress(false);
+                                try {
+                                    if (task.getException() != null) {
+                                        throw task.getException();
+                                    }
+                                }
+                                // If the users email already exists
+                                catch (FirebaseAuthUserCollisionException existEmail) {
+                                    mEmailView.setError(getString(R.string.error_email_exists));
+                                    focusView = mEmailView;
+                                } catch (Exception e) {
+                                    mEmailView.setError(getString(R.string.error_register_failed));
+                                    focusView = mEmailView;
+                                }
+                                focusView.requestFocus();
                             }
                         }
                     });
         }
     }
 
-    private void failedLogin() {
-        showProgress(false);
-        // If sign in fails, display a message to the user.
-        mPasswordView.setError(getString(R.string.error_log_in_failed));
-        focusView = mPasswordView;
-        focusView.requestFocus();
+    /**
+     * Clubs can have any valid email.
+     * If registering as a student, the given email must match the domain of the school
+     * chosen in the SchoolSelectActivity.
+     * Displays email form errors
+     */
+    private boolean isEmailValid(String email) {
+        Pattern emailPattern;
+        isClub = intent.getBooleanExtra("isClub", false);
+        ArrayList<String> domains = intent.getStringArrayListExtra("schoolDomains");
+        if (isClub) {
+            emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+                    Pattern.CASE_INSENSITIVE);
+        } else {
+            boolean matches = false;
+            for (int i = 0; i < domains.size(); i++) {
+                if (email.contains(domains.get(i))) {
+                    matches = true;
+                    break;
+                }
+            }
+            if (!matches) {
+                mEmailView.setError(getString(R.string.error_no_email_domain_match));
+                return false;
+            }
+            emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.edu$",
+                    Pattern.CASE_INSENSITIVE);
+        }
+        Matcher emailMatcher = emailPattern.matcher(email);
+        if (!emailMatcher.find()) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            return false;
+        }
+        return true;
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
+    private boolean isPasswordValid(String password) {
+        return password.length() >= 6;
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the registration form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -233,12 +304,12 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         // the progress spinner.
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+        mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
 
@@ -252,7 +323,6 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         });
     }
 
-
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -262,7 +332,6 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     }
 
     private boolean mayRequestContacts() {
-
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
@@ -282,7 +351,8 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Callback received when a permissions request has been completed.
+     * +     * Callback received when a permissions request has been completed.
+     * +
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -325,28 +395,18 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(RegisterActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
     }
 
-    /**
-     * This is necessary for the case where registration sends us to the log in page. We don't
-     * want to be able to return to resume the registration page so the back button now always
-     * returns us to the start page.
-     */
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(LoginActivity.this, StartPageActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -357,3 +417,4 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         int ADDRESS = 0;
     }
 }
+

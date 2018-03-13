@@ -4,6 +4,7 @@
     <entry_points version="2.0">
       <entry_point TYPE="field" FQNAME="com.eventu.UserInfo accountCreation" />
       <entry_point TYPE="field" FQNAME="com.eventu.UserInfo lastLogin" />
+      <entry_point TYPE="field" FQNAME="com.eventu.login_and_registration.AccountRetrievalActivity focusView" />
     </entry_points>
     <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setDomains" />
     <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setName" />
@@ -16,6 +17,15 @@
     <pattern value="com.eventu.UserInfo" method="getEmail" />
     <pattern value="com.eventu.UserInfo" method="getAccountCreation" />
     <pattern value="com.eventu.UserInfo" />
+    <pattern value="com.eventu.SchoolSelection.SchoolObject" method="setDomains" />
+    <pattern value="com.eventu.SchoolSelection.SchoolObject" method="setName" />
+    <pattern value="com.eventu.SchoolSelection.SchoolObject" />
+    <pattern value="com.eventu.school_selection.SchoolObject" method="setDomains" />
+    <pattern value="com.eventu.school_selection.SchoolObject" method="setName" />
+    <pattern value="com.eventu.school_selection.SchoolObject" />
+    <pattern value="com.eventu.login_and_registration.school_selection.SchoolObject" method="setName" />
+    <pattern value="com.eventu.login_and_registration.school_selection.SchoolObject" method="setDomains" />
+    <pattern value="com.eventu.login_and_registration.AccountRetrievalActivity" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />

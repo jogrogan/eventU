@@ -1,9 +1,12 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.eventu.BaseClass;
+import com.eventu.R;
 
 import java.util.ArrayList;
 
