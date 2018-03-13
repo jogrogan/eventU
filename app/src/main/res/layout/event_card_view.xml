@@ -27,14 +27,14 @@
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
                 android:text="@string/event_name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="#000000"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
 
             <TextView
                 android:id="@+id/textViewEventDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewEventName"
+                android:layout_below="@id/textViewEventDate"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
@@ -45,34 +45,33 @@
                 android:id="@+id/textViewEventLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewEventDesc"
+                android:layout_below="@id/textViewEventName"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_toEndOf="@id/imageViewEventImage"
-                android:background="@color/colorPrimary"
+                android:layout_toEndOf="@id/textViewEventDate"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/event_location"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
-                android:textStyle="bold"/>
+                android:textAppearance="@style/TextAppearance.AppCompat" android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/textViewEventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewEventLocation"
+                android:layout_below="@id/textViewEventName"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
                 android:text="@string/event_date"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="bold"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="12sp"/>
             <TextView
                 android:id="@+id/textViewEventCreator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textViewEventLocation"
-                android:text="@string/event_creator"/>
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/textViewEventName"
+                android:text="@string/event_creator" android:textSize="12sp"/>
 
         </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -39,10 +40,14 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         //Populate the holder views with text, date and images of the event
         holder.mEventName.setText(mEventInfo.getEventName());
         holder.mEventLocation.setText(mEventInfo.getEventLocation());
-        holder.mEventDate.setText(mEventInfo.getEventDate().toString());
+
+        SimpleDateFormat ft = new SimpleDateFormat("E MMM dd 'at' hh:mm a");
+        holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
-        //holder.mEventImage.setImageDrawable(mContext.getResources().getDrawable());
+
+        //TODO allow custom image
+        holder.mEventImage.setImageResource(R.drawable.eventu_logo);
     }
 
     @Override
