@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Yang Li on 3/9/18.
@@ -41,7 +42,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventName.setText(mEventInfo.getEventName());
         holder.mEventLocation.setText(mEventInfo.getEventLocation());
 
-        SimpleDateFormat ft = new SimpleDateFormat("E MMM dd 'at' hh:mm a");
+        SimpleDateFormat ft = new SimpleDateFormat("E MMM dd 'at' hh:mm a", Locale.US);
         holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
