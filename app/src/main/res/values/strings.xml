@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">eventU</string>
+    <string name="eventu_logo">eventU_logo</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -30,17 +31,19 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="eventu_logo">eventU_logo</string>
+    <string name="menu_logout">Log out</string>
+    <string name="logout_confirmation">"Are you sure you want to log out?"</string>
+
+    <!-- Strings related to Event Creation -->
     <string name="title_activity_create_event">Create Event</string>
     <string name="event_name">Event Name</string>
+    <string name="event_creator">Event Creator</string>
     <string name="event_location">Event Location</string>
     <string name="event_description">Event Description</string>
+    <string name="event_date">Event Date</string>
     <string name="date_and_time">Date and Time</string>
     <string name="menu_timeline">Timeline</string>
     <string name="menu_calendar">Calendar</string>
-    <string name="menu_logout">Log out</string>
-    <string name="logout_confirmation">"Are you sure you want to log out?"</string>
     <string name="confirm">Confirm</string>
-
-
+    <string name="event_image">"Event Image"</string>
 </resources>

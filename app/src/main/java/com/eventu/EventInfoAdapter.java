@@ -15,12 +15,12 @@ import java.util.List;
  * Class to hold the recylerview adapter and view holder for events
  */
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
+public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.EventViewHolder> {
 
     private Context mContext;
     private List<EventInfo> mEventList;
 
-    EventAdapter(Context context, List<EventInfo> eventList) {
+    EventInfoAdapter(Context context, List<EventInfo> eventList) {
         mContext = context;
         mEventList = eventList;
     }
@@ -28,7 +28,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.event_card_view, null);
+        View view = inflater.inflate(R.layout.event_card_view, parent, false);
         return new EventViewHolder(view);
     }
 
