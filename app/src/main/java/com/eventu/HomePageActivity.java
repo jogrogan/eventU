@@ -46,14 +46,27 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home_page);
-        FloatingActionButton mCreateEvent = findViewById(R.id.event_creation_fab);
+
+        //Display Welcome Message to Current User via toast
+        String username = mCurrentUser.getUsername();
+        Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
+                Toast.LENGTH_SHORT).show();
+
+        //Set up Recylcer View for Events
         mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
         mEventRecyclerView.setHasFixedSize(true);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
+
+        //Current User Info coming from whatever activity that launched this one
         mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
+
         //Set up onClick Listener - this one is for clicking the floating action button
+        FloatingActionButton mCreateEvent = findViewById(R.id.event_creation_fab);
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,13 +74,8 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        //Display Welcome Message to Current User via toast
-        String username = mCurrentUser.getUsername();
-        Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
-                Toast.LENGTH_SHORT).show();
-
+        //Sets up bottom navigation pane
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -85,13 +93,6 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 });
 
-
-        mCreateEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomePageActivity.this, CreateEventActivity.class));
-            }
-        });
     }
 
     @Override
@@ -164,6 +165,5 @@ public class HomePageActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 }
