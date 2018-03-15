@@ -15,7 +15,6 @@ public class EventInfo {
     private Date EventDate;
 
     public EventInfo() {
-
     }
 
     public EventInfo(String eventName, String eventDescription, String eventLocation,
@@ -28,23 +27,23 @@ public class EventInfo {
     }
 
     //Getters for all EventInfo fields
-    public String getEventName() {
+    String getEventName() {
         return EventName;
     }
 
-    public String getEventDescription() {
+    String getEventDescription() {
         return EventDescription;
     }
 
-    public String getEventLocation() {
+    String getEventLocation() {
         return EventLocation;
     }
 
-    public String getEventCreator() {
+    String getEventCreator() {
         return EventCreator;
     }
 
-    public Date getEventDate() {
+    Date getEventDate() {
         return EventDate;
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
@@ -11,9 +12,29 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="8dp">
 
+            <ImageButton
+                android:id="@+id/imagebuttonFavorite"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_below="@id/textViewEventDesc"
+                android:layout_gravity="bottom|center"
+                android:layout_toStartOf="@id/imagebuttonVerticalDots"
+                android:adjustViewBounds="true"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@string/favorite_star"
+                android:cropToPadding="false" app:srcCompat="@drawable/star_toggle"/>
+            <ImageButton
+                android:id="@+id/imagebuttonVerticalDots"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewEventDesc"
+                android:adjustViewBounds="true"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="@string/more_actions"
+                android:cropToPadding="false"
+                app:srcCompat="@drawable/ic_vertical_more"/>
             <ImageView
                 android:id="@+id/imageViewEventImage"
                 android:layout_width="120dp"
@@ -72,7 +93,6 @@
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/textViewEventName"
                 android:text="@string/event_creator" android:textSize="12sp"/>
-
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

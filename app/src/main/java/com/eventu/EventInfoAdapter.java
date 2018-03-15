@@ -1,12 +1,18 @@
 package com.eventu;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -35,7 +41,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder holder, int position) {
+    public void onBindViewHolder(final EventViewHolder holder, int position) {
         EventInfo mEventInfo = mEventList.get(position);
 
         //Populate the holder views with text, date and images of the event
@@ -47,8 +53,45 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
 
-        //TODO allow custom image
+        //TODO allow custom image - planned for future
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);
+
+        holder.mEventPopUpMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu and inflating the view
+                PopupMenu mPopMenu = new PopupMenu(mContext, v);
+                mPopMenu.getMenuInflater().inflate(R.menu.popup_menu, mPopMenu.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                mPopMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        if (item.getTitle().equals("Surprise Me")) {
+                            Intent viewIntent =
+                                    new Intent("android.intent.action.VIEW",
+                                            Uri.parse(
+                                                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+                            mContext.startActivity(viewIntent);
+                        } else {
+                            Toast.makeText(mContext, "You Clicked : " + item.getTitle(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    }
+                });
+                mPopMenu.show();
+            }
+        });
+
+        holder.mEventFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+                //TODO add more favorite logic here
+            }
+        });
     }
 
     @Override
@@ -64,6 +107,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         private TextView mEventLocation;
         private TextView mEventDate;
         private TextView mEventCreator;
+        private ImageButton mEventFavorite;
+        private ImageButton mEventPopUpMenu;
 
 
         EventViewHolder(View itemView) {
@@ -74,6 +119,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             mEventDate = itemView.findViewById(R.id.textViewEventDate);
             mEventLocation = itemView.findViewById(R.id.textViewEventLocation);
             mEventCreator = itemView.findViewById(R.id.textViewEventCreator);
+            mEventFavorite = itemView.findViewById(R.id.imagebuttonFavorite);
+            mEventPopUpMenu = itemView.findViewById(R.id.imagebuttonVerticalDots);
         }
     }
 }

@@ -39,7 +39,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     // UI References
     private RecyclerView mEventRecyclerView;
-    private EventInfoAdapter mEventAdapter;
     private List<EventInfo> mEventInfoList;
 
 
@@ -50,6 +49,8 @@ public class HomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         //Display Welcome Message to Current User via toast
+        //Current User Info coming from whatever activity that launched this one
+        mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
@@ -62,8 +63,6 @@ public class HomePageActivity extends AppCompatActivity {
         //The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
 
-        //Current User Info coming from whatever activity that launched this one
-        mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
 
         //Set up onClick Listener - this one is for clicking the floating action button
         FloatingActionButton mCreateEvent = findViewById(R.id.event_creation_fab);
@@ -132,7 +131,7 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 });
 
-        mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
+        EventInfoAdapter mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
         mEventRecyclerView.setAdapter(mEventAdapter);
     }
 
