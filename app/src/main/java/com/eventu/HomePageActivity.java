@@ -11,10 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.eventu.login_and_registration.StartPageActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,13 +40,14 @@ public class HomePageActivity extends AppCompatActivity {
     // UI References
     private RecyclerView mEventRecyclerView;
     private List<EventInfo> mEventInfoList;
+    private ViewFlipper mViewFlipper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_home_page);
+        setContentView(R.layout.activity_homepage);
 
         //Display Welcome Message to Current User via toast
         //Current User Info coming from whatever activity that launched this one
@@ -54,6 +55,9 @@ public class HomePageActivity extends AppCompatActivity {
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
+
+        //Sets Up the View Flipper for toggling between calendar and timeline
+        mViewFlipper = findViewById(R.id.eventViewFlipper);
 
         //Set up Recylcer View for Events
         mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
@@ -79,10 +83,17 @@ public class HomePageActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int displayNum;
                         switch (item.getItemId()) {
                             case R.id.action_timeline:
+                                displayNum = mViewFlipper.indexOfChild(
+                                        findViewById(R.id.homepage_timeline_view));
+                                mViewFlipper.setDisplayedChild(displayNum);
                                 break;
                             case R.id.action_calendar:
+                                displayNum = mViewFlipper.indexOfChild(
+                                        findViewById(R.id.homepage_calendar_view));
+                                mViewFlipper.setDisplayedChild(displayNum);
                                 break;
                             case R.id.action_logout:
                                 logout();
@@ -112,18 +123,14 @@ public class HomePageActivity extends AppCompatActivity {
                             if (dc != null) {
                                 switch (dc.getType()) {
                                     case REMOVED:
-                                        Log.d("yang", "Document Removed");
                                         break;
                                     case ADDED:
                                         EventInfo mEventInfo = dc.getDocument().toObject(
                                                 EventInfo.class);
                                         mEventInfoList.add(mEventInfo);
-                                        Log.d("yang", "Document Added" + dc.getDocument().getString(
-                                                "EventName"));
                                     case MODIFIED:
                                         break;
                                     default:
-                                        Log.d("yang", "no cases matched");
                                         break;
                                 }
                             }
