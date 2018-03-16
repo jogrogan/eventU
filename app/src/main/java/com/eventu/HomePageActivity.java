@@ -124,38 +124,9 @@ public class HomePageActivity extends BaseClass {
                         return true;
                     }
                 });
-    }
 
-    //Inflate the menu with the icons and such via the action_bar_menu xml file
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
-        return true;
-    }
 
-    //Function that handles all the button clicks for the action bar
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_bar_refresh_events:
-                //TODO Refresh Menu
-                Toast.makeText(HomePageActivity.this, "Refreshing Not Implemented",
-                        Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_bar_userSettings:
-                //TODO Settings Page
-                Toast.makeText(HomePageActivity.this, "Settings Page Not Implemented",
-                        Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        //Updating the Recycler View
         String mCampusEventPath = "/universities/" + mCurrentUser.getSchoolName() + "/Club Events/";
         db.collection(mCampusEventPath)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -188,6 +159,33 @@ public class HomePageActivity extends BaseClass {
 
         EventInfoAdapter mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
         mEventRecyclerView.setAdapter(mEventAdapter);
+    }
+
+    //Inflate the menu with the icons and such via the action_bar_menu xml file
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+    //Function that handles all the button clicks for the action bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_bar_refresh_events:
+                //TODO Refresh Menu
+                Toast.makeText(HomePageActivity.this, "Refreshing Not Implemented",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_bar_userSettings:
+                //TODO Settings Page
+                Toast.makeText(HomePageActivity.this, "Settings Page Not Implemented",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     private void logout() {
