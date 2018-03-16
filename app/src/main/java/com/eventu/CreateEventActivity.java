@@ -3,6 +3,7 @@ package com.eventu;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,11 +29,14 @@ import java.util.Map;
 public class CreateEventActivity extends BaseClass {
 
     // NO HARDCODING! Tags used in place of strings
-    public static final String EVENT_NAME = "EventName";
-    public static final String EVENT_LOCATION = "EventLocation";
-    public static final String EVENT_DESCRIPTION = "EventDescription";
-    public static final String EVENT_DATE = "EventDate";
-    public static final String EVENT_CREATOR = "EventCreator";
+    private static final String EVENT_NAME = "EventName";
+    private static final String EVENT_LOCATION = "EventLocation";
+    private static final String EVENT_DESCRIPTION = "EventDescription";
+    private static final String EVENT_DATE = "EventDate";
+    private static final String EVENT_CREATOR = "EventCreator";
+
+    // Firebase References
+    private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     // UI References
     private EditText mEventName;
@@ -44,12 +48,10 @@ public class CreateEventActivity extends BaseClass {
     // Database References
     private CollectionReference mSchoolClubEvents;
 
-    // Firebase References
-    private FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_create_event);
         mEventName = findViewById(R.id.event_name);
         mEventDescription = findViewById(R.id.event_description);
@@ -58,46 +60,80 @@ public class CreateEventActivity extends BaseClass {
         mDatePicker = findViewById(R.id.dp_datepicker);
         FloatingActionButton nextButton = findViewById(R.id.next_button);
 
-
+        if (mCurrentUser == null) {
+            Log.d("NULL", "NULL user found.");
+            return;
+        }
         String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
         mSchoolClubEvents = FirebaseFirestore.getInstance().collection(mEventPath);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<String, Object> eventData = new HashMap<>();
-                eventData.put(EVENT_NAME, mEventName.getText().toString());
-                eventData.put(EVENT_LOCATION, mEventLocation.getText().toString());
-                eventData.put(EVENT_DESCRIPTION, mEventDescription.getText().toString());
-                Date eventDate = new GregorianCalendar(
-                        mDatePicker.getYear(),
-                        mDatePicker.getMonth(),
-                        mDatePicker.getDayOfMonth(),
-                        mTimePicker.getHour(),
-                        mTimePicker.getMinute()).getTime();
-                eventData.put(EVENT_DATE, eventDate);
-                eventData.put(EVENT_CREATOR, mCurrentUser.getDisplayName());
-
-                mSchoolClubEvents.add(eventData)
-                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(CreateEventActivity.this, "Successful Write!",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    String message;
-                                    if (task.getException() == null) {
-                                        message = "null pointer exception";
-                                    } else {
-                                        message = task.getException().getMessage();
-                                    }
-                                    Toast.makeText(CreateEventActivity.this,
-                                            message,
-                                            Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                attemptAddEvent();
             }
         });
+
+    }
+
+    private void attemptAddEvent() {
+        String eventName = mEventName.getText().toString();
+        String eventLocation = mEventLocation.getText().toString();
+        String eventDescription = mEventDescription.getText().toString();
+
+        View focusView = null;
+        if (eventDescription.isEmpty()) {
+            mEventDescription.setError(getString(R.string.error_field_required));
+            focusView = mEventDescription;
+        }
+
+        if (eventLocation.isEmpty()) {
+            mEventLocation.setError(getString(R.string.error_field_required));
+            focusView = mEventLocation;
+        }
+
+        if (eventName.isEmpty()) {
+            mEventName.setError(getString(R.string.error_field_required));
+            focusView = mEventName;
+        }
+
+        if (focusView != null) {
+            focusView.requestFocus();
+            return;
+        }
+
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put(EVENT_NAME, eventName);
+        eventData.put(EVENT_LOCATION, eventLocation);
+        eventData.put(EVENT_DESCRIPTION, eventDescription);
+        Date eventDate = new GregorianCalendar(
+                mDatePicker.getYear(),
+                mDatePicker.getMonth(),
+                mDatePicker.getDayOfMonth(),
+                mTimePicker.getHour(),
+                mTimePicker.getMinute()).getTime();
+        eventData.put(EVENT_DATE, eventDate);
+        eventData.put(EVENT_CREATOR, getIntent().getStringExtra("username"));
+
+        mSchoolClubEvents.add(eventData)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(CreateEventActivity.this, "Successful Write!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            String message;
+                            if (task.getException() == null) {
+                                message = "null pointer exception";
+                            } else {
+                                message = task.getException().getMessage();
+                            }
+                            Toast.makeText(CreateEventActivity.this,
+                                    message,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        finish();
     }
 }

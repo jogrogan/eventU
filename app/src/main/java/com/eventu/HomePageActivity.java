@@ -32,16 +32,14 @@ import java.util.List;
  */
 public class HomePageActivity extends AppCompatActivity {
     // Database References
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // Current User's Information;
     private UserInfo mCurrentUser;
 
     // UI References
-    private RecyclerView mEventRecyclerView;
     private List<EventInfo> mEventInfoList;
     private ViewFlipper mViewFlipper;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class HomePageActivity extends AppCompatActivity {
         mViewFlipper = findViewById(R.id.eventViewFlipper);
 
         //Set up Recylcer View for Events
-        mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
+        RecyclerView mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
         mEventRecyclerView.setHasFixedSize(true);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -73,7 +71,9 @@ public class HomePageActivity extends AppCompatActivity {
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePageActivity.this, CreateEventActivity.class));
+                Intent intent = new Intent(HomePageActivity.this, CreateEventActivity.class);
+                intent.putExtra("username", mCurrentUser.getUsername());
+                startActivity(intent);
             }
         });
 
@@ -103,11 +103,6 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         String mCampusEventPath = "/universities/" + mCurrentUser.getSchoolName() + "/Club Events/";
         db.collection(mCampusEventPath)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -128,6 +123,7 @@ public class HomePageActivity extends AppCompatActivity {
                                         EventInfo mEventInfo = dc.getDocument().toObject(
                                                 EventInfo.class);
                                         mEventInfoList.add(mEventInfo);
+                                        break;
                                     case MODIFIED:
                                         break;
                                     default:
