@@ -13,6 +13,7 @@ class EventInfo {
     private String EventLocation;
     private String EventCreator;
     private Date EventDate;
+    private String EventID;
 
     public EventInfo() {
     }
@@ -45,5 +46,17 @@ class EventInfo {
 
     Date getEventDate() {
         return EventDate;
+    }
+
+    private String getEventID() {
+        return EventID;
+    }
+
+    void setEventID(String eventID) {
+        this.EventID = eventID;
+    }
+
+    public boolean equals(Object object) {
+        return (object instanceof EventInfo && EventID.equals(((EventInfo) object).getEventID()));
     }
 }

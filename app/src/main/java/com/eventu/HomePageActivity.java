@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -32,20 +33,16 @@ import java.util.List;
 /**
  * The Home page that is viewed immediately after logging in
  */
-public class HomePageActivity extends BaseClass {
+public class HomePageActivity extends AppCompatActivity {
     // Database References
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Current User's Information;
     private UserInfo mCurrentUser;
-
     // UI References
-    private RecyclerView mEventRecyclerView;
     private List<EventInfo> mEventInfoList;
     private ViewFlipper mViewFlipper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private BottomNavigationView mBottomNavigationView;
-    private ActionBar mActionBar;
+    private EventInfoAdapter mEventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +71,22 @@ public class HomePageActivity extends BaseClass {
                 }
         );
 
-
         //Sets up the action bar
-        mActionBar = getSupportActionBar();
+        ActionBar mActionBar = getSupportActionBar();
 
         //Sets Up the View Flipper for toggling between calendar and timeline
         mViewFlipper = findViewById(R.id.eventViewFlipper);
 
         //Set up Recylcer View for Events
-        mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
+        RecyclerView mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
         mEventRecyclerView.setHasFixedSize(true);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
+
+        mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
+        mEventRecyclerView.setAdapter(mEventAdapter);
 
 
         //Set up onClick Listener - this one is for clicking the floating action button
@@ -95,12 +94,14 @@ public class HomePageActivity extends BaseClass {
         mCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePageActivity.this, CreateEventActivity.class));
+                Intent intent = new Intent(HomePageActivity.this, CreateEventActivity.class);
+                intent.putExtra("username", mCurrentUser.getUsername());
+                startActivity(intent);
             }
         });
 
         //Sets up bottom navigation pane
-        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -140,14 +141,22 @@ public class HomePageActivity extends BaseClass {
                         }
                         for (DocumentChange dc : QuerySnap.getDocumentChanges()) {
                             if (dc != null) {
+                                EventInfo mEventInfo = dc.getDocument().toObject(
+                                        EventInfo.class);
+                                mEventInfo.setEventID(dc.getDocument().getId());
                                 switch (dc.getType()) {
                                     case REMOVED:
+                                        mEventInfoList.remove(mEventInfo);
+                                        mEventAdapter.notifyDataSetChanged();
                                         break;
                                     case ADDED:
-                                        EventInfo mEventInfo = dc.getDocument().toObject(
-                                                EventInfo.class);
                                         mEventInfoList.add(mEventInfo);
+                                        mEventAdapter.notifyDataSetChanged();
+                                        break;
                                     case MODIFIED:
+                                        mEventInfoList.remove(mEventInfo);
+                                        mEventInfoList.add(mEventInfo);
+                                        mEventAdapter.notifyDataSetChanged();
                                         break;
                                     default:
                                         break;
@@ -156,9 +165,6 @@ public class HomePageActivity extends BaseClass {
                         }
                     }
                 });
-
-        EventInfoAdapter mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
-        mEventRecyclerView.setAdapter(mEventAdapter);
     }
 
     //Inflate the menu with the icons and such via the action_bar_menu xml file
@@ -210,5 +216,12 @@ public class HomePageActivity extends BaseClass {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Do not want to be able to return to the log in page
+     */
+    @Override
+    public void onBackPressed() {
     }
 }

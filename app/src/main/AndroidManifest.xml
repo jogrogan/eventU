@@ -38,7 +38,7 @@
                 android:value="com.eventu.login_and_registration.StartPageActivity"/>
         </activity>
 
-        <!-- Password Retrival Page Activity -->
+        <!-- Password Retrieval Page Activity -->
         <activity
             android:name=".login_and_registration.AccountRetrievalActivity"
             android:label="@string/title_forgot_password"
