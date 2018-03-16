@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Refresh the Menu -->
+    <item
+        android:id="@+id/action_bar_refresh_events"
+        android:title="@string/menu_refresh" app:showAsAction="never"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_bar_userSettings"
+          android:title="@string/action_settings"
+          app:showAsAction="never"/>
+</menu>

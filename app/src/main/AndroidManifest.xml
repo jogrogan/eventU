@@ -13,19 +13,22 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true" android:theme="@style/AppTheme">
-        <activity
-            android:name=".BaseClass">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".BaseClass">
         </activity>
+
+        <!-- Start Page Activity -->
         <activity
             android:name=".login_and_registration.StartPageActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- Login and Registration Page Activity -->
         <activity
             android:name=".login_and_registration.LoginActivity"
             android:label="@string/title_activity_login"
@@ -34,6 +37,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.login_and_registration.StartPageActivity"/>
         </activity>
+
+        <!-- Password Retrival Page Activity -->
         <activity
             android:name=".login_and_registration.AccountRetrievalActivity"
             android:label="@string/title_forgot_password"
@@ -42,6 +47,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.login_and_registration.LoginActivity"/>
         </activity>
+
+        <!-- Select School Page Activity -->
         <activity
             android:name=".login_and_registration.school_selection.SchoolSelectActivity"
             android:label="@string/title_activity_register"
@@ -50,6 +57,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.login_and_registration.StartPageActivity"/>
         </activity>
+
+        <!-- Selecting Account Type Activity -->
         <activity
             android:name=".login_and_registration.AccountTypeActivity"
             android:label="@string/title_activity_register"
@@ -58,6 +67,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".login_and_registration.school_selection.SchoolSelectActivity"/>
         </activity>
+
+        <!-- Registration Page Activity -->
         <activity
             android:name=".login_and_registration.RegisterActivity"
             android:label="@string/title_activity_register"
@@ -66,10 +77,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.login_and_registration.AccountTypeActivity"/>
         </activity>
+
+        <!-- Home Page Activity -->
         <activity
             android:name=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/home_page">
         </activity>
+
+        <!-- Create Event Page Activity -->
         <activity
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event"

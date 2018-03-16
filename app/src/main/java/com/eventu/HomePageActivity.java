@@ -7,10 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ import java.util.List;
 /**
  * The Home page that is viewed immediately after logging in
  */
-public class HomePageActivity extends AppCompatActivity {
+public class HomePageActivity extends BaseClass {
     // Database References
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -41,7 +43,9 @@ public class HomePageActivity extends AppCompatActivity {
     private RecyclerView mEventRecyclerView;
     private List<EventInfo> mEventInfoList;
     private ViewFlipper mViewFlipper;
-
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private BottomNavigationView mBottomNavigationView;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,24 @@ public class HomePageActivity extends AppCompatActivity {
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
+
+        //Sets up the swipe to refresh feature
+        mSwipeRefreshLayout = findViewById(R.id.eventRefreshView);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        //TODO Add stuff to refresh on swipe
+                        Toast.makeText(HomePageActivity.this, "Refreshing!",
+                                Toast.LENGTH_SHORT).show();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+
+
+        //Sets up the action bar
+        mActionBar = getSupportActionBar();
 
         //Sets Up the View Flipper for toggling between calendar and timeline
         mViewFlipper = findViewById(R.id.eventViewFlipper);
@@ -78,8 +100,8 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         //Sets up bottom navigation pane
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(
+        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -102,7 +124,33 @@ public class HomePageActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
 
+    //Inflate the menu with the icons and such via the action_bar_menu xml file
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+    //Function that handles all the button clicks for the action bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_bar_refresh_events:
+                //TODO Refresh Menu
+                Toast.makeText(HomePageActivity.this, "Refreshing Not Implemented",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_bar_userSettings:
+                //TODO Settings Page
+                Toast.makeText(HomePageActivity.this, "Settings Page Not Implemented",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -140,13 +188,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         EventInfoAdapter mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
         mEventRecyclerView.setAdapter(mEventAdapter);
-    }
-
-    /**
-     * Do not want to be able to return to the log in page
-     */
-    @Override
-    public void onBackPressed() {
     }
 
     private void logout() {

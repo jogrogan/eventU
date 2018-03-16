@@ -7,10 +7,14 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_club_name">Club Name</string>
+    <string name="enter_school">Enter School</string>
+    <string name="action_forgot_password">Forgot Password?</string>
     <string name="action_log_in">Log in</string>
     <string name="action_register">Register</string>
     <string name="club">Club</string>
     <string name="student">Student</string>
+
+    <!-- Error Messages to login -->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_email_not_verified">Email not verified, new verification email sent</string>
     <string name="error_no_email_domain_match">This email address is invalid for this school
@@ -22,11 +26,10 @@
     <string name="error_email_not_exists">This email does not exist</string>
     <string name="error_log_in_failed">Log in failed</string>
     <string name="error_register_failed">Registration Failed</string>
+
     <string name="title_activity_login">Log in</string>
     <string name="title_activity_register">Register</string>
     <string name="title_forgot_password">Forgot Password</string>
-    <string name="enter_school">Enter School</string>
-    <string name="action_forgot_password">Forgot Password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -47,4 +50,11 @@
     <string name="event_image">"Event Image"</string>
     <string name="favorite_star">Favorite Star</string>
     <string name="more_actions">More Actions</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="action_settings">Action Settings</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="home_page">HomePage</string>
 </resources>

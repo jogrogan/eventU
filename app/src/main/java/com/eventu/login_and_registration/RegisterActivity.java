@@ -75,7 +75,6 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setupActionBar();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -114,17 +113,6 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                 return false;
             }
         });
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        // Show the Up button in the action bar.
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     /**
@@ -406,7 +394,6 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
