@@ -19,14 +19,13 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Yang Li on 3/9/18.
  * Class to hold the recylerview adapter and view holder for events
  */
 
 public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.EventViewHolder> {
 
-    private Context mContext;
-    private List<EventInfo> mEventList;
+    private final Context mContext;
+    private final List<EventInfo> mEventList;
 
     EventInfoAdapter(Context context, List<EventInfo> eventList) {
         mContext = context;
@@ -101,14 +100,14 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
 
     class EventViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mEventImage;
-        private TextView mEventName;
-        private TextView mEventDesc;
-        private TextView mEventLocation;
-        private TextView mEventDate;
-        private TextView mEventCreator;
-        private ImageButton mEventFavorite;
-        private ImageButton mEventPopUpMenu;
+        private final ImageView mEventImage;
+        private final TextView mEventName;
+        private final TextView mEventDesc;
+        private final TextView mEventLocation;
+        private final TextView mEventDate;
+        private final TextView mEventCreator;
+        private final ImageButton mEventFavorite;
+        private final ImageButton mEventPopUpMenu;
 
 
         EventViewHolder(View itemView) {

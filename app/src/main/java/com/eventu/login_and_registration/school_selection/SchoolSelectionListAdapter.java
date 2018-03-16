@@ -14,8 +14,8 @@ import java.util.List;
  * is displayed, the domain information can be retrieved from the given SchoolObject.
  */
 class SchoolSelectionListAdapter extends BaseAdapter {
-    final private LayoutInflater inflater;
-    final private List<SchoolObject> schools;
+    private final LayoutInflater inflater;
+    private final List<SchoolObject> schools;
 
     SchoolSelectionListAdapter(Context context, List<SchoolObject> schools) {
         this.inflater = LayoutInflater.from(context);

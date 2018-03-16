@@ -22,8 +22,8 @@ import java.util.Arrays;
 class JsonTask extends AsyncTask<String, String, String> {
 
     /* WeakReferences to the calling class as to prevent memory leaks */
-    final private WeakReference<Context> context;
-    final private WeakReference<ListView> mSchoolList;
+    private final WeakReference<Context> context;
+    private final WeakReference<ListView> mSchoolList;
 
     JsonTask(Context context, ListView mSchoolList) {
         this.context = new WeakReference<>(context);

@@ -4,10 +4,10 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 /**
- * Class to store all EventInformation
+ * Class to store all Event Information
  */
 
-public class EventInfo {
+class EventInfo {
     private String EventName;
     private String EventDescription;
     private String EventLocation;

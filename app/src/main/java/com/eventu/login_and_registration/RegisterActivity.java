@@ -130,31 +130,26 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         String password = mPasswordView.getText().toString();
         final String name = mNameView.getText().toString();
 
-        boolean cancel = false;
         focusView = null;
 
         // Check for a valid password.
-        if (password.equals("")) {
+        if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
-            cancel = true;
         } else if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_password_short));
             focusView = mPasswordView;
-            cancel = true;
         }
 
         // Check for a valid email address.
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
         } else if (!isEmailValid(email)) {
             focusView = mEmailView;
-            cancel = true;
         }
 
-        if (cancel) {
+        if (focusView != null) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();

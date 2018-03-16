@@ -143,14 +143,14 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (password.equals("")) {
+        if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
