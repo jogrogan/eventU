@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * Class to store all Event Information
  */
-
 class EventInfo {
     private String EventName;
     private String EventDescription;
@@ -56,6 +55,9 @@ class EventInfo {
         this.EventID = eventID;
     }
 
+    /**
+     * Two EventInfo objects are equal if the IDs of both of the events are the same.
+     */
     public boolean equals(Object object) {
         return (object instanceof EventInfo && EventID.equals(((EventInfo) object).getEventID()));
     }

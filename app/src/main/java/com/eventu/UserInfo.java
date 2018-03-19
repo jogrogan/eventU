@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * Class to include all user info stored inside the Firestore database
  */
-
 public class UserInfo implements Serializable {
     @ServerTimestamp
     private Date accountCreation;
@@ -23,19 +22,19 @@ public class UserInfo implements Serializable {
     private String username;
     private String schoolName;
     private String userID;
-    private boolean isClub;
+    private boolean club;
 
     public UserInfo() {
     }
 
     public UserInfo(String email, ArrayList<String> favorites, String username, String schoolName,
-            String userID, boolean isClub) {
+            String userID, boolean club) {
         this.email = email;
         this.favorites = new ArrayList<>(favorites);
         this.username = username;
         this.schoolName = schoolName;
         this.userID = userID;
-        this.isClub = isClub;
+        this.club = club;
     }
 
     public Date getAccountCreation() {
@@ -66,7 +65,7 @@ public class UserInfo implements Serializable {
         return userID;
     }
 
-    public boolean isClub() {
-        return isClub;
+    public boolean getClub() {
+        return club;
     }
 }

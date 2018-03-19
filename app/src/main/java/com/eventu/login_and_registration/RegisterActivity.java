@@ -58,8 +58,10 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+
     // User Information
     private boolean isClub;
+
     // UI references
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -67,6 +69,7 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
     private View mRegisterFormView;
     private View focusView;
     private EditText mNameView;
+
     // Firebase References
     private FirebaseAuth mFirebaseAuth;
     private Intent intent;
@@ -306,6 +309,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         });
     }
 
+    /**
+     * Handles field autocompletion
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -314,6 +320,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * Request contacts needed in order for email autocompletion
+     */
     private boolean mayRequestContacts() {
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
@@ -334,8 +343,7 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
     }
 
     /**
-     * +     * Callback received when a permissions request has been completed.
-     * +
+     * Callback received when a permissions request has been completed
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -347,6 +355,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         }
     }
 
+    /**
+     * Load email autocomplete data
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -364,6 +375,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * Stores email to be used by future autocompletion
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -381,6 +395,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
 
     }
 
+    /**
+     * Adds list of autocomplete email suggestions
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -390,6 +407,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         mEmailView.setAdapter(adapter);
     }
 
+    /**
+     * Object used for requesting contacts
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,

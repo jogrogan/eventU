@@ -21,7 +21,7 @@ import java.util.Arrays;
  */
 class JsonTask extends AsyncTask<String, String, String> {
 
-    /* WeakReferences to the calling class as to prevent memory leaks */
+    // WeakReferences to the calling class as to prevent memory leaks
     private final WeakReference<Context> context;
     private final WeakReference<ListView> mSchoolList;
 
@@ -30,6 +30,7 @@ class JsonTask extends AsyncTask<String, String, String> {
         this.mSchoolList = new WeakReference<>(mSchoolList);
     }
 
+    // Read Json from the url
     protected String doInBackground(String... params) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
@@ -76,7 +77,7 @@ class JsonTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        /* Update the school list view */
+        // Update the school ListView with the new objects found
         SchoolObject[] schoolJSONObjects = new Gson().fromJson(result, SchoolObject[].class);
         if (schoolJSONObjects != null) {
             final SchoolSelectionListAdapter adapter = new SchoolSelectionListAdapter(context.get(),

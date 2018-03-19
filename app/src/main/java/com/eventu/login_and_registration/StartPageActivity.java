@@ -40,6 +40,9 @@ public class StartPageActivity extends BaseClass {
         });
     }
 
+    /**
+     * Back button should have no functionality as this is the starting page
+     */
     @Override
     public void onBackPressed() {
     }

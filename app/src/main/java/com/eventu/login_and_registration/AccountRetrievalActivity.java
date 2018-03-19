@@ -38,6 +38,10 @@ public class AccountRetrievalActivity extends BaseClass {
         });
     }
 
+    /**
+     * Handles sending password reset email.
+     * Includes valid email verification.
+     */
     private void sendPasswordResetEmail() {
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         final String emailAddress = mEmailView.getText().toString();
@@ -60,6 +64,7 @@ public class AccountRetrievalActivity extends BaseClass {
                             } catch (FirebaseAuthInvalidUserException invalidEmail) {
                                 mEmailView.setError(getString(R.string.error_email_not_exists));
                                 focusView = mEmailView;
+                                focusView.requestFocus();
                             } catch (Exception e) {
                                 Toast.makeText(AccountRetrievalActivity.this,
                                         "There was an error in sending reset password email",

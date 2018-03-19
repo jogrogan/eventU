@@ -50,7 +50,7 @@ import java.util.List;
 
 /**
  * A login screen that offers login via email/password
- * and a button for resetting password in case you forgot yours.
+ * and a button for resetting password in case the user forgot
  */
 public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> {
 
@@ -65,7 +65,6 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     private View mProgressView;
     private View mLoginFormView;
     private View focusView;
-
 
     // Firebase References
     private FirebaseAuth mFirebaseAuth;
@@ -242,6 +241,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         }
     }
 
+    /**
+     * Simple email validation
+     */
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
@@ -275,7 +277,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         });
     }
 
-
+    /**
+     * Handles field autocompletion
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -284,8 +288,10 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * Request contacts needed in order for email autocompletion
+     */
     private boolean mayRequestContacts() {
-
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
@@ -305,7 +311,7 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Callback received when a permissions request has been completed.
+     * Callback received when a permissions request has been completed
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -317,6 +323,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         }
     }
 
+    /**
+     * Load email autocomplete data
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -334,6 +343,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * Stores email to be used by future autocompletion
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -350,6 +362,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
+    /**
+     * Adds list of autocomplete email suggestions
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -360,6 +375,7 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     }
 
     /**
+     * Override the user pressing the back button
      * This is necessary for the case where registration sends us to the log in page. We don't
      * want to be able to return to resume the registration page so the back button now always
      * returns us to the start page.
@@ -371,6 +387,9 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         startActivity(intent);
     }
 
+    /**
+     * Object used for requesting contacts
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,

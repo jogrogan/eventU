@@ -75,6 +75,10 @@ public class CreateEventActivity extends BaseClass {
 
     }
 
+    /**
+     * Attempts to add the user inputted information into the event database
+     * Includes error handling for missing fields.
+     */
     private void attemptAddEvent() {
         String eventName = mEventName.getText().toString();
         String eventLocation = mEventLocation.getText().toString();

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -15,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -36,13 +34,16 @@ import java.util.List;
 public class HomePageActivity extends AppCompatActivity {
     // Database References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     // Current User's Information;
     private UserInfo mCurrentUser;
+
     // UI References
     private List<EventInfo> mEventInfoList;
     private ViewFlipper mViewFlipper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private EventInfoAdapter mEventAdapter;
+    private BottomNavigationView mBottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +51,14 @@ public class HomePageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_homepage);
 
-        //Display Welcome Message to Current User via toast
-        //Current User Info coming from whatever activity that launched this one
+        // Display Welcome Message to Current User via toast
+        // Current User Info coming from whatever activity that launched this one
         mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
 
-        //Sets up the swipe to refresh feature
+        // Sets up the swipe to refresh feature
         mSwipeRefreshLayout = findViewById(R.id.eventRefreshView);
         mSwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -71,37 +72,28 @@ public class HomePageActivity extends AppCompatActivity {
                 }
         );
 
-        //Sets up the action bar
+        // Sets up the action bar
         ActionBar mActionBar = getSupportActionBar();
 
-        //Sets Up the View Flipper for toggling between calendar and timeline
+        // Sets Up the ViewFlipper for toggling between calendar and timeline
         mViewFlipper = findViewById(R.id.eventViewFlipper);
 
-        //Set up Recylcer View for Events
+        // Set up RecyclerView for Events
         RecyclerView mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
         mEventRecyclerView.setHasFixedSize(true);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //The list of events in the timeline view
+        // The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
 
         mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
-
-        //Set up onClick Listener - this one is for clicking the floating action button
-        FloatingActionButton mCreateEvent = findViewById(R.id.event_creation_fab);
-        mCreateEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomePageActivity.this, CreateEventActivity.class);
-                intent.putExtra("username", mCurrentUser.getUsername());
-                startActivity(intent);
-            }
-        });
-
-        //Sets up bottom navigation pane
-        BottomNavigationView mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        // Sets up bottom navigation pane
+        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        if (!mCurrentUser.getClub()) {
+            mBottomNavigationView.getMenu().removeItem(R.id.action_create_event);
+        }
         mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -118,6 +110,12 @@ public class HomePageActivity extends AppCompatActivity {
                                         findViewById(R.id.homepage_calendar_view));
                                 mViewFlipper.setDisplayedChild(displayNum);
                                 break;
+                            case R.id.action_create_event:
+                                Intent intent = new Intent(HomePageActivity.this,
+                                        CreateEventActivity.class);
+                                intent.putExtra("username", mCurrentUser.getUsername());
+                                startActivity(intent);
+                                break;
                             case R.id.action_logout:
                                 logout();
                                 break;
@@ -127,7 +125,7 @@ public class HomePageActivity extends AppCompatActivity {
                 });
 
 
-        //Updating the Recycler View
+        // Updating the RecyclerView with real time updates from the club events database
         String mCampusEventPath = "/universities/" + mCurrentUser.getSchoolName() + "/Club Events/";
         db.collection(mCampusEventPath)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -147,34 +145,45 @@ public class HomePageActivity extends AppCompatActivity {
                                 switch (dc.getType()) {
                                     case REMOVED:
                                         mEventInfoList.remove(mEventInfo);
-                                        mEventAdapter.notifyDataSetChanged();
                                         break;
                                     case ADDED:
                                         mEventInfoList.add(mEventInfo);
-                                        mEventAdapter.notifyDataSetChanged();
                                         break;
                                     case MODIFIED:
                                         mEventInfoList.remove(mEventInfo);
                                         mEventInfoList.add(mEventInfo);
-                                        mEventAdapter.notifyDataSetChanged();
                                         break;
                                     default:
                                         break;
                                 }
+                                mEventAdapter.notifyDataSetChanged();
                             }
                         }
                     }
                 });
     }
 
-    //Inflate the menu with the icons and such via the action_bar_menu xml file
+    /**
+     * Always default back to the timeline format when resuming the HomePageActivity
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
+    }
+
+    /**
+     * Inflate the menu with the icons and such via the action_bar_menu xml file
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_menu, menu);
         return true;
     }
 
-    //Function that handles all the button clicks for the action bar
+    /**
+     * Function that handles all the button clicks for the action bar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -194,6 +203,9 @@ public class HomePageActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Handles logging out of the eventU app
+     */
     private void logout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -219,6 +231,7 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     /**
+     * Overriding back button
      * Do not want to be able to return to the log in page
      */
     @Override

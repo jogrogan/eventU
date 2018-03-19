@@ -66,7 +66,8 @@ public class SchoolSelectActivity extends BaseClass {
 
     /**
      * Handles form errors for the school field.
-     * Starts the process to get JSON information about the universities matching the school string
+     * Starts the process to get JSON information about the universities matching the string the
+     * user entered
      */
     private void searchSchools() {
         String school = mSchoolView.getText().toString();

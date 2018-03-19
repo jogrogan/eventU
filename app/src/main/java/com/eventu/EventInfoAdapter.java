@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Class to hold the recylerview adapter and view holder for events
+ * Class to hold the RecyclerView adapter and view holder for events
  */
-
 public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.EventViewHolder> {
 
     private final Context mContext;
