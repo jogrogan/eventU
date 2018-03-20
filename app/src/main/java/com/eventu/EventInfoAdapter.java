@@ -25,10 +25,12 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
 
     private final Context mContext;
     private final List<EventInfo> mEventList;
+    private final UserInfo mCurrentUser;
 
-    EventInfoAdapter(Context context, List<EventInfo> eventList) {
+    EventInfoAdapter(Context context, List<EventInfo> eventList, UserInfo user) {
         mContext = context;
         mEventList = eventList;
+        mCurrentUser = user;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
 
     @Override
     public void onBindViewHolder(final EventViewHolder holder, int position) {
-        EventInfo mEventInfo = mEventList.get(position);
+        final EventInfo mEventInfo = mEventList.get(position);
 
         //Populate the holder views with text, date and images of the event
         holder.mEventName.setText(mEventInfo.getEventName());
@@ -83,11 +85,30 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             }
         });
 
+        // If on load the user previously had favorited this event, then re-select the icon
+        // Otherwise default the icon as unselected
+        if (mCurrentUser.getFavorites().contains(mEventInfo.getEventID())) {
+            holder.mEventFavorite.setSelected(true);
+        } else {
+            holder.mEventFavorite.setSelected(false);
+        }
         holder.mEventFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String eID = mEventInfo.getEventID();
+                boolean update;
+                // Add or remove the event from the user's list of favorited events
+                if (!v.isSelected()) {
+                    update = mCurrentUser.addFavorite(eID);
+                } else {
+                    update = mCurrentUser.removeFavorite(eID);
+                }
                 v.setSelected(!v.isSelected());
-                //TODO add more favorite logic here
+                // If the event was added or remove then update the user's favorites list inside
+                // the database
+                if (update) {
+                    UserDatabaseUpdater.updateFavorites(mCurrentUser);
+                }
             }
         });
     }

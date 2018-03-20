@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -86,7 +87,7 @@ public class HomePageActivity extends AppCompatActivity {
         // The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
 
-        mEventAdapter = new EventInfoAdapter(this, mEventInfoList);
+        mEventAdapter = new EventInfoAdapter(this, mEventInfoList, mCurrentUser);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         // Sets up bottom navigation pane
@@ -145,17 +146,25 @@ public class HomePageActivity extends AppCompatActivity {
                                 switch (dc.getType()) {
                                     case REMOVED:
                                         mEventInfoList.remove(mEventInfo);
+                                        // If the event removed was a favorite of the user then
+                                        // remove it
+                                        if (mCurrentUser.removeFavorite(mEventInfo.getEventID())) {
+                                            UserDatabaseUpdater.updateFavorites(mCurrentUser);
+                                        }
                                         break;
                                     case ADDED:
                                         mEventInfoList.add(mEventInfo);
                                         break;
                                     case MODIFIED:
-                                        mEventInfoList.remove(mEventInfo);
-                                        mEventInfoList.add(mEventInfo);
+                                        int index = mEventInfoList.indexOf(mEventInfo);
+                                        mEventInfoList.set(index, mEventInfo);
                                         break;
                                     default:
                                         break;
                                 }
+
+                                // Maintain sorting of events by date
+                                Collections.sort(mEventInfoList);
                                 mEventAdapter.notifyDataSetChanged();
                             }
                         }

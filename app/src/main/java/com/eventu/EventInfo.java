@@ -1,12 +1,14 @@
 package com.eventu;
 
+import android.support.annotation.NonNull;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * Class to store all Event Information
  */
-class EventInfo {
+class EventInfo implements Comparable<EventInfo> {
     private String EventName;
     private String EventDescription;
     private String EventLocation;
@@ -47,7 +49,7 @@ class EventInfo {
         return EventDate;
     }
 
-    private String getEventID() {
+    String getEventID() {
         return EventID;
     }
 
@@ -60,5 +62,14 @@ class EventInfo {
      */
     public boolean equals(Object object) {
         return (object instanceof EventInfo && EventID.equals(((EventInfo) object).getEventID()));
+    }
+
+    /**
+     * compareTo needs to be defined in order to be able to sort EventInfo objects.
+     * An EventInfo object is defined as "less than" another EventInfo object if its date is before
+     * the other's.
+     */
+    public int compareTo(@NonNull EventInfo e) {
+        return EventDate.compareTo(e.EventDate);
     }
 }
