@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -246,4 +247,5 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
     }
+
 }
