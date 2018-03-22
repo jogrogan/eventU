@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -147,11 +146,7 @@ public class HomePageActivity extends AppCompatActivity {
                                 switch (dc.getType()) {
                                     case REMOVED:
                                         mEventInfoList.remove(mEventInfo);
-                                        // If the event removed was a favorite of the user then
-                                        // remove it
-                                        if (mCurrentUser.removeFavorite(mEventInfo.getEventID())) {
-                                            UserDatabaseUpdater.updateFavorites(mCurrentUser);
-                                        }
+                                        mCurrentUser.removeFavorite(mEventInfo.getEventID());
                                         break;
                                     case ADDED:
                                         mEventInfoList.add(mEventInfo);

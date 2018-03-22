@@ -96,19 +96,13 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             @Override
             public void onClick(View v) {
                 String eID = mEventInfo.getEventID();
-                boolean update;
                 // Add or remove the event from the user's list of favorited events
                 if (!v.isSelected()) {
-                    update = mCurrentUser.addFavorite(eID);
+                    mCurrentUser.addFavorite(eID);
                 } else {
-                    update = mCurrentUser.removeFavorite(eID);
+                    mCurrentUser.removeFavorite(eID);
                 }
                 v.setSelected(!v.isSelected());
-                // If the event was added or remove then update the user's favorites list inside
-                // the database
-                if (update) {
-                    UserDatabaseUpdater.updateFavorites(mCurrentUser);
-                }
             }
         });
     }

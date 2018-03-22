@@ -1,5 +1,7 @@
 package com.eventu;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.Serializable;
@@ -54,7 +56,11 @@ public class UserInfo implements Serializable {
      * Returns true if successfully added, false otherwise.
      */
     boolean addFavorite(String favorite) {
-        return !favorites.contains(favorite) && favorites.add(favorite);
+        if (!favorites.contains(favorite) && favorites.add(favorite)) {
+            updateFavorites();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -62,7 +68,11 @@ public class UserInfo implements Serializable {
      * Returns true if successfully removed, false otherwise.
      */
     boolean removeFavorite(String favorite) {
-        return favorites.contains(favorite) && favorites.remove(favorite);
+        if (favorites.contains(favorite) && favorites.remove(favorite)) {
+            updateFavorites();
+            return true;
+        }
+        return false;
     }
 
     public Date getLastLogin() {
@@ -83,5 +93,17 @@ public class UserInfo implements Serializable {
 
     public boolean getClub() {
         return club;
+    }
+
+    /**
+     * Update the given user's favorites field
+     */
+    private void updateFavorites() {
+        DocumentReference doc
+                = FirebaseFirestore.getInstance().collection(
+                "universities")
+                .document(schoolName).collection("Users")
+                .document(userID);
+        doc.update("favorites", favorites);
     }
 }
