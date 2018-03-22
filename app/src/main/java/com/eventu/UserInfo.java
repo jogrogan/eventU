@@ -55,24 +55,20 @@ public class UserInfo implements Serializable {
      * Adds the input string to the ArrayList of favorites if not already present.
      * Returns true if successfully added, false otherwise.
      */
-    boolean addFavorite(String favorite) {
+    void addFavorite(String favorite) {
         if (!favorites.contains(favorite) && favorites.add(favorite)) {
             updateFavorites();
-            return true;
         }
-        return false;
     }
 
     /**
      * Removes the input string from the ArrayList of favorites.
      * Returns true if successfully removed, false otherwise.
      */
-    boolean removeFavorite(String favorite) {
+    void removeFavorite(String favorite) {
         if (favorites.contains(favorite) && favorites.remove(favorite)) {
             updateFavorites();
-            return true;
         }
-        return false;
     }
 
     public Date getLastLogin() {
