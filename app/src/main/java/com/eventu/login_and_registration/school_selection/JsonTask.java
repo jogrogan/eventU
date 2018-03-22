@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 /**
  * Used as an asynchronous task to read from the University Domains and Names Data API. Once
- * read a SchoolObject is created and set into the ListView
+ * read a SchoolInfo is created and set into the ListView
  */
 class JsonTask extends AsyncTask<String, String, String> {
 
@@ -78,7 +78,7 @@ class JsonTask extends AsyncTask<String, String, String> {
         super.onPostExecute(result);
 
         // Update the school ListView with the new objects found
-        SchoolObject[] schoolJSONObjects = new Gson().fromJson(result, SchoolObject[].class);
+        SchoolInfo[] schoolJSONObjects = new Gson().fromJson(result, SchoolInfo[].class);
         if (schoolJSONObjects != null) {
             final SchoolSelectionListAdapter adapter = new SchoolSelectionListAdapter(context.get(),
                     Arrays.asList(schoolJSONObjects));

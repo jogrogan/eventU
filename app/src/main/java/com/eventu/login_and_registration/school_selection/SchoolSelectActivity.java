@@ -33,7 +33,7 @@ public class SchoolSelectActivity extends BaseClass {
 
         mSchoolView = findViewById(R.id.school);
         mSchoolList = findViewById(R.id.school_list);
-        adapter = new SchoolSelectionListAdapter(this, Collections.<SchoolObject>emptyList());
+        adapter = new SchoolSelectionListAdapter(this, Collections.<SchoolInfo>emptyList());
         mSchoolList.setAdapter(adapter);
 
         mSchoolView.addTextChangedListener(new TextWatcher() {
@@ -54,7 +54,7 @@ public class SchoolSelectActivity extends BaseClass {
         mSchoolList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                SchoolObject school = (SchoolObject) adapterView.getItemAtPosition(position);
+                SchoolInfo school = (SchoolInfo) adapterView.getItemAtPosition(position);
                 Intent intent = new Intent(SchoolSelectActivity.this, AccountTypeActivity.class);
                 String schoolName = school.getName().replace('/', ' ');
                 intent.putExtra("schoolName", schoolName);
@@ -74,7 +74,7 @@ public class SchoolSelectActivity extends BaseClass {
 
          /* Wait for at least three characters before updating the school list */
         if (school.length() < 3) {
-            adapter = new SchoolSelectionListAdapter(this, Collections.<SchoolObject>emptyList());
+            adapter = new SchoolSelectionListAdapter(this, Collections.<SchoolInfo>emptyList());
             mSchoolList.setAdapter(adapter);
             return;
         }

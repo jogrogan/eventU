@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Used to turn the JSON found within the University Domains and Names Data API
  * into an object with a name and domains field
  */
-public class SchoolObject {
+public class SchoolInfo {
 
     private String name;
     private ArrayList<String> domains;

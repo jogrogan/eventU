@@ -11,13 +11,13 @@ import java.util.List;
 
 /**
  * Custom adapter in order to store SchoolObjects within our ListView. Although only the school name
- * is displayed, the domain information can be retrieved from the given SchoolObject.
+ * is displayed, the domain information can be retrieved from the given SchoolInfo.
  */
 class SchoolSelectionListAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
-    private final List<SchoolObject> schools;
+    private final List<SchoolInfo> schools;
 
-    SchoolSelectionListAdapter(Context context, List<SchoolObject> schools) {
+    SchoolSelectionListAdapter(Context context, List<SchoolInfo> schools) {
         this.inflater = LayoutInflater.from(context);
         this.schools = schools;
     }
@@ -28,7 +28,7 @@ class SchoolSelectionListAdapter extends BaseAdapter {
     }
 
     @Override
-    public SchoolObject getItem(int location) {
+    public SchoolInfo getItem(int location) {
         return schools.get(location);
     }
 
@@ -39,7 +39,7 @@ class SchoolSelectionListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final SchoolObject school = getItem(position);
+        final SchoolInfo school = getItem(position);
 
         if (convertView == null) {
             // If convertView is null we have to inflate a new simple list layout
