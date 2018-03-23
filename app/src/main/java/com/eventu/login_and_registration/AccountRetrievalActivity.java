@@ -21,7 +21,7 @@ public class AccountRetrievalActivity extends BaseClass {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
-    private View focusView;
+    private View mFocusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class AccountRetrievalActivity extends BaseClass {
     private void sendPasswordResetEmail() {
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
         final String emailAddress = mEmailView.getText().toString();
-        focusView = null;
+        mFocusView = null;
 
         mFirebaseAuth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -63,8 +63,8 @@ public class AccountRetrievalActivity extends BaseClass {
                                 }
                             } catch (FirebaseAuthInvalidUserException invalidEmail) {
                                 mEmailView.setError(getString(R.string.error_email_not_exists));
-                                focusView = mEmailView;
-                                focusView.requestFocus();
+                                mFocusView = mEmailView;
+                                mFocusView.requestFocus();
                             } catch (Exception e) {
                                 Toast.makeText(AccountRetrievalActivity.this,
                                         "There was an error in sending reset password email",

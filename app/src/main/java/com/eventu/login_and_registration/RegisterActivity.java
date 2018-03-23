@@ -67,7 +67,7 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
     private EditText mPasswordView;
     private View mProgressView;
     private View mRegisterFormView;
-    private View focusView;
+    private View mFocusView;
     private EditText mNameView;
 
     // Firebase References
@@ -133,29 +133,29 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         String password = mPasswordView.getText().toString();
         final String name = mNameView.getText().toString();
 
-        focusView = null;
+        mFocusView = null;
 
         // Check for a valid password.
         if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mFocusView = mPasswordView;
         } else if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_password_short));
-            focusView = mPasswordView;
+            mFocusView = mPasswordView;
         }
 
         // Check for a valid email address.
         if (email.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mFocusView = mEmailView;
         } else if (!isEmailValid(email)) {
-            focusView = mEmailView;
+            mFocusView = mEmailView;
         }
 
-        if (focusView != null) {
+        if (mFocusView != null) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
-            focusView.requestFocus();
+            mFocusView.requestFocus();
         } else {
             // Show a progress spinner, and perform the user registration attempt.
             showProgress(true);
@@ -170,8 +170,8 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                     showProgress(false);
                                     // If registration fails, display a message to the user.
                                     mEmailView.setError(getString(R.string.error_register_failed));
-                                    focusView = mEmailView;
-                                    focusView.requestFocus();
+                                    mFocusView = mEmailView;
+                                    mFocusView.requestFocus();
                                 } else {
                                     user.sendEmailVerification()
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -228,12 +228,12 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                 // If the users email already exists
                                 catch (FirebaseAuthUserCollisionException existEmail) {
                                     mEmailView.setError(getString(R.string.error_email_exists));
-                                    focusView = mEmailView;
+                                    mFocusView = mEmailView;
                                 } catch (Exception e) {
                                     mEmailView.setError(getString(R.string.error_register_failed));
-                                    focusView = mEmailView;
+                                    mFocusView = mEmailView;
                                 }
-                                focusView.requestFocus();
+                                mFocusView.requestFocus();
                             }
                         }
                     });

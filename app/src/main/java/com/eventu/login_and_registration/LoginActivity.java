@@ -64,7 +64,7 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private View focusView;
+    private View mFocusView;
 
     // Firebase References
     private FirebaseAuth mFirebaseAuth;
@@ -139,30 +139,30 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
-        focusView = null;
+        mFocusView = null;
 
         // Check for a valid password, if the user entered one.
         if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mFocusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (email.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mFocusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+            mFocusView = mEmailView;
             cancel = true;
         }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
+            mFocusView.requestFocus();
         } else {
             // Show a progress spinner, and perform the user login attempt.
             showProgress(true);
@@ -178,16 +178,16 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                                     showProgress(false);
                                     // If sign in fails, display a message to the user.
                                     mPasswordView.setError(getString(R.string.error_log_in_failed));
-                                    focusView = mPasswordView;
-                                    focusView.requestFocus();
+                                    mFocusView = mPasswordView;
+                                    mFocusView.requestFocus();
                                 } else if (!user.isEmailVerified()) {
                                     Toast.makeText(LoginActivity.this,
                                             getString(R.string.error_email_not_verified),
                                             Toast.LENGTH_SHORT).show();
                                     showProgress(false);
                                     // If sign in fails, display a message to the user.
-                                    focusView = mEmailView;
-                                    focusView.requestFocus();
+                                    mFocusView = mEmailView;
+                                    mFocusView.requestFocus();
                                     user.sendEmailVerification();
                                 } else {
                                     DocumentReference doc
@@ -223,18 +223,18 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                                 // If user enters wrong email.
                                 catch (FirebaseAuthInvalidUserException invalidEmail) {
                                     mEmailView.setError(getString(R.string.error_invalid_email));
-                                    focusView = mEmailView;
+                                    mFocusView = mEmailView;
                                 }
                                 // If user enters wrong password.
                                 catch (FirebaseAuthInvalidCredentialsException wrongPassword) {
                                     mPasswordView.setError(
                                             getString(R.string.error_wrong_password));
-                                    focusView = mPasswordView;
+                                    mFocusView = mPasswordView;
                                 } catch (Exception e) {
                                     mPasswordView.setError(getString(R.string.error_log_in_failed));
-                                    focusView = mPasswordView;
+                                    mFocusView = mPasswordView;
                                 }
-                                focusView.requestFocus();
+                                mFocusView.requestFocus();
                             }
                         }
                     });

@@ -92,6 +92,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         } else {
             holder.mEventFavorite.setSelected(false);
         }
+
         holder.mEventFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
