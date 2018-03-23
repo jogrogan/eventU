@@ -14,20 +14,21 @@ import java.util.ArrayList;
  * Allows the user to select either club or student for registration
  */
 public class AccountTypeActivity extends BaseClass {
-
+    private Button clubButton;
+    private Button studentButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_type);
 
-        Button clubButton = findViewById(R.id.club_button);
+        clubButton = findViewById(R.id.club_button);
         clubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchRegistrationActivity(true);
             }
         });
-        Button studentButton = findViewById(R.id.student_button);
+        studentButton = findViewById(R.id.student_button);
         studentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
