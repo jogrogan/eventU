@@ -36,23 +36,18 @@ class EventInfo implements Comparable<EventInfo> {
     String getEventDescription() {
         return EventDescription;
     }
-
     String getEventLocation() {
         return EventLocation;
     }
-
     String getEventCreator() {
         return EventCreator;
     }
-
     Date getEventDate() {
         return EventDate;
     }
-
     String getEventID() {
         return EventID;
     }
-
     void setEventID(String eventID) {
         this.EventID = eventID;
     }
