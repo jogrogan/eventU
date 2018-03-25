@@ -45,7 +45,6 @@ public class CreateEventActivity extends BaseClass {
     private EditText mEventDescription;
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
-
     // Database References
     private CollectionReference mSchoolClubEvents;
 
