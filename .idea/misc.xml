@@ -5,6 +5,7 @@
       <entry_point TYPE="field" FQNAME="com.eventu.UserInfo accountCreation" />
       <entry_point TYPE="field" FQNAME="com.eventu.UserInfo lastLogin" />
       <entry_point TYPE="field" FQNAME="com.eventu.login_and_registration.AccountRetrievalActivity focusView" />
+      <entry_point TYPE="field" FQNAME="com.eventu.HomePageActivity mActionBar" />
     </entry_points>
     <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setDomains" />
     <pattern value="com.eventu.SchoolSelectActivity.SchoolObject" method="setName" />
@@ -26,6 +27,8 @@
     <pattern value="com.eventu.login_and_registration.school_selection.SchoolObject" method="setName" />
     <pattern value="com.eventu.login_and_registration.school_selection.SchoolObject" method="setDomains" />
     <pattern value="com.eventu.login_and_registration.AccountRetrievalActivity" />
+    <pattern value="com.eventu.login_and_registration.school_selection.SchoolInfo" method="setDomains" />
+    <pattern value="com.eventu.login_and_registration.school_selection.SchoolInfo" method="setName" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />

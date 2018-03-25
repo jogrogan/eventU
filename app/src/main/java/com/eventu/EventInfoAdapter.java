@@ -52,7 +52,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
-        holder.mEventFavoriteTally.setText(String.format(Locale.US,"%d", mEventInfo.getEventTally()));
+        holder.mEventFavoriteTally.setText(
+                String.format(Locale.US, "%d", mEventInfo.getEventTally()));
 
         //TODO allow custom image - planned for future
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);

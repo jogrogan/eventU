@@ -58,6 +58,10 @@ class EventInfo implements Comparable<EventInfo> {
         return EventID;
     }
 
+    void setEventID(String eventID) {
+        this.EventID = eventID;
+    }
+
     int getEventTally() {
         return EventTally;
     }
@@ -88,10 +92,6 @@ class EventInfo implements Comparable<EventInfo> {
                 .document(schoolName).collection("Club Events")
                 .document(EventID);
         doc.update("EventTally", EventTally);
-    }
-
-    void setEventID(String eventID) {
-        this.EventID = eventID;
     }
 
     /**

@@ -21,9 +21,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:singleLine="true"
                 android:text="@string/event_creator"
-                android:textSize="12sp"
-                android:singleLine="true"/>
+                android:textSize="12sp"/>
 
             <ImageView
                 android:id="@+id/imageViewEventImage"
@@ -46,9 +46,9 @@
                 android:id="@+id/textViewEventLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewEventName"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
-                android:layout_below="@+id/textViewEventName"
                 android:text="@string/event_location"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="12sp"/>
@@ -57,9 +57,9 @@
                 android:id="@+id/textViewEventDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textViewEventLocation"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
-                android:layout_below="@id/textViewEventLocation"
                 android:text="@string/event_date"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="12sp"/>
@@ -68,8 +68,8 @@
                 android:id="@+id/textViewEventDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_below="@id/textViewEventDate"
+                android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
                 android:text="@string/event_description"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
@@ -78,13 +78,13 @@
                 android:id="@+id/textViewFavoriteTally"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imagebuttonFavorite"
+                android:layout_alignTop="@id/imagebuttonFavorite"
                 android:layout_below="@id/textViewEventDesc"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/imageViewEventImage"
                 android:layout_toStartOf="@id/imagebuttonFavorite"
                 android:gravity="center_vertical|end"
-                android:layout_alignTop="@id/imagebuttonFavorite"
-                android:layout_alignBottom="@id/imagebuttonFavorite"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
 
             <ImageButton
