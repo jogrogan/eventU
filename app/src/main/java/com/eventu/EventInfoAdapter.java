@@ -52,6 +52,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
+        holder.mEventFavoriteTally.setText(String.format(Locale.US,"%d", mEventInfo.getEventTally()));
 
         //TODO allow custom image - planned for future
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);
@@ -98,10 +99,13 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             public void onClick(View v) {
                 String eID = mEventInfo.getEventID();
                 // Add or remove the event from the user's list of favorited events
+                // Increase of decrease the tally of favorites for this event
                 if (!v.isSelected()) {
                     mCurrentUser.addFavorite(eID);
+                    mEventInfo.increaseTallyCount(mCurrentUser.getSchoolName());
                 } else {
                     mCurrentUser.removeFavorite(eID);
+                    mEventInfo.decreaseTallyCount(mCurrentUser.getSchoolName());
                 }
                 v.setSelected(!v.isSelected());
             }
@@ -121,6 +125,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         private final TextView mEventLocation;
         private final TextView mEventDate;
         private final TextView mEventCreator;
+        private final TextView mEventFavoriteTally;
         private final ImageButton mEventFavorite;
         private final ImageButton mEventPopUpMenu;
 
@@ -133,6 +138,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             mEventDate = itemView.findViewById(R.id.textViewEventDate);
             mEventLocation = itemView.findViewById(R.id.textViewEventLocation);
             mEventCreator = itemView.findViewById(R.id.textViewEventCreator);
+            mEventFavoriteTally = itemView.findViewById(R.id.textViewFavoriteTally);
             mEventFavorite = itemView.findViewById(R.id.imagebuttonFavorite);
             mEventPopUpMenu = itemView.findViewById(R.id.imagebuttonVerticalDots);
         }

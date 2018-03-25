@@ -2,6 +2,9 @@ package com.eventu;
 
 import android.support.annotation.NonNull;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -15,17 +18,19 @@ class EventInfo implements Comparable<EventInfo> {
     private String EventCreator;
     private Date EventDate;
     private String EventID;
+    private int EventTally;
 
     public EventInfo() {
     }
 
     public EventInfo(String eventName, String eventDescription, String eventLocation,
-            String eventCreator, Timestamp eventDate) {
+            String eventCreator, Timestamp eventDate, int eventTally) {
         EventName = eventName;
         EventDescription = eventDescription;
         EventLocation = eventLocation;
         EventCreator = eventCreator;
         EventDate = eventDate;
+        EventTally = eventTally;
     }
 
     //Getters for all EventInfo fields
@@ -51,6 +56,38 @@ class EventInfo implements Comparable<EventInfo> {
 
     String getEventID() {
         return EventID;
+    }
+
+    int getEventTally() {
+        return EventTally;
+    }
+
+    /**
+     * Increase the tally count for this event
+     */
+    void increaseTallyCount(String schoolName) {
+        EventTally++;
+        updateEventTally(schoolName);
+    }
+
+    /**
+     * Decrease the tally count for this event
+     */
+    void decreaseTallyCount(String schoolName) {
+        EventTally--;
+        updateEventTally(schoolName);
+    }
+
+    /**
+     * Update the given event's favorite tally count
+     */
+    private void updateEventTally(String schoolName) {
+        DocumentReference doc
+                = FirebaseFirestore.getInstance().collection(
+                "universities")
+                .document(schoolName).collection("Club Events")
+                .document(EventID);
+        doc.update("EventTally", EventTally);
     }
 
     void setEventID(String eventID) {
