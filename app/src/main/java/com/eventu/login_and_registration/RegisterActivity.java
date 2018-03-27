@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.eventu.BaseClass;
 import com.eventu.R;
 import com.eventu.UserInfo;
+import com.eventu.ClubPage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -213,6 +214,14 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                     Log.w("Firestore", "Error writing document", e);
                                                 }
                                             });
+
+                                    //if account is a club create a corresponding club page
+                                    if (isClub){
+                                        ClubPage clubPage = new ClubPage(name, user.getUid());
+                                        FirebaseFirestore.getInstance().collection("universities")
+                                                .document(schoolName).collection("Club Profile Pages")
+                                                .document(name).set(clubPage);
+                                    }
 
                                     Intent i = new Intent(RegisterActivity.this,
                                             LoginActivity.class);
