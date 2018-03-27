@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class AccountTypeActivity extends BaseClass {
     private Button clubButton;
     private Button studentButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

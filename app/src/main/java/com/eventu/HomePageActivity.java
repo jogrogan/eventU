@@ -227,7 +227,7 @@ public class HomePageActivity extends AppCompatActivity {
                 });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface diaxsafarlog, int which) {
+            public void onClick(DialogInterface dialog, int which) {
             }
         });
 

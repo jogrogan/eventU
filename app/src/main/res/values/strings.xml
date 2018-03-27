@@ -53,9 +53,6 @@
     <string name="menu_refresh">Refresh</string>
     <string name="settings">Action Settings</string>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="home_page">HomePage</string>
     <string name="club_description">Club Description</string>
     <string name="social_media">Social Media Links</string>

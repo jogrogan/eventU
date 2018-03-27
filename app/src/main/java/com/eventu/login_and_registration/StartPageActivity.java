@@ -18,6 +18,7 @@ public class StartPageActivity extends BaseClass {
     private Button logInButton;
     private Button registerButton;
     private ImageView eventu_logo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
