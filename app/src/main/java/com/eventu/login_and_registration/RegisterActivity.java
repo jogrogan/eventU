@@ -31,9 +31,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eventu.BaseClass;
+import com.eventu.ClubPage;
 import com.eventu.R;
 import com.eventu.UserInfo;
-import com.eventu.ClubPage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -90,10 +90,11 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
             TextView tv = new TextView(this);
             til.addView(tv);
         }
-        populateAutoComplete();
 
         // Set up the registration form.
         mEmailView = findViewById(R.id.email);
+        populateAutoComplete();
+
         mPasswordView = findViewById(R.id.password);
         mNameView = findViewById(R.id.name);
         mRegisterFormView = findViewById(R.id.register_form);
