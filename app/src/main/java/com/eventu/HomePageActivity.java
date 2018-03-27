@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -166,6 +168,17 @@ public class HomePageActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    //display club profile page when user clicks on event creator
+    public void displayClub(View view){
+        Intent intent = new Intent(this, DisplayClubPage.class);
+        intent.putExtra("school", mCurrentUser.getSchoolName());
+        intent.putExtra("user", mCurrentUser.getUserID());
+        TextView club = findViewById(R.id.textViewEventCreator);
+        String club_name = club.getText().toString();
+        intent.putExtra("club", club_name);
+        startActivity(intent);
     }
 
     /**

@@ -23,7 +23,10 @@
                 android:layout_alignParentTop="true"
                 android:singleLine="true"
                 android:text="@string/event_creator"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:clickable="true"
+                android:onClick="displayClub"
+            />
 
             <ImageView
                 android:id="@+id/imageViewEventImage"
