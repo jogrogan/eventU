@@ -221,7 +221,20 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                         ClubPage clubPage = new ClubPage(name, user.getUid());
                                         FirebaseFirestore.getInstance().collection("universities")
                                                 .document(schoolName).collection("Club Profile Pages")
-                                                .document(name).set(clubPage);
+                                                .document(user.getUid()).set(clubPage)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("Firestore",
+                                                            "Club successfully added");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w("Firestore", "Error adding club", e);
+                                                }
+                                            });
                                     }
 
                                     Intent i = new Intent(RegisterActivity.this,
@@ -337,19 +350,20 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
         return false;
+//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(android.R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        public void onClick(View v) {
+//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//                        }
+//                    });
+//        } else {
+//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//        }
+//        return false;
     }
 
     /**

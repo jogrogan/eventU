@@ -1,6 +1,7 @@
 package com.eventu;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.eventu.login_and_registration.LoginActivity;
 import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,13 +49,13 @@ public class DisplayClubPage extends AppCompatActivity {
 
         Intent intent = getIntent();
         String school_name = intent.getStringExtra("school");
-        String club_name = intent.getStringExtra("club");
+        final String club_id = intent.getStringExtra("club");
 
          doc
                 = FirebaseFirestore.getInstance().collection(
                 "universities")
                 .document(school_name).collection("Club Profile Pages")
-                .document(club_name);
+                .document(club_id);
         doc.get().addOnSuccessListener(
                 new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -83,9 +85,7 @@ public class DisplayClubPage extends AppCompatActivity {
         contact.setText(mClubPage.getContact());
         media.setText(s);
 
-
         String user_id = intent.getStringExtra("user");
-        String club_id = mClubPage.getId();
         if (user_id.equals(club_id)){
             edit.setVisibility(View.VISIBLE);
         }
