@@ -94,9 +94,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eventu.HomePageActivity"/>
         </activity>
-        <activity android:name=".EditClubPage">
-        </activity>
-        <activity android:name=".DisplayClubPage">
+        <activity android:name=".DisplayClubPageActivity">
         </activity>
     </application>
 
