@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eventu.BaseClass;
-import com.eventu.ClubPage;
+import com.eventu.ClubPageInfo;
 import com.eventu.R;
 import com.eventu.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -218,7 +217,8 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
 
                                     //if account is a club create a corresponding club page
                                     if (isClub){
-                                        ClubPage clubPage = new ClubPage(name, user.getUid());
+                                        ClubPageInfo clubPage = new ClubPageInfo(name,
+                                                user.getUid());
                                         FirebaseFirestore.getInstance().collection("universities")
                                                 .document(schoolName).collection("Club Profile Pages")
                                                 .document(user.getUid()).set(clubPage)
@@ -347,11 +347,8 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
      * Request contacts needed in order for email autocompletion
      */
     private boolean mayRequestContacts() {
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+        return checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+        //        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
 //            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
 //                    .setAction(android.R.string.ok, new View.OnClickListener() {
 //                        @Override

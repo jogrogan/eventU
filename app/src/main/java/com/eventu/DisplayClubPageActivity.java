@@ -1,37 +1,21 @@
 package com.eventu;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.eventu.login_and_registration.LoginActivity;
-import com.firebase.ui.auth.data.model.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class DisplayClubPage extends AppCompatActivity {
+public class DisplayClubPageActivity extends AppCompatActivity {
 
     EditText description;
     EditText links;
@@ -39,7 +23,7 @@ public class DisplayClubPage extends AppCompatActivity {
     EditText contact;
     Button edit;
     boolean edit_mode;
-    ClubPage mClubPage;
+    ClubPageInfo mClubPage;
     DocumentReference doc;
 
     @Override
@@ -61,7 +45,7 @@ public class DisplayClubPage extends AppCompatActivity {
                     @Override
                     public void onSuccess(
                             DocumentSnapshot documentSnapshot) {
-                        mClubPage = documentSnapshot.toObject(ClubPage.class);
+                        mClubPage = documentSnapshot.toObject(ClubPageInfo.class);
                     }
                 });
 

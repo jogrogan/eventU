@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.eventu.DisplayClubPage">
+    tools:context="com.eventu.DisplayClubPageActivity">
 
     <TextView
         android:id="@+id/display_club_name"
