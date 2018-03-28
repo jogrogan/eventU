@@ -56,17 +56,17 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         contact = findViewById(R.id.display_club_contact_info);
         edit = findViewById(R.id.edit_button);
 
-        ArrayList<String> array = mClubPage.getSocial();
+        ArrayList<String> array = mClubPage.getClubSocial();
         String s = "";
         for (int i = 0; i < array.size(); i++){
             s += array.get(i);
             s += "\n";
         }
 
-        name.setText(mClubPage.getName());
-        description.setText(mClubPage.getDescription());
-        links.setText(mClubPage.getWebsite());
-        contact.setText(mClubPage.getContact());
+        name.setText(mClubPage.getClubName());
+        description.setText(mClubPage.getClubDescription());
+        links.setText(mClubPage.getClubWebsite());
+        contact.setText(mClubPage.getClubContact());
         media.setText(s);
 
         String user_id = intent.getStringExtra("user");
@@ -92,10 +92,10 @@ public class DisplayClubPageActivity extends AppCompatActivity {
             contact.setEnabled(false);
             edit.setText("Edit");
 
-            mClubPage.setDescription(description.getText().toString());
-            mClubPage.setWebsite(links.getText().toString());
-            mClubPage.setSocial(media.getText().toString());
-            mClubPage.setContact(contact.getText().toString());
+            mClubPage.setClubDescription(description.getText().toString());
+            mClubPage.setClubWebsite(links.getText().toString());
+            mClubPage.setClubSocial(media.getText().toString());
+            mClubPage.setClubContact(contact.getText().toString());
             doc.set(mClubPage);
         }
     }

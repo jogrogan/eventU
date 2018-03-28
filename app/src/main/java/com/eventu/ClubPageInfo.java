@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ClubPageInfo implements Serializable {
     private String ClubDescription;
     private String ClubName;
-    private String ClubContant;
+    private String ClubContact;
     private ArrayList<String> ClubSocial;
     private String ClubWebsite;
     private String ClubID;
@@ -15,52 +15,52 @@ public class ClubPageInfo implements Serializable {
     public ClubPageInfo(String n, String i) {
         ClubDescription = "";
         ClubName = n;
-        ClubContant = "";
+        ClubContact = "";
         ClubSocial = new ArrayList<>();
         ClubWebsite = "";
         ClubID = i;
     }
 
-    String getDescription() {
+    String getClubDescription() {
         return ClubDescription;
     }
 
-    void setDescription(String d) {
+    void setClubDescription(String d) {
         ClubDescription = d;
     }
 
-    String getName() {
+    String getClubName() {
         return ClubName;
     }
 
-    String getContact() {
-        return ClubContant;
+    String getClubContact() {
+        return ClubContact;
     }
 
-    void setContact(String c) {
-        ClubContant = c;
+    void setClubContact(String c) {
+        ClubContact = c;
     }
 
-    ArrayList<String> getSocial() {
+    ArrayList<String> getClubSocial() {
         return ClubSocial;
     }
 
-    void setSocial(String s) {
+    void setClubSocial(String s) {
         String temp[] = s.split("\n");
         for (int i = 0; i < temp.length; i++) {
             ClubSocial.set(i, temp[i]);
         }
     }
 
-    String getWebsite() {
+    String getClubWebsite() {
         return ClubWebsite;
     }
 
-    void setWebsite(String w) {
+    void setClubWebsite(String w) {
         ClubWebsite = w;
     }
 
-    String getId() {
+    String getClubID() {
         return ClubID;
     }
 }
