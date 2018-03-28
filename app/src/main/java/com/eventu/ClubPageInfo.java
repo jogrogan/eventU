@@ -1,9 +1,8 @@
 package com.eventu;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ClubPageInfo implements Serializable {
+public class ClubPageInfo {
     private String ClubDescription;
     private String ClubName;
     private String ClubContact;
@@ -11,29 +10,32 @@ public class ClubPageInfo implements Serializable {
     private String ClubWebsite;
     private String ClubID;
 
-
-    public ClubPageInfo(String n, String i) {
-        ClubDescription = "";
-        ClubName = n;
-        ClubContact = "";
-        ClubSocial = new ArrayList<>();
-        ClubWebsite = "";
-        ClubID = i;
+    public ClubPageInfo() {
     }
 
-    String getClubDescription() {
+    public ClubPageInfo(String description, String name, String contact, ArrayList<String> social,
+            String website, String id) {
+        ClubDescription = description;
+        ClubName = name;
+        ClubContact = contact;
+        ClubSocial = new ArrayList<>(social);
+        ClubWebsite = website;
+        ClubID = id;
+    }
+
+    public String getClubDescription() {
         return ClubDescription;
     }
 
-    void setClubDescription(String d) {
+    public void setClubDescription(String d) {
         ClubDescription = d;
     }
 
-    String getClubName() {
+    public String getClubName() {
         return ClubName;
     }
 
-    String getClubContact() {
+    public String getClubContact() {
         return ClubContact;
     }
 
@@ -41,26 +43,26 @@ public class ClubPageInfo implements Serializable {
         ClubContact = c;
     }
 
-    ArrayList<String> getClubSocial() {
+    public ArrayList<String> getClubSocial() {
         return ClubSocial;
     }
 
-    void setClubSocial(String s) {
+    public void setClubSocial(String s) {
         String temp[] = s.split("\n");
         for (int i = 0; i < temp.length; i++) {
             ClubSocial.set(i, temp[i]);
         }
     }
 
-    String getClubWebsite() {
+    public String getClubWebsite() {
         return ClubWebsite;
     }
 
-    void setClubWebsite(String w) {
+    public void setClubWebsite(String w) {
         ClubWebsite = w;
     }
 
-    String getClubID() {
+    public String getClubID() {
         return ClubID;
     }
 }

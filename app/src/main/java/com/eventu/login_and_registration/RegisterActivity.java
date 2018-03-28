@@ -217,7 +217,8 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
 
                                     //if account is a club create a corresponding club page
                                     if (isClub){
-                                        ClubPageInfo clubPage = new ClubPageInfo(name,
+                                        ClubPageInfo clubPage = new ClubPageInfo("", name, "",
+                                                new ArrayList<String>(), "",
                                                 user.getUid());
                                         FirebaseFirestore.getInstance().collection("universities")
                                                 .document(schoolName).collection("Club Profile Pages")

@@ -3,7 +3,6 @@ package com.eventu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -31,45 +31,46 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_club_page);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String school_name = intent.getStringExtra("school");
         final String club_id = intent.getStringExtra("club");
-
-        Log.d("yang", "Hello asfdsa");
+        String mPath = "universities/" + school_name + "/Club Profile Page/" + club_id;
+        doc = FirebaseFirestore.getInstance().collection("universities").document(
+                school_name).collection("Club Profile Page").document(club_id);
         doc.get().addOnSuccessListener(
                 new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(
                             DocumentSnapshot documentSnapshot) {
                         mClubPage = documentSnapshot.toObject(ClubPageInfo.class);
+                        TextView name = findViewById(R.id.display_club_name);
+                        description = findViewById(R.id.display_club_description);
+                        links = findViewById(R.id.display_club_links);
+                        media = findViewById(R.id.display_club_media_links);
+                        contact = findViewById(R.id.display_club_contact_info);
+                        edit = findViewById(R.id.edit_button);
+
+                        ArrayList<String> array = mClubPage.getClubSocial();
+                        String s = "";
+                        for (int i = 0; i < array.size(); i++) {
+                            s += array.get(i);
+                            s += "\n";
+                        }
+
+                        name.setText(mClubPage.getClubName());
+                        description.setText(mClubPage.getClubDescription());
+                        links.setText(mClubPage.getClubWebsite());
+                        contact.setText(mClubPage.getClubContact());
+                        media.setText(s);
+
+                        String user_id = intent.getStringExtra("user");
+                        if (user_id.equals(club_id)) {
+                            edit.setVisibility(View.VISIBLE);
+                        }
+                        edit_mode = false;
                     }
                 });
 
-        TextView name = findViewById(R.id.display_club_name);
-        description = findViewById(R.id.display_club_description);
-        links = findViewById(R.id.display_club_links);
-        media = findViewById(R.id.display_club_media_links);
-        contact = findViewById(R.id.display_club_contact_info);
-        edit = findViewById(R.id.edit_button);
-
-        ArrayList<String> array = mClubPage.getClubSocial();
-        String s = "";
-        for (int i = 0; i < array.size(); i++){
-            s += array.get(i);
-            s += "\n";
-        }
-
-        name.setText(mClubPage.getClubName());
-        description.setText(mClubPage.getClubDescription());
-        links.setText(mClubPage.getClubWebsite());
-        contact.setText(mClubPage.getClubContact());
-        media.setText(s);
-
-        String user_id = intent.getStringExtra("user");
-        if (user_id.equals(club_id)){
-            edit.setVisibility(View.VISIBLE);
-        }
-        edit_mode = false;
     }
 
     //toggle edit mode
