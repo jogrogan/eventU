@@ -19,18 +19,20 @@ class EventInfo implements Comparable<EventInfo> {
     private Date EventDate;
     private String EventID;
     private int EventTally;
+    private String ClubID;
 
     public EventInfo() {
     }
 
     public EventInfo(String eventName, String eventDescription, String eventLocation,
-            String eventCreator, Timestamp eventDate, int eventTally) {
+            String eventCreator, Timestamp eventDate, int eventTally, String clubID) {
         EventName = eventName;
         EventDescription = eventDescription;
         EventLocation = eventLocation;
         EventCreator = eventCreator;
         EventDate = eventDate;
         EventTally = eventTally;
+        ClubID = clubID;
     }
 
     //Getters for all EventInfo fields
@@ -64,6 +66,10 @@ class EventInfo implements Comparable<EventInfo> {
 
     int getEventTally() {
         return EventTally;
+    }
+
+    String getClubID() {
+        return ClubID;
     }
 
     /**
