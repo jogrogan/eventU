@@ -19,6 +19,7 @@ public class StartPageActivity extends BaseClass {
     private Button registerButton;
     private ImageView eventu_logo;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +27,7 @@ public class StartPageActivity extends BaseClass {
 
         eventu_logo = findViewById(R.id.eventu_logo);
         eventu_logo.setImageResource(R.drawable.eventu_logo);
+
 
         logInButton = findViewById(R.id.log_in_button);
         logInButton.setOnClickListener(new OnClickListener() {
