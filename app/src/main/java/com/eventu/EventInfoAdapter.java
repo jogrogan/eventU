@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,12 +53,22 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
         holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
+        holder.mEventCreator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("yang", "OnClick Recieved");
+                Intent intent = new Intent(mContext, DisplayClubPageActivity.class);
+                intent.putExtra("user", mCurrentUser.getUserID());
+                intent.putExtra("school", mCurrentUser.getSchoolName());
+                intent.putExtra("club", mEventInfo.getClubID());
+                mContext.startActivity(intent);
+            }
+        });
         holder.mEventFavoriteTally.setText(
                 String.format(Locale.US, "%d", mEventInfo.getEventTally()));
 
         //TODO allow custom image - planned for future
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);
-
         holder.mEventPopUpMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

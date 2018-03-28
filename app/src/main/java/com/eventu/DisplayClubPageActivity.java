@@ -3,6 +3,7 @@ package com.eventu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -35,11 +35,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         String school_name = intent.getStringExtra("school");
         final String club_id = intent.getStringExtra("club");
 
-         doc
-                = FirebaseFirestore.getInstance().collection(
-                "universities")
-                .document(school_name).collection("Club Profile Pages")
-                .document(club_id);
+        Log.d("yang", "Hello asfdsa");
         doc.get().addOnSuccessListener(
                 new OnSuccessListener<DocumentSnapshot>() {
                     @Override
