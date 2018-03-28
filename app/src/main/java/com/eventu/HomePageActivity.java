@@ -170,17 +170,6 @@ public class HomePageActivity extends AppCompatActivity {
                 });
     }
 
-    //display club profile page when user clicks on event creator
-    public void displayClub(View view){
-        Intent intent = new Intent(this, DisplayClubPage.class);
-        intent.putExtra("school", mCurrentUser.getSchoolName());
-        intent.putExtra("user", mCurrentUser.getUserID());
-        TextView club = findViewById(R.id.textViewEventCreator);
-        String club_name = club.getText().toString();
-        intent.putExtra("club", club_name);
-        startActivity(intent);
-    }
-
     /**
      * Always default back to the timeline format when resuming the HomePageActivity
      */

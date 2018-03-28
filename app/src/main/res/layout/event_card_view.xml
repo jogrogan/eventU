@@ -25,7 +25,6 @@
                 android:text="@string/event_creator"
                 android:textSize="12sp"
                 android:clickable="true"
-                android:onClick="displayClub"
             />
 
             <ImageView
