@@ -21,9 +21,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:clickable="true"
                 android:singleLine="true"
                 android:text="@string/event_creator"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+            />
 
             <ImageView
                 android:id="@+id/imageViewEventImage"

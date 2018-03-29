@@ -35,6 +35,7 @@ public class CreateEventActivity extends BaseClass {
     private static final String EVENT_DATE = "EventDate";
     private static final String EVENT_CREATOR = "EventCreator";
     private static final String EVENT_TALLY = "EventTally";
+    private static final String CLUB_ID = "ClubID";
 
     // Firebase References
     private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -118,6 +119,10 @@ public class CreateEventActivity extends BaseClass {
         eventData.put(EVENT_DATE, eventDate);
         eventData.put(EVENT_CREATOR, getIntent().getStringExtra("username"));
         eventData.put(EVENT_TALLY, 0);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            eventData.put(CLUB_ID, user.getUid());
+        }
 
         mSchoolClubEvents.add(eventData)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

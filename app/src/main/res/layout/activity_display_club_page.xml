@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.eventu.DisplayClubPage">
+    tools:context="com.eventu.DisplayClubPageActivity">
 
     <TextView
         android:id="@+id/display_club_name"
@@ -18,22 +18,37 @@
     <TextView
         android:id="@+id/display_description"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_below="@id/display_club_name"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/display_club_name"
         android:layout_marginStart="5dp"
-        android:text="@string/club_description"/>
+        android:text="@string/club_description"
+        android:textColor="@android:color/black"/>
+    <EditText
+        android:id="@+id/display_club_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/display_description"
+        android:layout_marginStart="5dp"
+        android:enabled="false"
+        android:textColor="@android:color/black"
+        tools:text="This is an example test, none of the text is visible during run-time. Useful to show how much text the description will take up"/>
     <TextView
         android:id="@+id/display_links"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/display_club_description"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="7dp" android:text="@string/links"/>
-    <TextView
+        android:layout_marginTop="7dp"
+        android:text="@string/links"
+        android:textColor="@android:color/black"/>
+    <EditText
         android:id="@+id/display_club_links"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/display_links"
         android:layout_marginStart="5dp"
+        android:enabled="false"
+        android:textColor="@android:color/black"
         tools:text="Links for Club Pages"/>
     <TextView
         android:id="@+id/display_media_links"
@@ -43,13 +58,16 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="7dp"
         android:text="@string/social_media"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@+id/display_club_links"/>
-    <TextView
+    <EditText
         android:id="@+id/display_club_media_links"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/display_media_links"
         android:layout_marginStart="5dp"
+        android:enabled="false"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@+id/display_media_links"
         tools:text="Facebook\nTwitter\nReddit\nInstagram\n4Chan"/>
     <TextView
@@ -60,13 +78,16 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="7dp"
         android:text="@string/contact_info"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@+id/display_club_media_links"/>
-    <TextView
+    <EditText
         android:id="@+id/display_club_contact_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/display_contact_info"
         android:layout_below="@+id/display_contact_info"
+        android:enabled="false"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@+id/display_contact_info"
         tools:text="Phone Number: 123-456-8790\nLocation: 110 8th St Troy NY"/>
     <Button
@@ -74,16 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:onClick="editPage"
-        android:text="editPage" android:visibility="visible"/>
-    <TextView
-        android:id="@+id/display_club_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="24dp" android:layout_marginStart="5dp"
-        android:layout_toRightOf="@+id/display_club_links"
-        tools:text="This is an example test, none of the text is visible during run-time. Useful to show how much text the description will take up"/>
+        android:layout_alignParentEnd="true"
+        android:text="@string/edit"
+        android:visibility="invisible"/>
 </RelativeLayout>

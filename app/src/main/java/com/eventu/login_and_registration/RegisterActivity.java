@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eventu.BaseClass;
+import com.eventu.ClubPageInfo;
 import com.eventu.R;
 import com.eventu.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -89,10 +90,11 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
             TextView tv = new TextView(this);
             til.addView(tv);
         }
-        populateAutoComplete();
 
         // Set up the registration form.
         mEmailView = findViewById(R.id.email);
+        populateAutoComplete();
+
         mPasswordView = findViewById(R.id.password);
         mNameView = findViewById(R.id.name);
         mRegisterFormView = findViewById(R.id.register_form);
@@ -134,6 +136,12 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
         final String name = mNameView.getText().toString();
 
         mFocusView = null;
+
+        // Check for a valid name
+        if (name.isEmpty()) {
+            mNameView.setError(getString(R.string.error_field_required));
+            mFocusView = mNameView;
+        }
 
         // Check for a valid password.
         if (password.isEmpty()) {
@@ -213,6 +221,30 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                     Log.w("Firestore", "Error writing document", e);
                                                 }
                                             });
+
+                                    //if account is a club create a corresponding club page
+                                    if (isClub) {
+                                        ClubPageInfo clubPage = new ClubPageInfo(name,
+                                                user.getUid());
+                                        FirebaseFirestore.getInstance().collection("universities")
+                                                .document(schoolName).collection(
+                                                "Club Profile Pages")
+                                                .document(user.getUid()).set(clubPage)
+                                                .addOnSuccessListener(
+                                                        new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d("Firestore",
+                                                                        "Club successfully added");
+                                                            }
+                                                        })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("Firestore", "Error adding club", e);
+                                                    }
+                                                });
+                                    }
 
                                     Intent i = new Intent(RegisterActivity.this,
                                             LoginActivity.class);
