@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -136,6 +137,12 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
 
         mFocusView = null;
 
+        // Check for a valid name
+        if (name.isEmpty()) {
+            mNameView.setError(getString(R.string.error_field_required));
+            mFocusView = mNameView;
+        }
+
         // Check for a valid password.
         if (password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_field_required));
@@ -216,26 +223,27 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                             });
 
                                     //if account is a club create a corresponding club page
-                                    if (isClub){
-                                        ClubPageInfo clubPage = new ClubPageInfo("", name, "",
-                                                new ArrayList<String>(), "",
+                                    if (isClub) {
+                                        ClubPageInfo clubPage = new ClubPageInfo(name,
                                                 user.getUid());
                                         FirebaseFirestore.getInstance().collection("universities")
-                                                .document(schoolName).collection("Club Profile Pages")
+                                                .document(schoolName).collection(
+                                                "Club Profile Pages")
                                                 .document(user.getUid()).set(clubPage)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d("Firestore",
-                                                            "Club successfully added");
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w("Firestore", "Error adding club", e);
-                                                }
-                                            });
+                                                .addOnSuccessListener(
+                                                        new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d("Firestore",
+                                                                        "Club successfully added");
+                                                            }
+                                                        })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("Firestore", "Error adding club", e);
+                                                    }
+                                                });
                                     }
 
                                     Intent i = new Intent(RegisterActivity.this,
@@ -348,20 +356,22 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
      * Request contacts needed in order for email autocompletion
      */
     private boolean mayRequestContacts() {
-        return checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
-        //        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
     }
 
     /**

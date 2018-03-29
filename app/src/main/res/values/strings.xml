@@ -61,4 +61,6 @@
     <string name="edit_button">Edit</string>
     <string name="club_profile_page">Club Profile Page</string>
     <string name="links">links</string>
+    <string name="edit">Edit</string>
+    <string name="done">Done</string>
 </resources>

@@ -1,68 +1,67 @@
 package com.eventu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ClubPageInfo {
-    private String ClubDescription;
-    private String ClubName;
-    private String ClubContact;
-    private ArrayList<String> ClubSocial;
-    private String ClubWebsite;
-    private String ClubID;
+    private String clubDescription;
+    private String clubName;
+    private String clubContact;
+    private ArrayList<String> clubSocial;
+    private String clubWebsite;
+    private String clubID;
 
     public ClubPageInfo() {
     }
 
-    public ClubPageInfo(String description, String name, String contact, ArrayList<String> social,
-            String website, String id) {
-        ClubDescription = description;
-        ClubName = name;
-        ClubContact = contact;
-        ClubSocial = new ArrayList<>(social);
-        ClubWebsite = website;
-        ClubID = id;
+    public ClubPageInfo(String name, String id) {
+        clubDescription = "";
+        clubName = name;
+        clubContact = "";
+        clubSocial = new ArrayList<>();
+        clubWebsite = "";
+        clubID = id;
     }
 
     public String getClubDescription() {
-        return ClubDescription;
+        return clubDescription;
     }
 
     public void setClubDescription(String d) {
-        ClubDescription = d;
+        clubDescription = d;
     }
 
     public String getClubName() {
-        return ClubName;
+        return clubName;
     }
 
     public String getClubContact() {
-        return ClubContact;
+        return clubContact;
     }
 
     void setClubContact(String c) {
-        ClubContact = c;
+        clubContact = c;
     }
 
     public ArrayList<String> getClubSocial() {
-        return ClubSocial;
+        return new ArrayList<>(clubSocial);
     }
 
     public void setClubSocial(String s) {
         String temp[] = s.split("\n");
-        for (int i = 0; i < temp.length; i++) {
-            ClubSocial.set(i, temp[i]);
-        }
+        clubSocial.clear();
+        clubSocial.addAll(Arrays.asList(temp));
     }
 
     public String getClubWebsite() {
-        return ClubWebsite;
+        return clubWebsite;
     }
 
     public void setClubWebsite(String w) {
-        ClubWebsite = w;
+        clubWebsite = w;
     }
 
     public String getClubID() {
-        return ClubID;
+        return clubID;
     }
 }

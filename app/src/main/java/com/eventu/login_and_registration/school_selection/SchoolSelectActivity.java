@@ -72,7 +72,7 @@ public class SchoolSelectActivity extends BaseClass {
     private void searchSchools() {
         String school = mSchoolView.getText().toString();
 
-         /* Wait for at least three characters before updating the school list */
+        /* Wait for at least three characters before updating the school list */
         if (school.length() < 3) {
             adapter = new SchoolSelectionListAdapter(this, Collections.<SchoolInfo>emptyList());
             mSchoolList.setAdapter(adapter);

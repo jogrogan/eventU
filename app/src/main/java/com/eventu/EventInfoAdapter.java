@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +55,6 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventCreator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("yang", "OnClick Recieved");
                 Intent intent = new Intent(mContext, DisplayClubPageActivity.class);
                 intent.putExtra("user", mCurrentUser.getUserID());
                 intent.putExtra("school", mCurrentUser.getSchoolName());
