@@ -26,7 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -143,6 +145,12 @@ public class HomePageActivity extends AppCompatActivity {
                                 EventInfo mEventInfo = dc.getDocument().toObject(
                                         EventInfo.class);
                                 mEventInfo.setEventID(dc.getDocument().getId());
+
+                                Date currentDate = Calendar.getInstance().getTime();
+                                if (currentDate.after(mEventInfo.getEventDate())) {
+                                    continue;
+                                }
+
                                 switch (dc.getType()) {
                                     case REMOVED:
                                         mEventInfoList.remove(mEventInfo);

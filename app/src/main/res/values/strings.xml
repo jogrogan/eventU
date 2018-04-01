@@ -52,6 +52,7 @@
     <string name="more_actions">More Actions</string>
     <string name="menu_refresh">Refresh</string>
     <string name="settings">Action Settings</string>
+    <string name="error_timepicker">Time cannot be in the past</string>
 
     <string name="home_page">HomePage</string>
     <string name="club_description">Club Description</string>
