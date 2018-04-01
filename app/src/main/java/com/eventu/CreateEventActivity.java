@@ -18,6 +18,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class CreateEventActivity extends BaseClass {
         mEventLocation = findViewById(R.id.event_location);
         mTimePicker = findViewById(R.id.tp_timepicker);
         mDatePicker = findViewById(R.id.dp_datepicker);
+        mDatePicker.setMinDate(System.currentTimeMillis());
         FloatingActionButton nextButton = findViewById(R.id.next_button);
 
         if (mCurrentUser == null) {
@@ -78,7 +80,7 @@ public class CreateEventActivity extends BaseClass {
 
     /**
      * Attempts to add the user inputted information into the event database
-     * Includes error handling for missing fields.
+     * Includes error handling for missing and invalid fields.
      */
     private void attemptAddEvent() {
         String eventName = mEventName.getText().toString();
@@ -86,6 +88,11 @@ public class CreateEventActivity extends BaseClass {
         String eventDescription = mEventDescription.getText().toString();
 
         View focusView = null;
+        if (!isValidTime()) {
+            Toast.makeText(this, R.string.error_timepicker, Toast.LENGTH_SHORT).show();
+            focusView = mTimePicker;
+        }
+
         if (eventDescription.isEmpty()) {
             mEventDescription.setError(getString(R.string.error_field_required));
             focusView = mEventDescription;
@@ -145,5 +152,19 @@ public class CreateEventActivity extends BaseClass {
                     }
                 });
         finish();
+    }
+
+    /**
+     * Makes sure the time and date entered in the timepicker and datepicker
+     * refer to a future event.
+     */
+    private boolean isValidTime() {
+        Calendar calendar = new GregorianCalendar(mDatePicker.getYear(),
+                mDatePicker.getMonth(),
+                mDatePicker.getDayOfMonth(),
+                mTimePicker.getHour(),
+                mTimePicker.getMinute());
+
+        return calendar.compareTo(Calendar.getInstance()) > 0;
     }
 }
