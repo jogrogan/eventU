@@ -90,7 +90,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
     }
 
     //toggle edit mode
-    public void editPage(View view) {
+    private void editPage(View view) {
         if (edit_mode) {
             description.setEnabled(true);
             links.setEnabled(true);
