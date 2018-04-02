@@ -2,7 +2,6 @@ package com.eventu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -73,18 +72,19 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 //Creating the instance of PopupMenu and inflating the view
                 PopupMenu mPopMenu = new PopupMenu(mContext, v);
                 mPopMenu.getMenuInflater().inflate(R.menu.popup_menu, mPopMenu.getMenu());
+                if (mEventInfo.getClubID().equals(mCurrentUser.getUserID())) {
+                    mPopMenu.getMenu().findItem(R.id.edit_event).setEnabled(true);
+                }
 
                 //registering popup with OnMenuItemClickListener
                 mPopMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        if (item.getTitle().equals("Surprise Me")) {
-                            Intent viewIntent =
-                                    new Intent("android.intent.action.VIEW",
-                                            Uri.parse(
-                                                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
-                            mContext.startActivity(viewIntent);
+                        if (item.getTitle().equals("Edit")) {
+                            Intent intent = new Intent(mContext, CreateEventActivity.class);
+                            intent.putExtra("eventID", mEventInfo.getEventID());
+                            mContext.startActivity(intent);
                         } else {
                             Toast.makeText(mContext, "You Clicked : " + item.getTitle(),
                                     Toast.LENGTH_SHORT).show();

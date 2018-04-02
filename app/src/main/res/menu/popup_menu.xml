@@ -2,13 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/send_message"
-        android:title="Send Message"/>
+        android:title="@string/send_message"/>
 
     <item
         android:id="@+id/report"
-        android:title="Report"/>
+        android:title="@string/report"/>
 
     <item
-        android:id="@+id/rickroll"
-        android:title="Surprise Me"/>
+        android:id="@+id/edit_event"
+        android:enabled="false"
+        android:title="@string/edit_event"/>
 </menu>

@@ -64,4 +64,9 @@
     <string name="links">links</string>
     <string name="edit">Edit</string>
     <string name="done">Done</string>
+
+    <!-- Strings related to Timeline popup_menu.xml -->
+    <string name="send_message">Send Message</string>
+    <string name="report">Report</string>
+    <string name="edit_event">Edit</string>
 </resources>
