@@ -47,6 +47,19 @@ public class AccountRetrievalActivity extends BaseClass {
         final String emailAddress = mEmailView.getText().toString();
         mFocusView = null;
 
+
+        View focusView = null;
+
+        if (emailAddress.isEmpty()) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+        }
+
+        if (focusView != null) {
+            focusView.requestFocus();
+            return;
+        }
+
         mFirebaseAuth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

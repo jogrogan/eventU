@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.eventu.BaseClass;
 import com.eventu.ClubPageInfo;
+import com.eventu.DisplayClubPageActivity;
 import com.eventu.R;
 import com.eventu.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -193,7 +194,8 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                 }
                                             });
 
-                                    String schoolName = intent.getStringExtra("schoolName");
+                                    final String schoolName = intent.getStringExtra("schoolName");
+                                    final String userID = user.getUid();
                                     UserProfileChangeRequest profileUpdates
                                             = new UserProfileChangeRequest.Builder()
                                             .setDisplayName(schoolName)
@@ -203,11 +205,11 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                     isClub = intent.getBooleanExtra("isClub", false);
 
                                     UserInfo userInfo = new UserInfo(email, new ArrayList<String>(),
-                                            name, schoolName, user.getUid(), isClub);
+                                            name, schoolName, userID, isClub);
 
                                     FirebaseFirestore.getInstance().collection("universities")
                                             .document(schoolName).collection("Users")
-                                            .document(user.getUid()).set(userInfo)
+                                            .document(userID).set(userInfo)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
@@ -222,20 +224,29 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                 }
                                             });
 
-                                    //if account is a club create a corresponding club page
+                                    // If account is a club create a corresponding club page and
+                                    // switch to that page to edit it
                                     if (isClub) {
-                                        ClubPageInfo clubPage = new ClubPageInfo(name,
-                                                user.getUid());
+                                        ClubPageInfo clubPage = new ClubPageInfo(name, userID);
                                         FirebaseFirestore.getInstance().collection("universities")
                                                 .document(schoolName).collection(
                                                 "Club Profile Pages")
-                                                .document(user.getUid()).set(clubPage)
+                                                .document(userID).set(clubPage)
                                                 .addOnSuccessListener(
                                                         new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                Log.d("Firestore",
-                                                                        "Club successfully added");
+                                                                Intent newClubPage = new Intent(
+                                                                        RegisterActivity.this,
+                                                                        DisplayClubPageActivity
+                                                                                .class);
+                                                                newClubPage.putExtra("school",
+                                                                        schoolName);
+                                                                newClubPage.putExtra("club",
+                                                                        userID);
+                                                                newClubPage.putExtra("createPage",
+                                                                        true);
+                                                                startActivity(newClubPage);
                                                             }
                                                         })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -244,11 +255,10 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                         Log.w("Firestore", "Error adding club", e);
                                                     }
                                                 });
+                                    } else {
+                                        startActivity(new Intent(RegisterActivity.this,
+                                                LoginActivity.class));
                                     }
-
-                                    Intent i = new Intent(RegisterActivity.this,
-                                            LoginActivity.class);
-                                    startActivity(i);
                                 }
                             } else {
                                 showProgress(false);
