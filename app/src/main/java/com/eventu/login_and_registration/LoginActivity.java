@@ -9,6 +9,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,6 +25,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +68,8 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
     private View mProgressView;
     private View mLoginFormView;
     private View mFocusView;
+    private CheckBox mRemembermeCheckBox;
+    private SharedPreferences.Editor mSharedPrefEditor;
 
     // Firebase References
     private FirebaseAuth mFirebaseAuth;
@@ -103,7 +108,18 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        mRemembermeCheckBox = findViewById(R.id.remembermeCheckBox);
+        mRemembermeCheckBox.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        mSharedPrefEditor = getSharedPreferences(
+                                getString(R.string.USER_PREFS_FILE), MODE_PRIVATE).edit();
+                        mSharedPrefEditor.putBoolean(getString(R.string.RememberAccess),
+                                mRemembermeCheckBox.isChecked());
+                        mSharedPrefEditor.apply();
+                    }
+                });
         Button forgotPasswordButton = findViewById(R.id.forgot_password);
         forgotPasswordButton.setOnClickListener(new OnClickListener() {
             @Override

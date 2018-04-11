@@ -48,7 +48,6 @@ public class HomePageActivity extends AppCompatActivity {
     private EventInfoAdapter mEventAdapter;
     private BottomNavigationView mBottomNavigationView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

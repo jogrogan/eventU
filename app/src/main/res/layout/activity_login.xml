@@ -31,7 +31,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -87,6 +87,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/action_forgot_password"/>
+            <CheckBox
+                android:id="@+id/remembermeCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:checked="false"
+                android:text="@string/remember_me"/>
 
         </LinearLayout>
     </ScrollView>
