@@ -1,7 +1,10 @@
 package com.eventu;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +15,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.CalendarView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -29,7 +40,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Home page that is viewed immediately after logging in
@@ -41,17 +55,32 @@ public class HomePageActivity extends AppCompatActivity {
     // Current User's Information;
     private UserInfo mCurrentUser;
 
-    // UI References
+    // Adapter References
     private List<EventInfo> mEventInfoList;
+    private Map<String, EventInfo> mCalendarEvents;
+    private EventInfoAdapter mEventAdapter;
+
+    // Other UI References
     private ViewFlipper mViewFlipper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private EventInfoAdapter mEventAdapter;
     private BottomNavigationView mBottomNavigationView;
+    private CalendarView mCalendarView;
+    private LinearLayout mContainerLayout;
+    private RelativeLayout mMainLayout;
+    private View mPopupView;
+    private PopupWindow mPopupWindow;
+    private RecyclerView mCalendarPopUpRecyclerView;
 
+    // Other
+    private Context self;
+    private boolean isTimelineSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        isTimelineSelected = true;
+        self = this;
 
         setContentView(R.layout.activity_homepage);
 
@@ -88,6 +117,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         // The list of events in the timeline view
         mEventInfoList = new ArrayList<>();
+        mCalendarEvents = new HashMap<>();
 
         mEventAdapter = new EventInfoAdapter(this, mEventInfoList, mCurrentUser);
         mEventRecyclerView.setAdapter(mEventAdapter);
@@ -107,11 +137,13 @@ public class HomePageActivity extends AppCompatActivity {
                                 displayNum = mViewFlipper.indexOfChild(
                                         findViewById(R.id.homepage_timeline_view));
                                 mViewFlipper.setDisplayedChild(displayNum);
+                                isTimelineSelected = true;
                                 break;
                             case R.id.action_calendar:
                                 displayNum = mViewFlipper.indexOfChild(
                                         findViewById(R.id.homepage_calendar_view));
                                 mViewFlipper.setDisplayedChild(displayNum);
+                                isTimelineSelected = false;
                                 break;
                             case R.id.action_create_event:
                                 Intent intent = new Intent(HomePageActivity.this,
@@ -127,8 +159,48 @@ public class HomePageActivity extends AppCompatActivity {
                     }
                 });
 
+        // Sets up Calendar View and necessary UI References to handle popup windows on date select
+        mMainLayout = findViewById(R.id.homePageMainView);
+        mPopupView = LayoutInflater.from(this).inflate(R.layout.calendar_popup_view, mMainLayout,
+                false);
+        mPopupWindow = new PopupWindow(mPopupView, WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
-        // Updating the RecyclerView with real time updates from the club events database
+        mCalendarPopUpRecyclerView = mPopupView.findViewById(R.id.RecycleViewEvents);
+        mCalendarPopUpRecyclerView.setHasFixedSize(true);
+        mCalendarPopUpRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mContainerLayout = new LinearLayout(this);
+        mContainerLayout.setOrientation(LinearLayout.VERTICAL);
+
+        mCalendarView = findViewById(R.id.CalendarView);
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month,
+                    int dayOfMonth) {
+                Calendar selectedDate = new GregorianCalendar(year, month, dayOfMonth);
+                Calendar eventDate = Calendar.getInstance();
+                mCalendarEvents.clear();
+                for (EventInfo info : mEventInfoList) {
+                    eventDate.setTime(info.getEventDate());
+                    if (selectedDate.get(Calendar.YEAR) == eventDate.get(Calendar.YEAR) &&
+                            selectedDate.get(Calendar.DAY_OF_YEAR) == eventDate.get(
+                                    Calendar.DAY_OF_YEAR)) {
+                        mCalendarEvents.put(info.getEventID(), info);
+                    }
+                }
+
+                if (setCalendarAdapter()) {
+                    mPopupWindow.showAtLocation(mPopupView, Gravity.CENTER_VERTICAL, 0, 0);
+                    mPopupWindow.update(0, 0, mMainLayout.getWidth(), mCalendarView.getHeight());
+                    mPopupWindow.setContentView(mContainerLayout);
+                }
+            }
+        });
+
+        // Updating the RecyclerViews with real time updates from the club events database
         String mCampusEventPath = "/universities/" + mCurrentUser.getSchoolName() + "/Club Events/";
         db.collection(mCampusEventPath)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -145,6 +217,12 @@ public class HomePageActivity extends AppCompatActivity {
                                 EventInfo mEventInfo = dc.getDocument().toObject(EventInfo.class);
                                 mEventInfo.setEventID(dc.getDocument().getId());
 
+                                boolean calendarCheck = false;
+                                if (!isTimelineSelected && mCalendarEvents.containsKey(
+                                        mEventInfo.getEventID())) {
+                                    calendarCheck = true;
+                                }
+
                                 Date currentDate = Calendar.getInstance().getTime();
                                 if (currentDate.after(mEventInfo.getEventDate())) {
                                     continue;
@@ -152,6 +230,10 @@ public class HomePageActivity extends AppCompatActivity {
 
                                 switch (dc.getType()) {
                                     case REMOVED:
+                                        if (calendarCheck) {
+                                            mCalendarEvents.remove(mEventInfo.getEventID());
+                                            setCalendarAdapter();
+                                        }
                                         mEventInfoList.remove(mEventInfo);
                                         mCurrentUser.removeFavorite(mEventInfo.getEventID());
                                         break;
@@ -159,6 +241,26 @@ public class HomePageActivity extends AppCompatActivity {
                                         mEventInfoList.add(mEventInfo);
                                         break;
                                     case MODIFIED:
+                      
+                                        // If in calendar mode, check to see the date wasn't changed
+                                        if (calendarCheck) {
+                                            Calendar eventDate = Calendar.getInstance();
+                                            Calendar eventBeforeChange = Calendar.getInstance();
+                                            eventDate.setTime(mEventInfo.getEventDate());
+                                            eventBeforeChange.setTime(mCalendarEvents.get(
+                                                    mEventInfo.getEventID()).getEventDate());
+                                            if (eventBeforeChange.get(Calendar.YEAR)
+                                                    == eventDate.get(Calendar.YEAR) &&
+                                                    eventBeforeChange.get(Calendar.DAY_OF_YEAR)
+                                                            == eventDate.get(
+                                                            Calendar.DAY_OF_YEAR)) {
+                                                mCalendarEvents.put(mEventInfo.getEventID(),
+                                                        mEventInfo);
+                                            } else {
+                                                mCalendarEvents.remove(mEventInfo.getEventID());
+                                            }
+                                            setCalendarAdapter();
+                                        }
                                         int index = mEventInfoList.indexOf(mEventInfo);
                                         mEventInfoList.set(index, mEventInfo);
                                         break;
@@ -175,12 +277,33 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     /**
+     * Helper function to take the events on a given calendar day and store them into the
+     * RecyclerView
+     */
+    private boolean setCalendarAdapter() {
+        if (mCalendarEvents.isEmpty()) {
+            mPopupWindow.dismiss();
+            Toast.makeText(self, "No events on this day", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        List<EventInfo> eventsOnDay = new ArrayList<>(mCalendarEvents.values());
+        Collections.sort(eventsOnDay);
+        EventInfoAdapter adapter = new EventInfoAdapter(this, eventsOnDay, mCurrentUser);
+        mCalendarPopUpRecyclerView.setAdapter(adapter);
+        return true;
+    }
+
+    /**
      * Always default back to the timeline format when resuming the HomePageActivity
      */
     @Override
     public void onResume() {
         super.onResume();
-        mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
+        if (isTimelineSelected) {
+            mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
+        } else {
+            mBottomNavigationView.setSelectedItemId(R.id.action_calendar);
+        }
     }
 
     /**
@@ -232,6 +355,11 @@ public class HomePageActivity extends AppCompatActivity {
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (isTimelineSelected) {
+                    mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
+                } else {
+                    mBottomNavigationView.setSelectedItemId(R.id.action_calendar);
+                }
             }
         });
 
