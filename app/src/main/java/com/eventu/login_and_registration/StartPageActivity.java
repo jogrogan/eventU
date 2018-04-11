@@ -1,6 +1,7 @@
 package com.eventu.login_and_registration;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -30,33 +31,19 @@ public class StartPageActivity extends BaseClass {
     private Button registerButton;
     private ImageView eventu_logo;
 
-    private FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+    private FirebaseUser mFirebaseUser;
+    private SharedPreferences mSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mFirebaseUser == null) {
-            setContentView(R.layout.activity_start_page);
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        mSharedPref = getSharedPreferences(getString(R.string.USER_PREFS_FILE), MODE_PRIVATE);
 
-            eventu_logo = findViewById(R.id.eventu_logo);
-            eventu_logo.setImageResource(R.drawable.eventu_logo);
-
-            logInButton = findViewById(R.id.log_in_button);
-            logInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(StartPageActivity.this, LoginActivity.class));
-                }
-            });
-            registerButton = findViewById(R.id.register_button);
-            registerButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(StartPageActivity.this, SchoolSelectActivity.class));
-                }
-            });
-        } else {
+        //If the user exists and has specified that this device remembers their password, log in
+        // immediately
+        if (mFirebaseUser != null && mSharedPref.getBoolean(getString(R.string.RememberAccess),
+                false)) {
             DocumentReference doc
                     = FirebaseFirestore.getInstance().collection(
                     "universities")
@@ -79,6 +66,30 @@ public class StartPageActivity extends BaseClass {
                 }
             });
         }
+
+        //New User or user has requested not to remember password normal start up
+        else {
+            setContentView(R.layout.activity_start_page);
+
+            eventu_logo = findViewById(R.id.eventu_logo);
+            eventu_logo.setImageResource(R.drawable.eventu_logo);
+
+            logInButton = findViewById(R.id.log_in_button);
+            logInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(StartPageActivity.this, LoginActivity.class));
+                }
+            });
+            registerButton = findViewById(R.id.register_button);
+            registerButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(
+                            new Intent(StartPageActivity.this, SchoolSelectActivity.class));
+                }
+            });
+        }
     }
 
     /**
@@ -88,4 +99,3 @@ public class StartPageActivity extends BaseClass {
     public void onBackPressed() {
     }
 }
-

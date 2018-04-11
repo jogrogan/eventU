@@ -31,16 +31,6 @@ import java.util.Map;
  * Allows the user to create an event
  */
 public class CreateEventActivity extends BaseClass {
-
-    // NO HARDCODING! Tags used in place of strings
-    private static final String EVENT_NAME = "EventName";
-    private static final String EVENT_LOCATION = "EventLocation";
-    private static final String EVENT_DESCRIPTION = "EventDescription";
-    private static final String EVENT_DATE = "EventDate";
-    private static final String EVENT_CREATOR = "EventCreator";
-    private static final String EVENT_TALLY = "EventTally";
-    private static final String CLUB_ID = "clubID";
-
     // Firebase References
     private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -166,18 +156,18 @@ public class CreateEventActivity extends BaseClass {
         }
 
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put(EVENT_NAME, eventName);
-        eventData.put(EVENT_LOCATION, eventLocation);
-        eventData.put(EVENT_DESCRIPTION, eventDescription);
+        eventData.put(getString(R.string.event_name), eventName);
+        eventData.put(getString(R.string.event_location), eventLocation);
+        eventData.put(getString(R.string.event_description), eventDescription);
         Date eventDate = new GregorianCalendar(
                 mDatePicker.getYear(),
                 mDatePicker.getMonth(),
                 mDatePicker.getDayOfMonth(),
                 mTimePicker.getHour(),
                 mTimePicker.getMinute()).getTime();
-        eventData.put(EVENT_DATE, eventDate);
-        eventData.put(EVENT_CREATOR, eventCreator);
-        eventData.put(EVENT_TALLY, tally);
+        eventData.put(getString(R.string.event_date), eventDate);
+        eventData.put(getString(R.string.event_creator), eventCreator);
+        eventData.put(getString(R.string.event_tally), tally);
 
         if (ClubID.isEmpty()) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -185,7 +175,7 @@ public class CreateEventActivity extends BaseClass {
                 ClubID = user.getUid();
             }
         }
-        eventData.put(CLUB_ID, ClubID);
+        eventData.put(getString(R.string.clubID), ClubID);
 
         if (eventID.isEmpty()) {
             mSchoolClubEvents.add(eventData)
