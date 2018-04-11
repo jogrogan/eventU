@@ -48,14 +48,14 @@ public class HomePageActivity extends AppCompatActivity {
     private EventInfoAdapter mEventAdapter;
     private BottomNavigationView mBottomNavigationView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_homepage);
 
-        // Display Welcome Message to Current User via toast
-        // Current User Info coming from whatever activity that launched this one
+        // Display Welcome Message to Current User via
         mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
@@ -142,8 +142,7 @@ public class HomePageActivity extends AppCompatActivity {
                         }
                         for (DocumentChange dc : QuerySnap.getDocumentChanges()) {
                             if (dc != null) {
-                                EventInfo mEventInfo = dc.getDocument().toObject(
-                                        EventInfo.class);
+                                EventInfo mEventInfo = dc.getDocument().toObject(EventInfo.class);
                                 mEventInfo.setEventID(dc.getDocument().getId());
 
                                 Date currentDate = Calendar.getInstance().getTime();
@@ -166,7 +165,6 @@ public class HomePageActivity extends AppCompatActivity {
                                     default:
                                         break;
                                 }
-
                                 // Maintain sorting of events by date
                                 Collections.sort(mEventInfoList);
                                 mEventAdapter.notifyDataSetChanged();
@@ -174,7 +172,6 @@ public class HomePageActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     /**
@@ -207,9 +204,7 @@ public class HomePageActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_bar_userSettings:
-                //TODO Settings Page
-                Toast.makeText(HomePageActivity.this, "Settings Page Not Implemented",
-                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(HomePageActivity.this, SettingsActivity.class));
                 break;
             default:
                 break;

@@ -128,7 +128,6 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
     }
 
     class EventViewHolder extends RecyclerView.ViewHolder {
-
         private final ImageView mEventImage;
         private final TextView mEventName;
         private final TextView mEventDesc;
@@ -138,7 +137,6 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         private final TextView mEventFavoriteTally;
         private final ImageButton mEventFavorite;
         private final ImageButton mEventPopUpMenu;
-
 
         EventViewHolder(View itemView) {
             super(itemView);

@@ -39,7 +39,7 @@ public class CreateEventActivity extends BaseClass {
     private static final String EVENT_DATE = "EventDate";
     private static final String EVENT_CREATOR = "EventCreator";
     private static final String EVENT_TALLY = "EventTally";
-    private static final String CLUB_ID = "ClubID";
+    private static final String CLUB_ID = "clubID";
 
     // Firebase References
     private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -60,7 +60,7 @@ public class CreateEventActivity extends BaseClass {
     // Other Event Information
     private String eventCreator;
     private int tally = 0;
-    private String clubID = "";
+    private String ClubID = "";
     private String eventID = "";
 
     @Override
@@ -113,7 +113,7 @@ public class CreateEventActivity extends BaseClass {
                         mEventDescription.setText(eventInfo.getEventDescription());
                         tally = eventInfo.getEventTally();
                         eventCreator = eventInfo.getEventCreator();
-                        clubID = eventInfo.getClubID();
+                        ClubID = eventInfo.getClubID();
 
                         Date selectedDate = eventInfo.getEventDate();
                         Calendar calendar = Calendar.getInstance();
@@ -179,13 +179,13 @@ public class CreateEventActivity extends BaseClass {
         eventData.put(EVENT_CREATOR, eventCreator);
         eventData.put(EVENT_TALLY, tally);
 
-        if (clubID.isEmpty()) {
+        if (ClubID.isEmpty()) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                clubID = user.getUid();
+                ClubID = user.getUid();
             }
         }
-        eventData.put(CLUB_ID, clubID);
+        eventData.put(CLUB_ID, ClubID);
 
         if (eventID.isEmpty()) {
             mSchoolClubEvents.add(eventData)

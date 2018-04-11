@@ -19,7 +19,7 @@ class EventInfo implements Comparable<EventInfo> {
     private Date EventDate;
     private String EventID;
     private int EventTally;
-    private String ClubID;
+    private String clubID;
 
     public EventInfo() {
     }
@@ -32,50 +32,50 @@ class EventInfo implements Comparable<EventInfo> {
         EventCreator = eventCreator;
         EventDate = eventDate;
         EventTally = eventTally;
-        ClubID = clubID;
+        this.clubID = clubID;
     }
 
     //Getters for all EventInfo fields
-    String getEventName() {
+    public String getEventName() {
         return EventName;
     }
 
-    String getEventDescription() {
+    public String getEventDescription() {
         return EventDescription;
     }
 
-    String getEventLocation() {
+    public String getEventLocation() {
         return EventLocation;
     }
 
-    String getEventCreator() {
+    public String getEventCreator() {
         return EventCreator;
     }
 
-    Date getEventDate() {
+    public Date getEventDate() {
         return EventDate;
     }
 
-    String getEventID() {
+    public String getEventID() {
         return EventID;
     }
 
-    void setEventID(String eventID) {
+    public void setEventID(String eventID) {
         this.EventID = eventID;
     }
 
-    int getEventTally() {
+    public int getEventTally() {
         return EventTally;
     }
 
-    String getClubID() {
-        return ClubID;
+    public String getClubID() {
+        return clubID;
     }
 
     /**
      * Increase the tally count for this event
      */
-    void increaseTallyCount(String schoolName) {
+    public void increaseTallyCount(String schoolName) {
         EventTally++;
         updateEventTally(schoolName);
     }
@@ -83,7 +83,7 @@ class EventInfo implements Comparable<EventInfo> {
     /**
      * Decrease the tally count for this event
      */
-    void decreaseTallyCount(String schoolName) {
+    public void decreaseTallyCount(String schoolName) {
         EventTally--;
         updateEventTally(schoolName);
     }
@@ -91,7 +91,7 @@ class EventInfo implements Comparable<EventInfo> {
     /**
      * Update the given event's favorite tally count
      */
-    private void updateEventTally(String schoolName) {
+    public void updateEventTally(String schoolName) {
         DocumentReference doc
                 = FirebaseFirestore.getInstance().collection(
                 "universities")

@@ -4,61 +4,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ClubPageInfo {
-    private String clubDescription;
-    private String clubName;
-    private String clubContact;
-    private ArrayList<String> clubSocial;
-    private String clubWebsite;
+    private String ClubDescription;
+    private String ClubName;
+    private String ClubContact;
+    private ArrayList<String> ClubSocial;
+    private String ClubWebsite;
     private String clubID;
 
     public ClubPageInfo() {
     }
 
     public ClubPageInfo(String name, String id) {
-        clubDescription = "";
-        clubName = name;
-        clubContact = "";
-        clubSocial = new ArrayList<>();
-        clubWebsite = "";
+        ClubDescription = "";
+        ClubName = name;
+        ClubContact = "";
+        ClubSocial = new ArrayList<>();
+        ClubWebsite = "";
         clubID = id;
     }
 
     public String getClubDescription() {
-        return clubDescription;
+        return ClubDescription;
     }
 
     public void setClubDescription(String d) {
-        clubDescription = d;
+        ClubDescription = d;
     }
 
     public String getClubName() {
-        return clubName;
+        return ClubName;
     }
 
     public String getClubContact() {
-        return clubContact;
+        return ClubContact;
     }
 
     void setClubContact(String c) {
-        clubContact = c;
+        ClubContact = c;
     }
 
     public ArrayList<String> getClubSocial() {
-        return new ArrayList<>(clubSocial);
+        return new ArrayList<>(ClubSocial);
     }
 
     public void setClubSocial(String s) {
         String temp[] = s.split("\n");
-        clubSocial.clear();
-        clubSocial.addAll(Arrays.asList(temp));
+        ClubSocial.clear();
+        ClubSocial.addAll(Arrays.asList(temp));
     }
 
     public String getClubWebsite() {
-        return clubWebsite;
+        return ClubWebsite;
     }
 
     public void setClubWebsite(String w) {
-        clubWebsite = w;
+        ClubWebsite = w;
     }
 
     public String getClubID() {
