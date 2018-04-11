@@ -241,7 +241,6 @@ public class HomePageActivity extends AppCompatActivity {
                                         mEventInfoList.add(mEventInfo);
                                         break;
                                     case MODIFIED:
-                      
                                         // If in calendar mode, check to see the date wasn't changed
                                         if (calendarCheck) {
                                             Calendar eventDate = Calendar.getInstance();
