@@ -1,7 +1,6 @@
 package com.eventu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ClubPageInfo {
     private String ClubDescription;
@@ -22,35 +21,22 @@ public class ClubPageInfo {
         ClubWebsite = "";
         clubID = id;
     }
-
     public String getClubDescription() {
         return ClubDescription;
     }
-
-    public void setClubDescription(String d) {
-        ClubDescription = d;
-    }
-
     public String getClubName() {
         return ClubName;
     }
-
     public String getClubContact() {
         return ClubContact;
     }
 
-    void setClubContact(String c) {
-        ClubContact = c;
-    }
-
     public ArrayList<String> getClubSocial() {
-        return new ArrayList<>(ClubSocial);
+        return ClubSocial;
     }
 
-    public void setClubSocial(String s) {
-        String temp[] = s.split("\n");
-        ClubSocial.clear();
-        ClubSocial.addAll(Arrays.asList(temp));
+    public void setClubSocial(ArrayList<String> newList) {
+        ClubSocial = newList;
     }
 
     public String getClubWebsite() {
@@ -64,4 +50,21 @@ public class ClubPageInfo {
     public String getClubID() {
         return clubID;
     }
+
+    public void setClubID(String id) {
+        clubID = id;
+    }
+
+    public void setClubDescription(String d) {
+        ClubDescription = d;
+    }
+
+    public void setClubName(String n) {
+        ClubName = n;
+    }
+
+    public void setClubContact(String c) {
+        ClubContact = c;
+    }
+
 }

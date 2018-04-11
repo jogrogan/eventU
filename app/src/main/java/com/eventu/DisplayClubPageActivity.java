@@ -2,21 +2,24 @@ package com.eventu;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.eventu.login_and_registration.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DisplayClubPageActivity extends AppCompatActivity {
 
@@ -41,16 +44,13 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         final String club_id = intent.getStringExtra("club");
         String mPath = "universities/" + school_name + "/Club Profile Pages/" + club_id;
         doc = FirebaseFirestore.getInstance().document(mPath);
-        doc.get().addOnSuccessListener(
-                new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        // Issue serializing the clubSocial ArrayList, the following Gson code is
-                        // another way of converting the database data into a ClubPageInfo object
-                        Gson gson = new Gson();
-                        JsonElement jsonElement = gson.toJsonTree(documentSnapshot.getData());
-                        mClubPage = gson.fromJson(jsonElement, ClubPageInfo.class);
-
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc.exists()) {
+                        mClubPage = doc.toObject(ClubPageInfo.class);
                         TextView name = findViewById(R.id.display_club_name);
                         mClubDescription = findViewById(R.id.display_club_description);
                         mClubWebsite = findViewById(R.id.display_club_links);
@@ -89,9 +89,14 @@ public class DisplayClubPageActivity extends AppCompatActivity {
                                 });
                             }
                         }
+                    } else {
+                        Log.d("DisplayClubPageError", "Doc does not exist");
                     }
-                });
-
+                } else {
+                    Log.d("DisplayClubPageError", "Task failed");
+                }
+            }
+        });
     }
 
     /**
@@ -140,7 +145,9 @@ public class DisplayClubPageActivity extends AppCompatActivity {
     private void setClubPageInfo() {
         mClubPage.setClubDescription(mClubDescription.getText().toString());
         mClubPage.setClubWebsite(mClubWebsite.getText().toString());
-        mClubPage.setClubSocial(mClubMediaLinks.getText().toString());
+        String s = mClubMediaLinks.getText().toString();
+        ArrayList<String> newList = new ArrayList<>(Arrays.asList(s.split("\n")));
+        mClubPage.setClubSocial(newList);
         mClubPage.setClubContact(mClubContactInfo.getText().toString());
     }
 
