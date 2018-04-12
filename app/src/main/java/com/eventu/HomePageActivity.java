@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +36,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,17 +52,16 @@ import java.util.Map;
  * The Home page that is viewed immediately after logging in
  */
 public class HomePageActivity extends AppCompatActivity {
+    static final int RESULT_IMAGE_CHANGE = 1;
     // Database References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
     // Current User's Information;
     private UserInfo mCurrentUser;
-
     // Adapter References
     private List<EventInfo> mEventInfoList;
     private Map<String, EventInfo> mCalendarEvents;
     private EventInfoAdapter mEventAdapter;
-
     // Other UI References
     private ViewFlipper mViewFlipper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -70,7 +72,6 @@ public class HomePageActivity extends AppCompatActivity {
     private View mPopupView;
     private PopupWindow mPopupWindow;
     private RecyclerView mCalendarPopUpRecyclerView;
-
     // Other
     private Context self;
     private boolean isTimelineSelected;
@@ -119,7 +120,7 @@ public class HomePageActivity extends AppCompatActivity {
         mEventInfoList = new ArrayList<>();
         mCalendarEvents = new HashMap<>();
 
-        mEventAdapter = new EventInfoAdapter(this, mEventInfoList, mCurrentUser);
+        mEventAdapter = new EventInfoAdapter(this, this, mEventInfoList, mCurrentUser);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         // Sets up bottom navigation pane
@@ -276,6 +277,25 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     /**
+     * If an image was changed then update the adapter
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_IMAGE_CHANGE && resultCode == RESULT_OK && data != null) {
+            boolean imageChanged = data.getBooleanExtra("imageChanged", false);
+            if (imageChanged) {
+                EventInfo eventInfo = (EventInfo) data.getSerializableExtra("eventInfo");
+                int index = mEventInfoList.indexOf(eventInfo);
+                mEventInfoList.set(index, eventInfo);
+                mEventAdapter.notifyDataSetChanged();
+            }
+        } else {
+            Log.d("Activity Result", "No image change made");
+        }
+    }
+
+    /**
      * Helper function to take the events on a given calendar day and store them into the
      * RecyclerView
      */
@@ -287,7 +307,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
         List<EventInfo> eventsOnDay = new ArrayList<>(mCalendarEvents.values());
         Collections.sort(eventsOnDay);
-        EventInfoAdapter adapter = new EventInfoAdapter(this, eventsOnDay, mCurrentUser);
+        EventInfoAdapter adapter = new EventInfoAdapter(this, this, eventsOnDay, mCurrentUser);
         mCalendarPopUpRecyclerView.setAdapter(adapter);
         return true;
     }

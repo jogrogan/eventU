@@ -22,7 +22,6 @@
         android:contentDescription="@string/eventu_logo"
         android:padding="16dp"
         android:src="@drawable/eventu_logo"
-
         app:srcCompat="@drawable/eventu_logo"/>
 
 
@@ -31,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Log In"
+        android:hint="@string/action_log_in"
         android:text="@string/action_log_in"
         android:textStyle="bold"
     />

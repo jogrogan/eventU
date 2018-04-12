@@ -42,8 +42,8 @@ public class StartPageActivity extends BaseClass {
 
         //If the user exists and has specified that this device remembers their password, log in
         // immediately
-        if (mFirebaseUser != null && mSharedPref.getBoolean(getString(R.string.RememberAccess),
-                false)) {
+        if (mFirebaseUser != null && mFirebaseUser.getDisplayName() != null &&
+                mSharedPref.getBoolean(getString(R.string.RememberAccess), false)) {
             DocumentReference doc
                     = FirebaseFirestore.getInstance().collection(
                     "universities")
