@@ -25,7 +25,7 @@ import org.junit.Test;
 public class SchoolSelectTest {
     @Rule
     public final ActivityTestRule<SchoolSelectActivity> mActivityRule = new ActivityTestRule<>(
-            SchoolSelectActivity.class);
+            SchoolSelectActivity.class, false, false);
 
     /**
      * Used to compare SchoolInfo objects within Espresso calls
