@@ -13,11 +13,11 @@ import java.util.List;
  * Custom adapter in order to store SchoolObjects within our ListView. Although only the school name
  * is displayed, the domain information can be retrieved from the given SchoolInfo.
  */
-class SchoolSelectionListAdapter extends BaseAdapter {
+public class SchoolSelectionListAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private final List<SchoolInfo> schools;
 
-    SchoolSelectionListAdapter(Context context, List<SchoolInfo> schools) {
+    public SchoolSelectionListAdapter(Context context, List<SchoolInfo> schools) {
         this.inflater = LayoutInflater.from(context);
         this.schools = schools;
     }

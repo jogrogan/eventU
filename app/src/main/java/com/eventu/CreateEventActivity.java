@@ -50,7 +50,7 @@ import java.util.Map;
 public class CreateEventActivity extends BaseClass {
     // Firebase References
     private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-
+    private final int RESULT_LOAD_IMAGE = 1;
     // UI References
     private EditText mEventName;
     private EditText mEventLocation;
@@ -58,7 +58,6 @@ public class CreateEventActivity extends BaseClass {
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
     private Button mImageButton;
-    private final int RESULT_LOAD_IMAGE = 1;
     private ImageView mEventImage;
 
     // Database References
