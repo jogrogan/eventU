@@ -104,9 +104,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
      */
     private boolean clubPageErrorChecking() {
         String clubDescription = mClubDescription.getText().toString();
-
         View focusView = null;
-
         if (clubDescription.isEmpty()) {
             mClubDescription.setError(getString(R.string.error_field_required));
             focusView = mClubDescription;
@@ -151,7 +149,6 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         mClubPage.setClubContact(mClubContactInfo.getText().toString());
     }
 
-
     /**
      * Called after registration when the club makes their club page.
      */
@@ -167,17 +164,16 @@ public class DisplayClubPageActivity extends AppCompatActivity {
                     return;
                 }
                 setClubPageInfo();
-                doc.set(mClubPage)
-                        .addOnSuccessListener(
-                                new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        disableEdits();
-                                        startActivity(new Intent(DisplayClubPageActivity.this,
-                                                LoginActivity.class));
-                                        finish();
-                                    }
-                                });
+                doc.set(mClubPage).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                disableEdits();
+                                startActivity(new Intent(DisplayClubPageActivity.this,
+                                        LoginActivity.class));
+                                finish();
+                            }
+                        });
             }
         });
     }
@@ -194,10 +190,8 @@ public class DisplayClubPageActivity extends AppCompatActivity {
                 edit_mode = !edit_mode;
                 return;
             }
-
             disableEdits();
             mEditButton.setText(R.string.edit);
-
             setClubPageInfo();
             doc.set(mClubPage);
         }

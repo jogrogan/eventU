@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -113,8 +114,8 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mSharedPrefEditor = getSharedPreferences(
-                                getString(R.string.USER_PREFS_FILE), MODE_PRIVATE).edit();
+                        mSharedPrefEditor = PreferenceManager.getDefaultSharedPreferences(
+                                getApplicationContext()).edit();
                         mSharedPrefEditor.putBoolean(getString(R.string.RememberAccess),
                                 mRemembermeCheckBox.isChecked());
                         mSharedPrefEditor.apply();

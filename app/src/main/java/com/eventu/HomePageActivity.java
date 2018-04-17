@@ -53,15 +53,19 @@ import java.util.Map;
  */
 public class HomePageActivity extends AppCompatActivity {
     static final int RESULT_IMAGE_CHANGE = 1;
+
     // Database References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
+
     // Current User's Information;
     private UserInfo mCurrentUser;
+
     // Adapter References
     private List<EventInfo> mEventInfoList;
     private Map<String, EventInfo> mCalendarEvents;
     private EventInfoAdapter mEventAdapter;
+
     // Other UI References
     private ViewFlipper mViewFlipper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -72,6 +76,7 @@ public class HomePageActivity extends AppCompatActivity {
     private View mPopupView;
     private PopupWindow mPopupWindow;
     private RecyclerView mCalendarPopUpRecyclerView;
+
     // Other
     private Context self;
     private boolean isTimelineSelected;
