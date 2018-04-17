@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
@@ -22,7 +23,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class StartPage {
+public class StartPageTest {
 
     @Rule
     public final ActivityTestRule<StartPageActivity> mActivityRule = new ActivityTestRule<>(
@@ -33,6 +34,9 @@ public class StartPage {
         Intents.init();
     }
 
+    /**
+     * Verifies "Register" button brings user to SchoolSelectActivity
+     */
     @Test
     public void registerButton() {
         Context context = InstrumentationRegistry.getTargetContext();
@@ -44,10 +48,13 @@ public class StartPage {
 
         mActivityRule.launchActivity(new Intent());
         intended(hasComponent(StartPageActivity.class.getName()));
-        onView(withId(R.id.register_button)).perform(click());
+        Espresso.onView(withId(R.id.register_button)).perform(click());
         intended(hasComponent(SchoolSelectActivity.class.getName()));
     }
 
+    /**
+     * Verifies "Login" button brings user to LoginActivity
+     */
     @Test
     public void logInButton() {
         Context context = InstrumentationRegistry.getTargetContext();
@@ -59,7 +66,7 @@ public class StartPage {
 
         mActivityRule.launchActivity(new Intent());
         intended(hasComponent(StartPageActivity.class.getName()));
-        onView(withId(R.id.log_in_button)).perform(click());
+        Espresso.onView(withId(R.id.log_in_button)).perform(click());
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
