@@ -86,6 +86,9 @@ public class AccountRetrievalTest {
         Espresso.onView(ViewMatchers.withId(R.id.password_retrieval)).perform(
                 typeText("test@email.com"));
         Espresso.onView(withId(R.id.reset_password)).perform(click());
+
+        pause();
+
         Espresso.onView(withId(R.id.password_retrieval)).check(
                 matches(hasErrorText(context.getString(R.string.error_email_not_exists))));
     }
@@ -98,6 +101,9 @@ public class AccountRetrievalTest {
         Espresso.onView(ViewMatchers.withId(R.id.password_retrieval)).perform(
                 typeText("test@mailinator.com"));
         Espresso.onView(withId(R.id.reset_password)).perform(click());
+
+        pause();
+
         Espresso.onView(withId(R.id.password_retrieval)).check(matches(hasNoErrorText()));
     }
 
@@ -110,8 +116,22 @@ public class AccountRetrievalTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.password_retrieval)).perform(typeText("a"));
         Espresso.onView(withId(R.id.reset_password)).perform(click());
+
+        pause();
+
         Espresso.onView(withId(R.id.password_retrieval)).check(
                 matches(hasErrorText(context.getString(R.string.error_reset_password))));
+    }
+
+    /**
+     * Adds pause to main thread
+     */
+    private void pause() {
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @After

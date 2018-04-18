@@ -233,6 +233,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                                         userID);
                                                                 newClubPage.putExtra("createPage",
                                                                         true);
+                                                                newClubPage.putExtra(
+                                                                        "fromRegistration",
+                                                                        true);
                                                                 startActivity(newClubPage);
                                                             }
                                                         })

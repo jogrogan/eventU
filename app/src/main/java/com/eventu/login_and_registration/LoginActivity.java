@@ -27,7 +27,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.eventu.BaseClass;
 import com.eventu.HomePageActivity;
@@ -185,9 +184,8 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                                     mFocusView = mPasswordView;
                                     mFocusView.requestFocus();
                                 } else if (!user.isEmailVerified()) {
-                                    Toast.makeText(LoginActivity.this,
-                                            getString(R.string.error_email_not_verified),
-                                            Toast.LENGTH_SHORT).show();
+                                    mEmailView.setError(
+                                            getString(R.string.error_email_not_verified));
                                     showProgress(false);
                                     // If sign in fails, display a message to the user.
                                     mFocusView = mEmailView;

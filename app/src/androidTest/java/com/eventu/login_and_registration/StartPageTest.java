@@ -43,7 +43,7 @@ public class StartPageTest {
     private CountDownLatch authSignal;
 
     /**
-     * Clears app preferences
+     * Initializes Intents and clears app preferences
      */
     @Before
     public void before() {
@@ -72,7 +72,6 @@ public class StartPageTest {
     public void registerButton() {
         noRememberMePreference();
 
-        mActivityRule.getActivity().requestPermissions(new String[]{READ_CONTACTS}, 0);
         Espresso.onView(withId(R.id.register_button)).perform(click());
         intended(hasComponent(SchoolSelectActivity.class.getName()));
     }

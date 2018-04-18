@@ -117,8 +117,32 @@ public class RegisterTest {
     }
 
     /**
-     * Verifies field required error on all fields and registration action on click for existing
-     * user
+     * Verifies field required error on all fields
+     */
+    @Test
+    public void emptyFields() {
+        ArrayList<String> testDomains = new ArrayList<>();
+        testDomains.add("mailinator.com");
+
+        Intent intent = new Intent();
+        intent.putExtra("schoolName", "Test");
+        intent.putExtra("schoolDomains", testDomains);
+        intent.putExtra("isClub", true);
+
+        launchActivity(intent);
+        Context context = InstrumentationRegistry.getTargetContext();
+
+        Espresso.onView(withId(R.id.register_button)).perform(click());
+        Espresso.onView(withId(R.id.name)).check(
+                matches(hasErrorText(context.getString(R.string.error_field_required))));
+        Espresso.onView(withId(R.id.email)).check(
+                matches(hasErrorText(context.getString(R.string.error_field_required))));
+        Espresso.onView(withId(R.id.password)).check(
+                matches(hasErrorText(context.getString(R.string.error_field_required))));
+
+    }
+    /**
+     * Verifies registration action on click for existing user
      */
     @Test
     public void registerExistingUser() {
@@ -137,18 +161,19 @@ public class RegisterTest {
         launchActivity(intent);
         Context context = InstrumentationRegistry.getTargetContext();
 
-        Espresso.onView(withId(R.id.register_button)).perform(click());
-        Espresso.onView(withId(R.id.name)).check(
-                matches(hasErrorText(context.getString(R.string.error_field_required))));
-        Espresso.onView(withId(R.id.email)).check(
-                matches(hasErrorText(context.getString(R.string.error_field_required))));
-        Espresso.onView(withId(R.id.password)).check(
-                matches(hasErrorText(context.getString(R.string.error_field_required))));
-
         Espresso.onView(ViewMatchers.withId(R.id.name)).perform(typeText(clubName));
         Espresso.onView(ViewMatchers.withId(R.id.email)).perform(typeText(email));
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(typeText(password));
         Espresso.onView(withId(R.id.register_button)).perform(click());
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+
+        Espresso.onView(withId(R.id.email)).check(
+                matches(hasErrorText(context.getString(R.string.error_email_exists))));
     }
 
     /**
@@ -181,6 +206,8 @@ public class RegisterTest {
             Thread.currentThread().interrupt();
         }
 
+        intended(hasComponent(DisplayClubPageActivity.class.getName()));
+        Espresso.pressBack();
         intended(hasComponent(DisplayClubPageActivity.class.getName()));
         deleteClubUser();
     }
@@ -269,6 +296,9 @@ public class RegisterTest {
         }
     }
 
+    /**
+     * Releases Intents
+     */
     @After
     public void after() {
         Intents.release();

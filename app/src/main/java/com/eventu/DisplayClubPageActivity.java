@@ -196,4 +196,14 @@ public class DisplayClubPageActivity extends AppCompatActivity {
             doc.set(mClubPage);
         }
     }
+
+    /**
+     * Back button should have no functionality if from registration sequence
+     */
+    @Override
+    public void onBackPressed() {
+        if (!getIntent().getBooleanExtra("fromRegistration", false)) {
+            super.onBackPressed();
+        }
+    }
 }
