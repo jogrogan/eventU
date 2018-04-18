@@ -1,4 +1,4 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -29,7 +29,9 @@ public class JsonTaskTest {
     private static CountDownLatch signal;
     private static ListView mSchoolList;
 
-
+    /**
+     * Creates a few test objects
+     */
     @BeforeClass
     public static void beforeClass() {
         ArrayList<String> testDomains = new ArrayList<>();

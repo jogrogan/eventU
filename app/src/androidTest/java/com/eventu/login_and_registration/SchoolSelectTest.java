@@ -1,4 +1,4 @@
-package com.eventu;
+package com.eventu.login_and_registration;
 
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -12,8 +12,10 @@ import android.content.Intent;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
+import com.eventu.R;
 import com.eventu.login_and_registration.school_selection.SchoolInfo;
 import com.eventu.login_and_registration.school_selection.SchoolSelectActivity;
 
@@ -54,10 +56,10 @@ public class SchoolSelectTest {
         mActivityRule.launchActivity(new Intent());
         intended(hasComponent(SchoolSelectActivity.class.getName()));
 
-        Espresso.onView(withId(R.id.school)).perform(typeText("ren"));
+        Espresso.onView(ViewMatchers.withId(R.id.school)).perform(typeText("ren"));
         Espresso.onView(withId(R.id.school)).check(matches(withText("ren")));
         Espresso.onData(withSchoolName("Rensselaer Polytechnic Institute")).perform(click());
-        intended(hasComponent(SchoolSelectActivity.class.getName()));
+        intended(hasComponent(AccountTypeActivity.class.getName()));
 
         mActivityRule.finishActivity();
         Intents.release();
