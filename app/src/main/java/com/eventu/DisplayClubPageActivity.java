@@ -104,9 +104,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
      */
     private boolean clubPageErrorChecking() {
         String clubDescription = mClubDescription.getText().toString();
-
         View focusView = null;
-
         if (clubDescription.isEmpty()) {
             mClubDescription.setError(getString(R.string.error_field_required));
             focusView = mClubDescription;
@@ -114,9 +112,9 @@ public class DisplayClubPageActivity extends AppCompatActivity {
 
         if (focusView != null) {
             focusView.requestFocus();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -151,7 +149,6 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         mClubPage.setClubContact(mClubContactInfo.getText().toString());
     }
 
-
     /**
      * Called after registration when the club makes their club page.
      */
@@ -163,21 +160,20 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!clubPageErrorChecking()) {
+                if (clubPageErrorChecking()) {
                     return;
                 }
                 setClubPageInfo();
-                doc.set(mClubPage)
-                        .addOnSuccessListener(
-                                new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        disableEdits();
-                                        startActivity(new Intent(DisplayClubPageActivity.this,
-                                                LoginActivity.class));
-                                        finish();
-                                    }
-                                });
+                doc.set(mClubPage).addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                disableEdits();
+                                startActivity(new Intent(DisplayClubPageActivity.this,
+                                        LoginActivity.class));
+                                finish();
+                            }
+                        });
             }
         });
     }
@@ -190,16 +186,24 @@ public class DisplayClubPageActivity extends AppCompatActivity {
             enableEdits();
             mEditButton.setText(R.string.done);
         } else {
-            if (!clubPageErrorChecking()) {
+            if (clubPageErrorChecking()) {
                 edit_mode = !edit_mode;
                 return;
             }
-
             disableEdits();
             mEditButton.setText(R.string.edit);
-
             setClubPageInfo();
             doc.set(mClubPage);
+        }
+    }
+
+    /**
+     * Back button should have no functionality if from registration sequence
+     */
+    @Override
+    public void onBackPressed() {
+        if (!getIntent().getBooleanExtra("fromRegistration", false)) {
+            super.onBackPressed();
         }
     }
 }

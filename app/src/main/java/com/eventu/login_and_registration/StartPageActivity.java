@@ -3,6 +3,7 @@ package com.eventu.login_and_registration;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -38,12 +39,12 @@ public class StartPageActivity extends BaseClass {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        mSharedPref = getSharedPreferences(getString(R.string.USER_PREFS_FILE), MODE_PRIVATE);
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //If the user exists and has specified that this device remembers their password, log in
         // immediately
-        if (mFirebaseUser != null && mSharedPref.getBoolean(getString(R.string.RememberAccess),
-                false)) {
+        if (mFirebaseUser != null && mFirebaseUser.getDisplayName() != null &&
+                mSharedPref.getBoolean(getString(R.string.RememberAccess), false)) {
             DocumentReference doc
                     = FirebaseFirestore.getInstance().collection(
                     "universities")

@@ -5,13 +5,14 @@ import android.support.annotation.NonNull;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * Class to store all Event Information
  */
-class EventInfo implements Comparable<EventInfo> {
+class EventInfo implements Comparable<EventInfo>, Serializable {
     private String EventName;
     private String EventDescription;
     private String EventLocation;

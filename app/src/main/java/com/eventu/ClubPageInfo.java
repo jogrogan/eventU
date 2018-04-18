@@ -21,14 +21,29 @@ public class ClubPageInfo {
         ClubWebsite = "";
         clubID = id;
     }
+
     public String getClubDescription() {
         return ClubDescription;
     }
+
+    public void setClubDescription(String d) {
+        ClubDescription = d;
+    }
+
     public String getClubName() {
         return ClubName;
     }
+
+    public void setClubName(String n) {
+        ClubName = n;
+    }
+
     public String getClubContact() {
         return ClubContact;
+    }
+
+    public void setClubContact(String c) {
+        ClubContact = c;
     }
 
     public ArrayList<String> getClubSocial() {
@@ -53,18 +68,6 @@ public class ClubPageInfo {
 
     public void setClubID(String id) {
         clubID = id;
-    }
-
-    public void setClubDescription(String d) {
-        ClubDescription = d;
-    }
-
-    public void setClubName(String n) {
-        ClubName = n;
-    }
-
-    public void setClubContact(String c) {
-        ClubContact = c;
     }
 
 }

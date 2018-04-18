@@ -19,10 +19,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -106,17 +104,6 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
             @Override
             public void onClick(View view) {
                 attemptRegister();
-            }
-        });
-
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptRegister();
-                    return true;
-                }
-                return false;
             }
         });
     }
@@ -246,6 +233,9 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                                                                         userID);
                                                                 newClubPage.putExtra("createPage",
                                                                         true);
+                                                                newClubPage.putExtra(
+                                                                        "fromRegistration",
+                                                                        true);
                                                                 startActivity(newClubPage);
                                                             }
                                                         })
@@ -297,8 +287,13 @@ public class RegisterActivity extends BaseClass implements LoaderCallbacks<Curso
                     Pattern.CASE_INSENSITIVE);
         } else {
             boolean matches = false;
+            String emailDomain = "";
+            int indexDomain = email.indexOf('@');
+            if (indexDomain >= 0 && indexDomain + 1 < email.length()) {
+                emailDomain = email.substring(indexDomain + 1);
+            }
             for (int i = 0; i < domains.size(); i++) {
-                if (email.contains(domains.get(i))) {
+                if (emailDomain.equals(domains.get(i))) {
                     matches = true;
                     break;
                 }

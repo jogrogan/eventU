@@ -3,6 +3,7 @@
     <string name="eventu_logo">eventU_logo</string>
 
     <!-- Strings related to login -->
+    <string name="start_page_log_in">Log In</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
@@ -31,6 +32,7 @@
     <string name="title_activity_register">Register</string>
     <string name="title_forgot_password">Forgot Password</string>
     <string name="reset_password">Reset Password</string>
+    <string name="error_reset_password">Error sending reset password email</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
@@ -43,6 +45,11 @@
     <string name="event_creator">EventCreator</string>
     <string name="event_location">EventLocation</string>
     <string name="event_description">EventDescription</string>
+
+    <string name="event_name_hint">Event Name</string>
+    <string name="event_location_hint">Event Location</string>
+    <string name="event_description_hint">Event Description</string>
+
     <string name="event_tally">EventTally</string>
     <string name="clubID">clubID</string>
     <string name="event_date">EventDate</string>
@@ -147,5 +154,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="remember_me">Remeber me on this device</string>
+    <string name="remember_me">Remember me on this device</string>
 </resources>

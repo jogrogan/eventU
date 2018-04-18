@@ -2,9 +2,11 @@ package com.eventu.login_and_registration.school_selection;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,13 +21,13 @@ import java.util.Arrays;
  * Used as an asynchronous task to read from the University Domains and Names Data API. Once
  * read a SchoolInfo is created and set into the ListView
  */
-class JsonTask extends AsyncTask<String, String, String> {
+public class JsonTask extends AsyncTask<String, String, String> {
 
     // WeakReferences to the calling class as to prevent memory leaks
     private final WeakReference<Context> context;
     private final WeakReference<ListView> mSchoolList;
 
-    JsonTask(Context context, ListView mSchoolList) {
+    public JsonTask(Context context, ListView mSchoolList) {
         this.context = new WeakReference<>(context);
         this.mSchoolList = new WeakReference<>(mSchoolList);
     }
@@ -76,13 +78,17 @@ class JsonTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-
+        if (result == null) {
+            return;
+        }
         // Update the school ListView with the new objects found
-        SchoolInfo[] schoolJSONObjects = new Gson().fromJson(result, SchoolInfo[].class);
-        if (schoolJSONObjects != null) {
+        try {
+            SchoolInfo[] schoolJSONObjects = new Gson().fromJson(result, SchoolInfo[].class);
             final SchoolSelectionListAdapter adapter = new SchoolSelectionListAdapter(context.get(),
                     Arrays.asList(schoolJSONObjects));
             mSchoolList.get().setAdapter(adapter);
+        } catch (JsonParseException e) {
+            Log.e("ERROR", e.getMessage());
         }
     }
 }

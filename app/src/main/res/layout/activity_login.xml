@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Log In"
-        android:textSize="@dimen/activity_larger_vertical_margin"
+        android:text="@string/action_log_in"
+        android:textSize="40sp"
         android:textStyle="bold"/>
 
     <ScrollView
@@ -72,12 +72,20 @@
                     android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/remembermeCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:checked="false"
+                android:text="@string/remember_me"/>
+
             <Button
                 android:id="@+id/log_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 android:text="@string/action_log_in"
                 android:textStyle="bold"/>
 
@@ -87,12 +95,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/action_forgot_password"/>
-            <CheckBox
-                android:id="@+id/remembermeCheckBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:checked="false"
-                android:text="@string/remember_me"/>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
