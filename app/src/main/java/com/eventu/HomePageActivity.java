@@ -80,6 +80,7 @@ public class HomePageActivity extends AppCompatActivity {
     // Other
     private Context self;
     private boolean isTimelineSelected;
+    private Integer mNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
