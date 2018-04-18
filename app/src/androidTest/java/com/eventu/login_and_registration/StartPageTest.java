@@ -37,11 +37,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class StartPageTest {
-    private CountDownLatch authSignal;
-
     @Rule
     public final ActivityTestRule<StartPageActivity> mActivityRule = new ActivityTestRule<>(
             StartPageActivity.class, false, false);
+    private CountDownLatch authSignal;
 
     /**
      * Clears app preferences
@@ -149,23 +148,28 @@ public class StartPageTest {
 
         authSignal = new CountDownLatch(1);
 
-        mActivityRule.launchActivity(new Intent());
-        intended(hasComponent(StartPageActivity.class.getName()));
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            auth.signInWithEmailAndPassword("test@mailinator.com",
-                    "password").addOnCompleteListener(
-                    new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull final Task<AuthResult> task) {
-                            authSignal.countDown();
-                        }
-                    });
-        } else {
-            authSignal.countDown();
-        }
+        auth.signInWithEmailAndPassword("test@mailinator.com",
+                "password").addOnCompleteListener(
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
+                        authSignal.countDown();
+                    }
+                });
+
         try {
             authSignal.await(10, TimeUnit.SECONDS);
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        mActivityRule.launchActivity(new Intent());
+        intended(hasComponent(StartPageActivity.class.getName()));
+
+        try {
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

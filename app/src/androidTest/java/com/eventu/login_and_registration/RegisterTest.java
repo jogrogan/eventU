@@ -11,6 +11,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
@@ -22,7 +23,17 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
+import com.eventu.DisplayClubPageActivity;
 import com.eventu.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.After;
 import org.junit.Before;
@@ -106,10 +117,11 @@ public class RegisterTest {
     }
 
     /**
-     * Verifies field required error on all fields and registration action on click
+     * Verifies field required error on all fields and registration action on click for existing
+     * user
      */
     @Test
-    public void registration() {
+    public void registerExistingUser() {
         ArrayList<String> testDomains = new ArrayList<>();
         testDomains.add("mailinator.com");
 
@@ -137,6 +149,105 @@ public class RegisterTest {
         Espresso.onView(ViewMatchers.withId(R.id.email)).perform(typeText(email));
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(typeText(password));
         Espresso.onView(withId(R.id.register_button)).perform(click());
+    }
+
+    /**
+     * Registration action on click for new club user
+     */
+    @Test
+    public void registerNewClubUser() {
+        ArrayList<String> testDomains = new ArrayList<>();
+        testDomains.add("mailinator.com");
+
+        Intent intent = new Intent();
+        intent.putExtra("schoolName", "Test");
+        intent.putExtra("schoolDomains", testDomains);
+        intent.putExtra("isClub", true);
+
+        String clubName = "Test Club";
+        String email = "user@mailinator.com";
+        String password = "password";
+
+        launchActivity(intent);
+
+        Espresso.onView(ViewMatchers.withId(R.id.name)).perform(typeText(clubName));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(typeText(email));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(typeText(password));
+        Espresso.onView(withId(R.id.register_button)).perform(click());
+
+        try {
+            Thread.sleep(12000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+
+        intended(hasComponent(DisplayClubPageActivity.class.getName()));
+        deleteClubUser();
+    }
+
+    private void deleteClubUser() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+
+        final String schoolName = "Test";
+        AuthCredential credential = EmailAuthProvider
+                .getCredential("user@mailinator.com", "password");
+
+        // Delete User from Cloud Firestore
+        FirebaseFirestore.getInstance().collection("universities")
+                .document(schoolName).collection("Users")
+                .document(user.getUid()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore",
+                                "Document successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Error deleting document", e);
+                    }
+                });
+
+        // Delete Club Profile Page from Cloud Firestore
+        FirebaseFirestore.getInstance().collection("universities")
+                .document(schoolName).collection("Club Profile Pages")
+                .document(user.getUid()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore",
+                                "Document successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Error deleting document", e);
+                    }
+                });
+
+        // Delete user from Firebase Authentication
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        user.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("TEST", "User account deleted.");
+                                        }
+                                    }
+                                });
+
+                    }
+                });
     }
 
     /**

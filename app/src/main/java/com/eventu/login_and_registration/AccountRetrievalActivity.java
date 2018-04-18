@@ -47,16 +47,13 @@ public class AccountRetrievalActivity extends BaseClass {
         final String emailAddress = mEmailView.getText().toString();
         mFocusView = null;
 
-
-        View focusView = null;
-
         if (emailAddress.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mFocusView = mEmailView;
         }
 
-        if (focusView != null) {
-            focusView.requestFocus();
+        if (mFocusView != null) {
+            mFocusView.requestFocus();
             return;
         }
 
@@ -77,11 +74,12 @@ public class AccountRetrievalActivity extends BaseClass {
                             } catch (FirebaseAuthInvalidUserException invalidEmail) {
                                 mEmailView.setError(getString(R.string.error_email_not_exists));
                                 mFocusView = mEmailView;
-                                mFocusView.requestFocus();
                             } catch (Exception e) {
-                                Toast.makeText(AccountRetrievalActivity.this,
-                                        "There was an error in sending reset password email",
-                                        Toast.LENGTH_SHORT).show();
+                                mEmailView.setError(getString(R.string.error_reset_password));
+                                mFocusView = mEmailView;
+                            }
+                            if (mFocusView != null) {
+                                mFocusView.requestFocus();
                             }
                         }
                     }
