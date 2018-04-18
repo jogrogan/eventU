@@ -126,7 +126,7 @@ public class HomePageActivity extends AppCompatActivity {
         mEventInfoList = new ArrayList<>();
         mCalendarEvents = new HashMap<>();
 
-        mEventAdapter = new EventInfoAdapter(this, this, mEventInfoList, mCurrentUser);
+        mEventAdapter = new EventInfoAdapter(this, mEventInfoList, mCurrentUser);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         // Sets up bottom navigation pane
@@ -313,7 +313,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
         List<EventInfo> eventsOnDay = new ArrayList<>(mCalendarEvents.values());
         Collections.sort(eventsOnDay);
-        EventInfoAdapter adapter = new EventInfoAdapter(this, this, eventsOnDay, mCurrentUser);
+        EventInfoAdapter adapter = new EventInfoAdapter(this, eventsOnDay, mCurrentUser);
         mCalendarPopUpRecyclerView.setAdapter(adapter);
         return true;
     }
