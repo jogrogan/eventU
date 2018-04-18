@@ -1,8 +1,14 @@
 package com.eventu;
 
+import static android.content.Context.ALARM_SERVICE;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,6 +32,7 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
     private final Context mContext;
     private final List<EventInfo> mEventList;
     private final UserInfo mCurrentUser;
+    private SharedPreferences mSharedPref;
 
     EventInfoAdapter(Context context, List<EventInfo> eventList, UserInfo user) {
         mContext = context;
@@ -110,12 +118,23 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 String eID = mEventInfo.getEventID();
                 // Add or remove the event from the user's list of favorited events
                 // Increase of decrease the tally of favorites for this event
+                // Set up notifications for favorited events
+                Intent intent = new Intent(mContext.getApplicationContext(), NotificationIntentService.class);
+                intent.putExtra("Event", mEventInfo.getEventName());
+                intent.putExtra("Location", mEventInfo.getEventLocation());
+                intent.putExtra("channel", eID);
+                PendingIntent pendingIntent = PendingIntent.getService(mContext.getApplicationContext(), mEventInfo.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
                 if (!v.isSelected()) {
                     mCurrentUser.addFavorite(eID);
                     mEventInfo.increaseTallyCount(mCurrentUser.getSchoolName());
+
+                    alarmManager.set(AlarmManager.RTC, mEventInfo.getEventDate().getTime(), pendingIntent);
                 } else {
                     mCurrentUser.removeFavorite(eID);
                     mEventInfo.decreaseTallyCount(mCurrentUser.getSchoolName());
+
+                    alarmManager.cancel(pendingIntent);
                 }
                 v.setSelected(!v.isSelected());
             }
