@@ -141,6 +141,7 @@ public class RegisterTest {
                 matches(hasErrorText(context.getString(R.string.error_field_required))));
 
     }
+
     /**
      * Verifies registration action on click for existing user
      */
@@ -212,6 +213,9 @@ public class RegisterTest {
         deleteClubUser();
     }
 
+    /**
+     * Helper function to delete a user from all databases
+     */
     private void deleteClubUser() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {

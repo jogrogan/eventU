@@ -112,9 +112,9 @@ public class DisplayClubPageActivity extends AppCompatActivity {
 
         if (focusView != null) {
             focusView.requestFocus();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -160,7 +160,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!clubPageErrorChecking()) {
+                if (clubPageErrorChecking()) {
                     return;
                 }
                 setClubPageInfo();
@@ -186,7 +186,7 @@ public class DisplayClubPageActivity extends AppCompatActivity {
             enableEdits();
             mEditButton.setText(R.string.done);
         } else {
-            if (!clubPageErrorChecking()) {
+            if (clubPageErrorChecking()) {
                 edit_mode = !edit_mode;
                 return;
             }

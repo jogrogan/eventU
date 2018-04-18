@@ -180,6 +180,9 @@ public class CreateEventActivity extends BaseClass {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         EventInfo eventInfo = documentSnapshot.toObject(EventInfo.class);
+                        if (eventInfo == null) {
+                            return;
+                        }
                         mEventName.setText(eventInfo.getEventName());
                         mEventLocation.setText(eventInfo.getEventLocation());
                         mEventDescription.setText(eventInfo.getEventDescription());
