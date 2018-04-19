@@ -208,9 +208,8 @@ public class CreateEventTest {
 
         Calendar calendar = Calendar.getInstance();
 
-        // TODO: Add time error checking
         Espresso.onView(withId(R.id.tp_timepicker)).perform(
-                setTime((calendar.get(Calendar.HOUR) + 1) % 12));
+                setTime((calendar.get(Calendar.HOUR_OF_DAY) + 1) % 24));
         Espresso.onView(withId(R.id.next_button)).perform(scrollTo(), click());
 
         try {
