@@ -6,9 +6,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +29,6 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
     private final Context mContext;
     private final List<EventInfo> mEventList;
     private final UserInfo mCurrentUser;
-    private SharedPreferences mSharedPref;
 
     EventInfoAdapter(Context context, List<EventInfo> eventList, UserInfo user) {
         mContext = context;
@@ -46,6 +43,9 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         return new EventViewHolder(view);
     }
 
+    /**
+     * Populates the EventViewHolder and handles card view actions
+     */
     @Override
     public void onBindViewHolder(final EventViewHolder holder, int position) {
         final EventInfo mEventInfo = mEventList.get(position);
@@ -72,6 +72,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 String.format(Locale.US, "%d", mEventInfo.getEventTally()));
 
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);
+
+        // Handles pop-up menu event options
         holder.mEventPopUpMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,10 +112,10 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
             holder.mEventFavorite.setSelected(false);
         }
 
+        // Handles event favoriting functionality and adds notifications
         holder.mEventFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("asdfg", "Click!");
                 String eID = mEventInfo.getEventID();
                 // Add or remove the event from the user's list of favorited events
                 // Increase of decrease the tally of favorites for this event
@@ -151,6 +153,9 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         return mEventList.size();
     }
 
+    /**
+     * Holds all the view information for the event card view
+     */
     class EventViewHolder extends RecyclerView.ViewHolder {
         private final ImageView mEventImage;
         private final TextView mEventName;

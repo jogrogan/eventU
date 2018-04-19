@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Home page that is viewed immediately after logging in
+ * The Homepage that is viewed immediately after logging in
  */
 public class HomePageActivity extends AppCompatActivity {
     static final int RESULT_IMAGE_CHANGE = 1;

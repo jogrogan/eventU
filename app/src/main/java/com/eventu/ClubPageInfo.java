@@ -2,6 +2,9 @@ package com.eventu;
 
 import java.util.ArrayList;
 
+/**
+ * Class to include all club profile page info stored inside the Firestore database
+ */
 public class ClubPageInfo {
     private String ClubDescription;
     private String ClubName;

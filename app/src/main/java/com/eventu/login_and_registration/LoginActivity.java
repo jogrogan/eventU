@@ -95,6 +95,8 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        // Adds or removes the "Remember Me" option from the app preferences
         mRemembermeCheckBox = findViewById(R.id.remembermeCheckBox);
         mRemembermeCheckBox.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
@@ -107,6 +109,7 @@ public class LoginActivity extends BaseClass implements LoaderCallbacks<Cursor> 
                         mSharedPrefEditor.apply();
                     }
                 });
+
         Button forgotPasswordButton = findViewById(R.id.forgot_password);
         forgotPasswordButton.setOnClickListener(new OnClickListener() {
             @Override

@@ -297,7 +297,7 @@ public class CreateEventActivity extends BaseClass {
                                     Toast.LENGTH_SHORT).show();
 
                             // The Intent to return back to the homepage to handle loading image
-                            // changes
+                            // changes if necessary
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("imageChanged", imageChanged);
                             if (imageChanged) {

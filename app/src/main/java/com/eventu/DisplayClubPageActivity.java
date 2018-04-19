@@ -21,6 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Displays the club profile page of the club ID included in the Intent.
+ * Allows the club user who owns this page to edit it.
+ */
 public class DisplayClubPageActivity extends AppCompatActivity {
 
     // UI References
@@ -42,6 +46,8 @@ public class DisplayClubPageActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         String school_name = intent.getStringExtra("school");
         final String club_id = intent.getStringExtra("club");
+
+        // Reads the page from the firebase database
         String mPath = "universities/" + school_name + "/Club Profile Pages/" + club_id;
         doc = FirebaseFirestore.getInstance().document(mPath);
         doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -198,7 +204,8 @@ public class DisplayClubPageActivity extends AppCompatActivity {
     }
 
     /**
-     * Back button should have no functionality if from registration sequence
+     * Back button should have no functionality if from registration sequence because profile
+     * page creation is required.
      */
     @Override
     public void onBackPressed() {
