@@ -17,11 +17,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
 
 import com.eventu.login_and_registration.StartPageActivity;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -43,6 +50,44 @@ public class HomePageActivityTest {
             return mIntent;
         }
     };
+
+    public static ViewAction clickChildViewWithId(final int id) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Click on a child view with specified id.";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View v = view.findViewById(id);
+                v.performClick();
+            }
+        };
+    }
+
+    private static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<View>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
+    }
 
     @Test
     public void useAppContext() {
@@ -80,13 +125,26 @@ public class HomePageActivityTest {
                 .check(matches(not(isClickable())));
     }
 
+    /**
+     * public void TestCalendarAdaptor() {
+     * Espresso.onView(withId(R.id.action_calendar))
+     * .perform(click());
+     * Espresso.onView(withIndex(withId(R.id.CalendarView),1))
+     * .check(matches(isDisplayed()));
+     * }
+     */
     @Test
-    public void TestCalendarAdaptor() {
-        Espresso.onView(withId(R.id.action_calendar))
-                .perform(click())
-                .check(matches(isDisplayed()));
-        Espresso.onView(withId(R.id.CalendarView))
-                .check(matches(isDisplayed()));
+    public void TestCreateEvent() {
+        Intents.init();
+        Espresso.onView(withId(R.id.action_create_event))
+                .perform(click());
+        intended(hasComponent(CreateEventActivity.class.getName()));
+        Intents.release();
+    }
+
+    @Test
+    public void TestEditEvent() {
+        Espresso.onView(withId(R.id.eventRecyclerView));
     }
 
     @Test
@@ -96,6 +154,37 @@ public class HomePageActivityTest {
         Espresso.onView(withText("Settings"))
                 .perform(click());
         intended(hasComponent(SettingsActivity.class.getName()));
+        Intents.release();
+    }
+
+    @Test
+    public void TestEdit() {
+        Intents.init();
+        Espresso.onView(withId(R.id.eventRecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        clickChildViewWithId(R.id.imagebuttonVerticalDots)));
+        Espresso.onView(withText("Edit"))
+                .perform(click());
+        intended(hasComponent(CreateEventActivity.class.getName()));
+        Intents.release();
+    }
+
+    @Test
+    public void TestFavorite() {
+        Intents.init();
+        int before = MockTestVariables.mockUser.getFavorites().size();
+        Espresso.onView(withId(R.id.eventRecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        clickChildViewWithId(R.id.imagebuttonFavorite)));
+        int after = MockTestVariables.mockUser.getFavorites().size();
+
+        assertEquals(before, after);
+
+        Espresso.onView(withId(R.id.eventRecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        clickChildViewWithId(R.id.textViewEventCreator)));
+        intended(hasComponent(DisplayClubPageActivity.class.getName()));
+        Espresso.pressBack();
         Intents.release();
     }
 

@@ -3,9 +3,11 @@ package com.eventu;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -59,6 +61,8 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Current User's Information;
     private UserInfo mCurrentUser;
+    private String username;
+    private SharedPreferences mSharedPref;
 
     // Adapter References
     private List<EventInfo> mEventInfoList;
@@ -91,8 +95,9 @@ public class HomePageActivity extends AppCompatActivity {
 
         // Display Welcome Message to Current User via toast
         mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
-        String username = mCurrentUser.getUsername();
-        Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        username = mSharedPref.getString("example_text", mCurrentUser.getUsername());
+        Toast.makeText(HomePageActivity.this, "Welcome " + mCurrentUser.getUsername() + "!",
                 Toast.LENGTH_SHORT).show();
 
         // Sets up the swipe to refresh feature
@@ -319,6 +324,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        username = mSharedPref.getString("example_text", mCurrentUser.getUsername());
+        Toast.makeText(HomePageActivity.this, username, Toast.LENGTH_SHORT).show();
         if (isTimelineSelected) {
             mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
         } else {
