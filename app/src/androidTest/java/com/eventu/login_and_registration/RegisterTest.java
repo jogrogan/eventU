@@ -202,7 +202,7 @@ public class RegisterTest {
         Espresso.onView(withId(R.id.register_button)).perform(click());
 
         try {
-            Thread.sleep(12000);
+            Thread.sleep(15000);
         } catch (Exception e) {
             Thread.currentThread().interrupt();
         }
@@ -211,6 +211,12 @@ public class RegisterTest {
         Espresso.pressBack();
         intended(hasComponent(DisplayClubPageActivity.class.getName()));
         deleteClubUser();
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+
     }
 
     /**

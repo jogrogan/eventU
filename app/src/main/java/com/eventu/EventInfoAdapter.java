@@ -71,7 +71,6 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
         holder.mEventFavoriteTally.setText(
                 String.format(Locale.US, "%d", mEventInfo.getEventTally()));
 
-        //TODO allow custom image - planned for future
         holder.mEventImage.setImageResource(R.drawable.eventu_logo);
         holder.mEventPopUpMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,25 +118,28 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 // Add or remove the event from the user's list of favorited events
                 // Increase of decrease the tally of favorites for this event
                 // Set up notifications for favorited events
-                Intent intent = new Intent(mContext.getApplicationContext(), NotificationIntentService.class);
+                Intent intent = new Intent(mContext.getApplicationContext(),
+                        NotificationIntentService.class);
                 intent.putExtra("Event", mEventInfo.getEventName());
                 intent.putExtra("Location", mEventInfo.getEventLocation());
                 intent.putExtra("channel", eID);
-                PendingIntent pendingIntent = PendingIntent.getService(mContext.getApplicationContext(), eID.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent pendingIntent = PendingIntent.getService(
+                        mContext.getApplicationContext(), eID.hashCode(), intent,
+                        PendingIntent.FLAG_ONE_SHOT);
                 AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
-                if (!v.isSelected()) {
-                    mCurrentUser.addFavorite(eID);
-                    mEventInfo.increaseTallyCount(mCurrentUser.getSchoolName());
+                if (alarmManager != null) {
+                    if (!v.isSelected()) {
+                        mCurrentUser.addFavorite(eID);
+                        mEventInfo.increaseTallyCount(mCurrentUser.getSchoolName());
 
-                    Log.d("asdfg", "setting alarm " + eID.hashCode());
-                    alarmManager.set(AlarmManager.RTC, mEventInfo.getEventDate().getTime(), pendingIntent);
-                    Log.d("asdfg", "alarm set");
-                } else {
-                    mCurrentUser.removeFavorite(eID);
-                    mEventInfo.decreaseTallyCount(mCurrentUser.getSchoolName());
+                        alarmManager.set(AlarmManager.RTC, mEventInfo.getEventDate().getTime(),
+                                pendingIntent);
+                    } else {
+                        mCurrentUser.removeFavorite(eID);
+                        mEventInfo.decreaseTallyCount(mCurrentUser.getSchoolName());
 
-                    alarmManager.cancel(pendingIntent);
-                    Log.d("asdfg", "canceled alarm " + eID.hashCode());
+                        alarmManager.cancel(pendingIntent);
+                    }
                 }
                 v.setSelected(!v.isSelected());
             }

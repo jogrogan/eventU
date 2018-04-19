@@ -114,8 +114,8 @@ public class CreateEventActivity extends BaseClass {
             @Override
             public void onClick(View view) {
                 try {
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
                 } catch (Exception e) {
                     Log.i("Error", e.getMessage());

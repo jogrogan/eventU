@@ -3,8 +3,6 @@ package com.eventu;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-import static org.junit.Assert.assertEquals;
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -32,14 +30,6 @@ public class HomePageTest {
     public void testsetup() {
         Intents.init();
         mContext = InstrumentationRegistry.getTargetContext();
-    }
-
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        assertEquals("com.eventu", appContext.getPackageName());
-        Intents.release();
     }
 
     @Test

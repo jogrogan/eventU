@@ -41,6 +41,7 @@
                 android:hint="@string/event_name_hint"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/event_location_layout"
             android:layout_width="match_parent"
@@ -52,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/event_location_hint"/>
         </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/event_description_layout"
             android:layout_width="match_parent"
@@ -63,31 +65,36 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/event_description_hint"/>
         </android.support.design.widget.TextInputLayout>
-        <TimePicker
-            android:id="@+id/tp_timepicker"
-            android:layout_width="match_parent"
-            android:layout_height="113dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:scaleX="1"
-            android:scaleY="1"
-            android:timePickerMode="spinner"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <DatePicker
-            android:id="@+id/dp_datepicker"
-            android:layout_width="wrap_content"
-            android:layout_height="365dp"
-            android:layout_marginStart="8dp"
-            android:datePickerMode="calendar"
-            android:elevation="0dp"
-            android:headerBackground="@color/colorPrimaryDark"
-            android:scaleX="1"
-            android:scaleY="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tp_timepicker"/>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TimePicker
+                android:id="@+id/tp_timepicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                android:timePickerMode="spinner"/>
+
+            <DatePicker
+                android:id="@+id/dp_datepicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tp_timepicker"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:datePickerMode="calendar"
+                android:headerBackground="@color/colorPrimaryDark"
+                android:scaleX="1"
+                android:scaleY="1"/>
+        </RelativeLayout>
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/next_button"
             android:layout_width="94dp"
@@ -99,5 +106,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/next_button"/>
+
     </LinearLayout>
 </ScrollView>

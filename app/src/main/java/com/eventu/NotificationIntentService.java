@@ -10,14 +10,15 @@ import android.util.Log;
 
 public class NotificationIntentService extends IntentService {
 
-    public NotificationIntentService(){
+    public NotificationIntentService() {
         super("com.eventu.NotificationIntentService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d("test", "on handle intent called");
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, intent.getStringExtra("channel"))
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,
+                intent.getStringExtra("channel"))
                 .setContentTitle(intent.getStringExtra("Event"))
                 .setContentText(intent.getStringExtra("Location"))
                 .setSmallIcon(R.drawable.notification_icon)
@@ -28,7 +29,8 @@ public class NotificationIntentService extends IntentService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
-            NotificationChannel channel = new NotificationChannel(intent.getStringExtra("channel"), "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(intent.getStringExtra("channel"),
+                    "channel", NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription("description");
             // Register the channel with the system
             notificationManager.createNotificationChannel(channel);

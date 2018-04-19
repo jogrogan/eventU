@@ -105,8 +105,8 @@
             android:label="@string/title_activity_settings">
         </activity>
         <service
-            android:enabled="true"
-            android:name="com.eventu.NotificationIntentService">
+            android:name="com.eventu.NotificationIntentService"
+            android:enabled="true">
         </service>
     </application>
 
