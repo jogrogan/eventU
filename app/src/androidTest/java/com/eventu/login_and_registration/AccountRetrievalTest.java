@@ -128,7 +128,7 @@ public class AccountRetrievalTest {
      */
     private void pause() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (Exception e) {
             Thread.currentThread().interrupt();
         }

@@ -7,7 +7,7 @@
     android:minWidth="@dimen/activity_horizontal_margin"
     tools:context="com.eventu.HomePageActivity">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/RecycleViewEvents"
+        android:id="@+id/eventRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"

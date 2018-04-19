@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,7 +79,6 @@ public class HomePageActivity extends AppCompatActivity {
     // Other
     private Context self;
     private boolean isTimelineSelected;
-    private Integer mNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +89,14 @@ public class HomePageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_homepage);
 
-        // Display Welcome Message to Current User via
+        // Display Welcome Message to Current User via toast
         mCurrentUser = (UserInfo) getIntent().getSerializableExtra("UserInfo");
         String username = mCurrentUser.getUsername();
         Toast.makeText(HomePageActivity.this, "Welcome " + username + "!",
                 Toast.LENGTH_SHORT).show();
 
         // Sets up the swipe to refresh feature
-        mSwipeRefreshLayout = findViewById(R.id.eventRefreshView);
+        mSwipeRefreshLayout = findViewById(R.id.eventSwipeRefreshView);
         mSwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -111,14 +109,11 @@ public class HomePageActivity extends AppCompatActivity {
                 }
         );
 
-        // Sets up the action bar
-        ActionBar mActionBar = getSupportActionBar();
-
         // Sets Up the ViewFlipper for toggling between calendar and timeline
         mViewFlipper = findViewById(R.id.eventViewFlipper);
 
         // Set up RecyclerView for Events
-        RecyclerView mEventRecyclerView = findViewById(R.id.RecycleViewEvents);
+        RecyclerView mEventRecyclerView = findViewById(R.id.eventRecyclerView);
         mEventRecyclerView.setHasFixedSize(true);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -175,7 +170,7 @@ public class HomePageActivity extends AppCompatActivity {
         mPopupWindow.setFocusable(true);
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
-        mCalendarPopUpRecyclerView = mPopupView.findViewById(R.id.RecycleViewEvents);
+        mCalendarPopUpRecyclerView = mPopupView.findViewById(R.id.eventRecyclerView);
         mCalendarPopUpRecyclerView.setHasFixedSize(true);
         mCalendarPopUpRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 

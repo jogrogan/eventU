@@ -58,6 +58,7 @@ public class SchoolSelectTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.school)).perform(typeText("ren"));
         Espresso.onView(withId(R.id.school)).check(matches(withText("ren")));
+
         Espresso.onData(withSchoolName("Rensselaer Polytechnic Institute")).perform(click());
         intended(hasComponent(AccountTypeActivity.class.getName()));
 
