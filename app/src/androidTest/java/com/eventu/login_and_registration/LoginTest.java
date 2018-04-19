@@ -173,6 +173,12 @@ public class LoginTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(typeText(password));
         Espresso.onView(withId(R.id.log_in_button)).perform(click());
 
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+
         Espresso.onView(withId(R.id.email)).check(
                 matches(hasErrorText(context.getString(R.string.error_invalid_email))));
     }

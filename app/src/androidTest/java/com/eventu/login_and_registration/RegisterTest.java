@@ -202,7 +202,7 @@ public class RegisterTest {
         Espresso.onView(withId(R.id.register_button)).perform(click());
 
         try {
-            Thread.sleep(15000);
+            Thread.sleep(12000);
         } catch (Exception e) {
             Thread.currentThread().interrupt();
         }
@@ -210,13 +210,25 @@ public class RegisterTest {
         intended(hasComponent(DisplayClubPageActivity.class.getName()));
         Espresso.pressBack();
         intended(hasComponent(DisplayClubPageActivity.class.getName()));
-        deleteClubUser();
+
+        Espresso.onView(ViewMatchers.withId(R.id.display_club_description)).perform(
+                typeText("Test"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.edit_button)).perform(click());
+
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (Exception e) {
             Thread.currentThread().interrupt();
         }
 
+        deleteClubUser();
+
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**

@@ -3,9 +3,7 @@ package com.eventu;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
@@ -23,13 +21,11 @@ import java.util.ArrayList;
 public class HomePageTest {
     @Rule
     public final ActivityTestRule<HomePageActivity> mActivityRule = new ActivityTestRule<>(
-            HomePageActivity.class, true, false);
-    Context mContext;
+            HomePageActivity.class, false, false);
 
     @Before
-    public void testsetup() {
+    public void before() {
         Intents.init();
-        mContext = InstrumentationRegistry.getTargetContext();
     }
 
     @Test
