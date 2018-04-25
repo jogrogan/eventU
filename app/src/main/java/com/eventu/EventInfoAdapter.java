@@ -2,6 +2,7 @@ package com.eventu;
 
 import static android.content.Context.ALARM_SERVICE;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,12 +40,14 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
 
     private final FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     private final Context mContext;
+    private final Activity mActivity;
     private final List<EventInfo> mEventList;
     private final UserInfo mCurrentUserInfo;
     private final StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
 
-    EventInfoAdapter(Context context, List<EventInfo> eventList, UserInfo user) {
+    EventInfoAdapter(Context context, Activity activity, List<EventInfo> eventList, UserInfo user) {
         mContext = context;
+        mActivity = activity;
         mEventList = eventList;
         mCurrentUserInfo = user;
     }
@@ -61,15 +64,27 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
      */
     @Override
     public void onBindViewHolder(final EventViewHolder holder, int position) {
-        final EventInfo mEventInfo = mEventList.get(position);
+        bind(holder, position);
+    }
 
-        //Populate the holder views with text, date and images of the event
-        holder.mEventName.setText(mEventInfo.getEventName());
-        holder.mEventLocation.setText(mEventInfo.getEventLocation());
+    /**
+     * Populates the EventViewHolder and handles card view actions
+     */
+    @Override
+    public void onBindViewHolder(final EventViewHolder holder, int position, List<Object> payload) {
+        if (!payload.isEmpty() && payload.get(0) instanceof EventInfo) {
+            EventInfo mEventInfo = (EventInfo) payload.get(0);
+            setFields(holder, mEventInfo);
+        } else {
+            super.onBindViewHolder(holder, position, payload);
+        }
+    }
+
+    private void bind(final EventViewHolder holder, int position) {
+        final EventInfo mEventInfo = mEventList.get(position);
 
         SimpleDateFormat ft = new SimpleDateFormat("E MMM dd 'at' hh:mm a", Locale.US);
         holder.mEventDate.setText(ft.format(mEventInfo.getEventDate()));
-        holder.mEventDesc.setText(mEventInfo.getEventDescription());
         holder.mEventCreator.setText(mEventInfo.getEventCreator());
         holder.mEventCreator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,30 +96,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 mContext.startActivity(intent);
             }
         });
-        holder.mEventFavoriteTally.setText(
-                String.format(Locale.US, "%d", mEventInfo.getEventTally()));
 
-        // Handles reading the image used
-        if (mCurrentUser != null) {
-            String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
-            StorageReference imageStorage = mStorageReference.child(
-                    mEventPath + "/" + mEventInfo.getEventID());
-            imageStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    String imageURL = uri.toString();
-                    Glide.with(mContext).load(imageURL).into(holder.mEventImage);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    holder.mEventImage.setImageResource(R.drawable.eventu_logo);
-                    Log.i("Error", "Failed to get image");
-                }
-            });
-        } else {
-            holder.mEventImage.setImageResource(R.drawable.eventu_logo);
-        }
+        setFields(holder, mEventInfo);
 
         // Handles pop-up menu event options
         holder.mEventPopUpMenu.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +118,8 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                         if (item.getTitle().equals("Edit")) {
                             Intent intent = new Intent(mContext, CreateEventActivity.class);
                             intent.putExtra("eventID", mEventInfo.getEventID());
-                            mContext.startActivity(intent);
+                            mActivity.startActivityForResult(intent,
+                                    HomePageActivity.RESULT_IMAGE_CHANGE);
                         } else {
                             Toast.makeText(mContext, "You Clicked : " + item.getTitle(),
                                     Toast.LENGTH_SHORT).show();
@@ -179,6 +173,36 @@ public class EventInfoAdapter extends RecyclerView.Adapter<EventInfoAdapter.Even
                 v.setSelected(!v.isSelected());
             }
         });
+    }
+
+    private void setFields(final EventViewHolder holder, EventInfo mEventInfo) {
+        //Populate the holder views with text, date and images of the event
+        holder.mEventName.setText(mEventInfo.getEventName());
+        holder.mEventLocation.setText(mEventInfo.getEventLocation());
+        holder.mEventDesc.setText(mEventInfo.getEventDescription());
+        holder.mEventFavoriteTally.setText(
+                String.format(Locale.US, "%d", mEventInfo.getEventTally()));
+
+        if (mCurrentUser != null) {
+            String mEventPath = "universities/" + mCurrentUser.getDisplayName() + "/Club Events";
+            StorageReference imageStorage = mStorageReference.child(
+                    mEventPath + "/" + mEventInfo.getEventID());
+            imageStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    String imageURL = uri.toString();
+                    Glide.with(mContext).load(imageURL).into(holder.mEventImage);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    holder.mEventImage.setImageResource(R.drawable.eventu_logo);
+                    Log.i("Error", "Failed to get image");
+                }
+            });
+        } else {
+            holder.mEventImage.setImageResource(R.drawable.eventu_logo);
+        }
     }
 
     @Override

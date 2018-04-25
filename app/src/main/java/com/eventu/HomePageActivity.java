@@ -37,8 +37,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +55,6 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Database References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
 
     // Current User's Information;
     private UserInfo mCurrentUser;
@@ -126,7 +123,7 @@ public class HomePageActivity extends AppCompatActivity {
         mEventInfoList = new ArrayList<>();
         mCalendarEvents = new HashMap<>();
 
-        mEventAdapter = new EventInfoAdapter(this, mEventInfoList, mCurrentUser);
+        mEventAdapter = new EventInfoAdapter(this, this, mEventInfoList, mCurrentUser);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         // Sets up bottom navigation pane
@@ -268,6 +265,11 @@ public class HomePageActivity extends AppCompatActivity {
                                             setCalendarAdapter();
                                         }
                                         int index = mEventInfoList.indexOf(mEventInfo);
+                                        if (mEventInfoList.get(index).getEventDate().compareTo(
+                                                mEventInfo.getEventDate()) == 0) {
+                                            mEventAdapter.notifyItemChanged(index, mEventInfo);
+                                            continue;
+                                        }
                                         mEventInfoList.set(index, mEventInfo);
                                         break;
                                     default:
@@ -313,7 +315,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
         List<EventInfo> eventsOnDay = new ArrayList<>(mCalendarEvents.values());
         Collections.sort(eventsOnDay);
-        EventInfoAdapter adapter = new EventInfoAdapter(this, eventsOnDay, mCurrentUser);
+        EventInfoAdapter adapter = new EventInfoAdapter(this, this, eventsOnDay, mCurrentUser);
         mCalendarPopUpRecyclerView.setAdapter(adapter);
         return true;
     }
@@ -325,7 +327,6 @@ public class HomePageActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         username = mSharedPref.getString("example_text", mCurrentUser.getUsername());
-        Toast.makeText(HomePageActivity.this, username, Toast.LENGTH_SHORT).show();
         if (isTimelineSelected) {
             mBottomNavigationView.setSelectedItemId(R.id.action_timeline);
         } else {
